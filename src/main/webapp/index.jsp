@@ -6,13 +6,14 @@
 </head>
 <body>
 
-<form method="POST" action="/login">
+<form method="POST" action="servlet-inicio">
+    <p style="color: red">${mensajeError}</p>
     <label>Usuario</label>
-    <input type="text" name="usuario" min="2" required><br>
+    <input type="email" name="correoUsuario" required><br>
     <label>Contrasena</label>
-    <input type="password" name="contrasena" min="8" required>
+    <input type="password" name="password" minlength="8" required>
     <a href="servlet-restablecer">Olvidaste tu contrasena?</a>
-    <a href="servlet-inicio">Iniciar</a>
+    <button type="submit">Iniciar</button>
 </form>
 <br/>
 </body>
