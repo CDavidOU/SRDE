@@ -33,7 +33,7 @@
         <form action="servlet-" method="post">
             <button type="submit">Grafica</button>
         </form>
-        <form action="servlet-" method="post">
+        <form action="index.jsp" method="post">
             <button type="submit">Salir</button>
         </form>
         <form action="servlet-" method="post">

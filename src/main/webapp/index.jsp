@@ -15,6 +15,5 @@
     <a href="servlet-restablecer">Olvidaste tu contrasena?</a>
     <button type="submit">Iniciar</button>
 </form>
-<br/>
 </body>
 </html>

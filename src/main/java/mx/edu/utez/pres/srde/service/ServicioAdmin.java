@@ -5,9 +5,9 @@ import mx.edu.utez.pres.srde.model.BeanAdmin;
 
 
 public class ServicioAdmin {
-    public BeanAdmin datosAdmin(int id) {
+    public BeanAdmin datosAdmin(int idAdmin) {
         DaoAdmin daoAdmin = new DaoAdmin();
 
-        return daoAdmin.datosAdmin(id);
+        return daoAdmin.datosAdmin(idAdmin);
     }
 }

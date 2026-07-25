@@ -1,18 +1,33 @@
 package mx.edu.utez.pres.srde.model;
 
-public class BeanUsuario extends BeanPersona{
+public class BeanUsuario{
     private String password;
     private int id;
     private String rol;
+    private BeanPersona persona;
+    public BeanPersona getPersona()
+    {
+        return persona;
+    }
+    public void setPersona(BeanPersona persona)
+    {
+        this.persona = persona;
+    }
 
-    private BeanAdmin datosAdmin;
-    private BeanDocente datosDocente;
     public String getPassword() {
         return password;
     }
-
+    private BeanPersona datosPersona;
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public BeanPersona getDatosPersona() {
+        return datosPersona;
+    }
+
+    public void setDatosPersona(BeanPersona datosPersona) {
+        this.datosPersona = datosPersona;
     }
 
     public int getId() {
@@ -29,21 +44,5 @@ public class BeanUsuario extends BeanPersona{
 
     public void setRol(String rol) {
         this.rol = rol;
-    }
-
-    public BeanAdmin getDatosAdmin() {
-        return datosAdmin;
-    }
-
-    public void setDatosAdmin(BeanAdmin datosAdmin) {
-        this.datosAdmin = datosAdmin;
-    }
-
-    public BeanDocente getDatosDocente() {
-        return datosDocente;
-    }
-
-    public void setDatosDocente(BeanDocente datosDocente) {
-        this.datosDocente = datosDocente;
     }
 }

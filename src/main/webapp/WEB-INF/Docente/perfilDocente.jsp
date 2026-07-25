@@ -26,10 +26,10 @@
     <form action="servlet-" method="post">
         <button type="submit">Periodos</button>
     </form>
-    <form action="servlet-" method="post">
+    <form action="servlet-lista-estudiantes" method="post">
         <button type="submit">Estudiantes</button>
     </form>
-    <form action="servlet-" method="post">
+    <form action="index.jsp" method="post">
         <button type="submit">salir</button>
     </form>
     <form action="servlet-" method="post">

@@ -1,40 +1,47 @@
 package mx.edu.utez.pres.srde.dao;
 
+import mx.edu.utez.pres.srde.model.BeanPersona;
 import mx.edu.utez.pres.srde.model.BeanUsuario;
 import mx.edu.utez.pres.srde.util.Conexion;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 
 
 public class DaoUsuario {
 
-    public BeanUsuario verificarUsuario(String correo,String password) {
+    public BeanUsuario verificarUsuario(String correo, String password) {
         BeanUsuario usuarioLogueado = null;
 
-        String sql="select correo,contrasena,rol,id_usuario from usuario where correo=? and contrasena=STANDARD_HASH(?, 'SHA256') ";
+        String sql = "select correo,contrasena,rol,id_usuario from usuario where correo=? and contrasena=STANDARD_HASH(?, 'SHA256') ";
 
-        try(Connection conexion = Conexion.getConexion();
-            PreparedStatement prs = conexion.prepareStatement(sql)){
-                prs.setString(1,correo);
-                prs.setString(2,password);
-                try (ResultSet rs= prs.executeQuery()){
-                    if(rs.next()){
-                        usuarioLogueado = new BeanUsuario();
+        try (Connection conexion = Conexion.getConexion();
+             PreparedStatement prs = conexion.prepareStatement(sql)) {
+            prs.setString(1, correo);
+            prs.setString(2, password);
+            try (ResultSet rs = prs.executeQuery()) {
+                if (rs.next()) {
+                    usuarioLogueado = new BeanUsuario();
+                    usuarioLogueado.setPassword(rs.getString("contrasena"));
+                    usuarioLogueado.setRol(rs.getString("rol"));
+                    usuarioLogueado.setId(rs.getInt("id_usuario"));
+                    BeanPersona persona = new BeanPersona();
+                    persona.setId(rs.getInt("id_usuario"));
+                    persona.setCorreo(rs.getString("correo"));
 
-                        usuarioLogueado.setCorreo(rs.getString("correo"));
-                        usuarioLogueado.setPassword(rs.getString("contrasena"));
-                        usuarioLogueado.setRol(rs.getString("rol"));
-                        usuarioLogueado.setId(rs.getInt("id_usuario"));
-                    }
+                    usuarioLogueado.setDatosPersona(persona);
                 }
 
-        }catch (Exception e) {
-            e.printStackTrace();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            return usuarioLogueado;
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
-
-        return usuarioLogueado;
-
     }
 }

@@ -13,20 +13,20 @@ public class DaoDocente {
     public BeanDocente datosDocente(int id){
         BeanDocente datosDocente =null;
 
-        String sql="Select d.nombre,d.apellido,d.carrera,d.telefono,d.academia,u.correo from docente d inner join usuario u ON d.id_usuario = u.id_usuario WHERE u.id_usuario = ? ";
+        String sql="SELECT u.id_usuario, d.nombre, d.apellido, d.carrera, d.telefono, d.academia, u.correo FROM docente d INNER JOIN usuario u ON d.id_usuario = u.id_usuario WHERE u.id_usuario = ?";
         try(Connection conexion= Conexion.getConexion();
             PreparedStatement prs=conexion.prepareStatement(sql);) {
             prs.setInt(1, id);
             try(ResultSet rs=prs.executeQuery();) {
                 if(rs.next()){
                     datosDocente=new BeanDocente();
+                    datosDocente.setId(rs.getInt("id_usuario"));
                     datosDocente.setNombre(rs.getString("nombre"));
                     datosDocente.setApellido(rs.getString("apellido"));
                     datosDocente.setCorreo(rs.getString("correo"));
                     datosDocente.setCarrera(rs.getString("carrera"));
                     datosDocente.setTelefono(rs.getString("telefono"));
                     datosDocente.setAcademia(rs.getString("academia"));
-
                 }
             }
         } catch (SQLException e) {
