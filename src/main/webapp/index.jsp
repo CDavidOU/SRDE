@@ -14,6 +14,8 @@
     <input type="password" name="password" minlength="8" required>
     <a href="servlet-restablecer">Olvidaste tu contrasena?</a>
     <button type="submit">Iniciar</button>
+    <a href="test-vista.jsp">Pruebas</a>
+
 </form>
 </body>
 </html>

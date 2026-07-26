@@ -6,36 +6,39 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%request.setAttribute("tituloVista", "Perfil");%>
 <!doctype html>
 <html lang="es">
 <head>
-    <title>${tituloVista}</title>
+    <title>Title</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
 </head>
 <body class="bg-light">
 
 <div id="contenido" class="d-flex">
 
-    <div id="menu" class="bg-white border-end min-vh-100" style="width: 180px;">
-        <jsp:include page="../Plantillas/menu.jsp" />
+    <div id="menu" class="bg-white border-end">
+        <jsp:include page="WEB-INF/Plantillas/menu.jsp" />
     </div>
 
     <div id="cambiantes" class="flex-grow-1 d-flex flex-column">
         <div class="text-center w-150 mb-4">
-            <jsp:include page="../Plantillas/titulo.jsp"/>
+            <jsp:include page="WEB-INF/Plantillas/titulo.jsp"/>
         </div>
 
         <!-- OJO AQUÍ: Ya le quitamos el d-flex a este div -->
         <div id="datos" class="p-4 flex-grow-1">
             <div class="mx-auto" style="max-width: 950px;">
                 <div id="personal" class="row">
-                    <div class="col-6">
+                    <div class="col-4">
                         <label class="fw-bold mb-1 fs-5">Nombre(s)</label>
                         <input class="form-control" type="text" value="${sessionScope.docenteLogueado.nombre}" disabled readonly>
                     </div>
-                    <div class="col-6">
-                        <label class="fw-bold mb-1 fs-5">Apellido(s):</label>
+                    <div class="col-4">
+                        <label class="fw-bold mb-1 fs-5">Apellido Paterno:</label>
+                        <input class="form-control" type="text" value="${sessionScope.docenteLogueado.apellido}" disabled readonly>
+                    </div>
+                    <div class="col-4">
+                        <label class="fw-bold mb-1 fs-5">Apellido Materno:</label>
                         <input class="form-control" type="text" value="${sessionScope.docenteLogueado.apellido}" disabled readonly>
                     </div>
                 </div>
