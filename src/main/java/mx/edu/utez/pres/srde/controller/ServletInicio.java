@@ -38,11 +38,13 @@ public class ServletInicio extends HttpServlet {
                 ServicioAdmin servicioAdmin = new ServicioAdmin();
                 BeanAdmin admin = servicioAdmin.datosAdmin(usuarioLogueado.getId());
                 sesion.setAttribute("adminLogueado", admin);
+                int idAdmin = admin.getId();
                 req.getRequestDispatcher("WEB-INF/Admin/perfil.jsp").forward(req, res);
             } else {
                 ServicioDocente serviceDocente = new ServicioDocente();
                 BeanDocente datosDocente = serviceDocente.datosDocente(usuarioLogueado.getId());
                 sesion.setAttribute("docenteLogueado", datosDocente);
+                int idDocente = datosDocente.getId();
                 req.getRequestDispatcher("WEB-INF/Docente/perfilDocente.jsp").forward(req, res);
             }
         } else {
