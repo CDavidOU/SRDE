@@ -1,80 +1,80 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: Carlos
-  Date: 25/07/2026
-  Time: 10:58 p.m.
-  To change this template use File | Settings | File Templates.
---%>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<!doctype html>
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<!DOCTYPE html>
 <html lang="es">
 <head>
-    <title>Title</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inicio de Sesión</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body class="bg-light">
 
-<div id="contenido" class="d-flex">
+<form action="${pageContext.request.contextPath}/servlet-inicio" method="POST">
+    <div class="container min-vh-100 d-flex align-items-center justify-content-center py-4">
 
-    <div id="menu" class="bg-white border-end">
-        <jsp:include page="WEB-INF/Plantillas/menu.jsp" />
-    </div>
+        <!-- Ancho de la tarjeta en pantalla -->
+        <div class="col-12 col-md-8 col-lg-6">
 
-    <div id="cambiantes" class="flex-grow-1 d-flex flex-column">
-        <div class="text-center w-150 mb-4">
-            <jsp:include page="WEB-INF/Plantillas/titulo.jsp"/>
-        </div>
-
-        <!-- OJO AQUÍ: Ya le quitamos el d-flex a este div -->
-        <div id="datos" class="p-4 flex-grow-1">
-            <div class="mx-auto" style="max-width: 950px;">
-                <div id="personal" class="row">
-                    <div class="col-4">
-                        <label class="fw-bold mb-1 fs-5">Nombre(s)</label>
-                        <input class="form-control" type="text" value="${sessionScope.docenteLogueado.nombre}" disabled readonly>
-                    </div>
-                    <div class="col-4">
-                        <label class="fw-bold mb-1 fs-5">Apellido Paterno:</label>
-                        <input class="form-control" type="text" value="${sessionScope.docenteLogueado.apellido}" disabled readonly>
-                    </div>
-                    <div class="col-4">
-                        <label class="fw-bold mb-1 fs-5">Apellido Materno:</label>
-                        <input class="form-control" type="text" value="${sessionScope.docenteLogueado.apellido}" disabled readonly>
-                    </div>
-                </div>
-
-                <div id="contacto" class="row mt-4">
-                    <div class="col-6">
-                        <label class="fw-bold mb-1 fs-5">Correo electrónico:</label>
-                        <input class="form-control" type="text" value="${sessionScope.docenteLogueado.correo}" disabled readonly>
-                    </div>
-                    <div class="col-6">
-                        <label class="fw-bold mb-1 fs-5">Teléfono:</label>
-                        <input class="form-control" type="text" value="${sessionScope.docenteLogueado.telefono}" disabled readonly>
-                    </div>
-                </div>
-
-                <div id="universidad" class="row mt-4">
-                    <div class="col-6">
-                        <label class="fw-bold mb-1 fs-5">Carrera:</label>
-                        <input class="form-control" type="text" value="${sessionScope.docenteLogueado.carrera}" disabled readonly>
-                    </div>
-                    <div class="col-6">
-                        <label class="fw-bold mb-1 fs-5">Academia:</label>
-                        <input class="form-control" type="text" value="${sessionScope.docenteLogueado.academia}" disabled readonly>
-                    </div>
-                </div>
-
-                <div id="CambioContraseña" class="row mt-5 p-2" style="border-top: 1px solid #c2c2c2;">
-                    <h3 class="col-9">Cambiar contraseña</h3>
-                    <a class="btn text-white col-3" style="background-color: #429983;" href="#" role="button">Cambiar</a>
-                </div>
-
+            <!-- LOGO: Controlamos la altura para que no se vea gigante -->
+            <div class="text-center mb-3">
+                <img src="${pageContext.request.contextPath}/imagenes/UtezLogo.png"
+                     class="img-fluid"
+                     alt="Logo UTEZ"
+                     style="width: 55%; max-width: 260px;">
             </div>
+
+            <!-- TARJETA UNIFICADA (Fondo blanco, sombra y borde) -->
+            <div class="bg-white shadow-sm border rounded overflow-hidden">
+
+                <!-- Encabezado Azul pegado arriba -->
+                <div class="p-3 text-white text-center" style="background-color: #002E60;">
+                    <h2 class="h3 m-0 fw-bold">Iniciar Sesión</h2>
+                </div>
+
+                <!-- Contenido interno con espacio uniforme (p-4) -->
+                <div class="p-4">
+
+                    <!-- Mensaje de error -->
+                    <c:if test="${not empty mensajeError}">
+                        <div class="alert alert-danger text-center py-2 mb-3" role="alert">
+                                ${mensajeError}
+                        </div>
+                    </c:if>
+
+                    <!-- Campo Usuario -->
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Usuario</label>
+                        <input class="form-control" type="email" name="correoUsuario" placeholder="Ingresa tu usuario" required>
+                    </div>
+
+                    <!-- Campo Contraseña -->
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Contraseña</label>
+                        <input class="form-control" type="password" name="password" placeholder="Ingresa tu contraseña" minlength="8" required>
+                    </div>
+
+                    <!-- Olvidaste contraseña -->
+                    <div class="mb-4">
+                        <a href="servlet-restablecer" class="text-decoration-none">¿Olvidaste tu contraseña?</a>
+                    </div>
+
+                    <div class="text-center mb-3">
+                        <button class="btn text-white fw-bold w-100" style="background-color: #429983;" type="submit">Iniciar</button>
+                    </div>
+
+                    <!-- Botón pruebas (opcional) -->
+                    <div class="text-center">
+                        <a class="btn btn-sm btn-outline-secondary" href="test-vista.jsp">Pruebas</a>
+                    </div>
+
+                </div>
+            </div>
+
         </div>
     </div>
+</form>
 
-</div>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

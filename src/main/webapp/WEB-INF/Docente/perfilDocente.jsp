@@ -6,11 +6,10 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%request.setAttribute("tituloVista", "Perfil");%>
 <!doctype html>
 <html lang="es">
 <head>
-    <title>${tituloVista}</title>
+    <title>Perfil Docente</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
 </head>
 <body class="bg-light">
@@ -23,10 +22,9 @@
 
     <div id="cambiantes" class="flex-grow-1 d-flex flex-column">
         <div class="text-center w-150 mb-4">
-            <jsp:include page="../Plantillas/titulo.jsp"/>
+            <h1 style="background: #002E60; color: white; margin: 0; padding: 10px 0;">Perfil</h1>
         </div>
 
-        <!-- OJO AQUÍ: Ya le quitamos el d-flex a este div -->
         <div id="datos" class="p-4 flex-grow-1">
             <div class="mx-auto" style="max-width: 950px;">
                 <div id="personal" class="row">

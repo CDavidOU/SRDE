@@ -67,7 +67,7 @@ public class ServletInicio extends HttpServlet {
                 req.getRequestDispatcher("/WEB-INF/Docente/perfilDocente.jsp").forward(req, res);
             }
         } else {
-            req.setAttribute("mensajeError", "Credenciales incorrectas");
+            req.setAttribute("mensajeError", "Usuario o Contraseña incorrectos");
             req.getRequestDispatcher("/index.jsp").forward(req, res);
         }
     }
