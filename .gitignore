@@ -44,3 +44,5 @@ src/main/java/mx.edu.utez.pres.srde/util/Conexion.java
 
 ### para trabajar en equipo###
 .idea/
+
+src/main/resources

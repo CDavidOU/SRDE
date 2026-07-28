@@ -17,8 +17,25 @@ import mx.edu.utez.pres.srde.service.ServicioDocente;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet (name = "servletinicio", value = "/servlet-inicio")
+@WebServlet(name = "servletinicio", value = "/servlet-inicio")
 public class ServletInicio extends HttpServlet {
+
+    @Override
+    public void doGet(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
+        HttpSession sesion = req.getSession(false);
+
+        if (sesion != null) {
+            if (sesion.getAttribute("docenteLogueado") != null) {
+                req.getRequestDispatcher("/WEB-INF/Docente/perfilDocente.jsp").forward(req, res);
+                return;
+            } else if (sesion.getAttribute("adminLogueado") != null) {
+                req.getRequestDispatcher("/WEB-INF/Admin/perfil.jsp").forward(req, res);
+                return;
+            }
+        }
+
+        res.sendRedirect(req.getContextPath() + "/index.jsp");
+    }
 
     @Override
     public void doPost(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
@@ -38,18 +55,21 @@ public class ServletInicio extends HttpServlet {
                 ServicioAdmin servicioAdmin = new ServicioAdmin();
                 BeanAdmin admin = servicioAdmin.datosAdmin(usuarioLogueado.getId());
                 sesion.setAttribute("adminLogueado", admin);
+
                 int idAdmin = admin.getId();
-                req.getRequestDispatcher("WEB-INF/Admin/perfil.jsp").forward(req, res);
+                req.getRequestDispatcher("/WEB-INF/Admin/perfil.jsp").forward(req, res);
+
             } else {
                 ServicioDocente serviceDocente = new ServicioDocente();
                 BeanDocente datosDocente = serviceDocente.datosDocente(usuarioLogueado.getId());
                 sesion.setAttribute("docenteLogueado", datosDocente);
+
                 int idDocente = datosDocente.getId();
-                req.getRequestDispatcher("WEB-INF/Docente/perfilDocente.jsp").forward(req, res);
+                req.getRequestDispatcher("/WEB-INF/Docente/perfilDocente.jsp").forward(req, res);
             }
         } else {
-            req.setAttribute("mensajeError", "Credenciales incorrectas");
-            req.getRequestDispatcher("index.jsp").forward(req, res);
+            req.setAttribute("mensajeError", "Usuario o Contraseña incorrectos");
+            req.getRequestDispatcher("/index.jsp").forward(req, res);
         }
     }
 }
