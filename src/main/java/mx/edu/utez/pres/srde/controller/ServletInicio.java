@@ -17,10 +17,9 @@ import mx.edu.utez.pres.srde.service.ServicioDocente;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet (name = "servletinicio", value = "/servlet-inicio")
+@WebServlet(name = "servletinicio", value = "/servlet-inicio")
 public class ServletInicio extends HttpServlet {
 
-    // --- NUEVO MÉTODO AGREGADO PARA LA NAVEGACIÓN
     @Override
     public void doGet(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
         HttpSession sesion = req.getSession(false);
@@ -29,9 +28,7 @@ public class ServletInicio extends HttpServlet {
             if (sesion.getAttribute("docenteLogueado") != null) {
                 req.getRequestDispatcher("/WEB-INF/Docente/perfilDocente.jsp").forward(req, res);
                 return;
-            }
-
-            else if (sesion.getAttribute("adminLogueado") != null) {
+            } else if (sesion.getAttribute("adminLogueado") != null) {
                 req.getRequestDispatcher("/WEB-INF/Admin/perfil.jsp").forward(req, res);
                 return;
             }
@@ -40,7 +37,6 @@ public class ServletInicio extends HttpServlet {
         res.sendRedirect(req.getContextPath() + "/index.jsp");
     }
 
-    // --- TU CÓDIGO ORIGINAL SE MANTIENE INTACTO ---
     @Override
     public void doPost(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
         BeanUsuario usuario = new BeanUsuario();
@@ -59,11 +55,16 @@ public class ServletInicio extends HttpServlet {
                 ServicioAdmin servicioAdmin = new ServicioAdmin();
                 BeanAdmin admin = servicioAdmin.datosAdmin(usuarioLogueado.getId());
                 sesion.setAttribute("adminLogueado", admin);
+
+                int idAdmin = admin.getId();
                 req.getRequestDispatcher("/WEB-INF/Admin/perfil.jsp").forward(req, res);
+
             } else {
                 ServicioDocente serviceDocente = new ServicioDocente();
                 BeanDocente datosDocente = serviceDocente.datosDocente(usuarioLogueado.getId());
                 sesion.setAttribute("docenteLogueado", datosDocente);
+
+                int idDocente = datosDocente.getId();
                 req.getRequestDispatcher("/WEB-INF/Docente/perfilDocente.jsp").forward(req, res);
             }
         } else {
