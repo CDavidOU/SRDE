@@ -30,6 +30,12 @@
             <div class="row justify-content-center">
                 <div class="col-5">
 
+                    <c:if test="${not empty mensajeError}">
+                        <div class="alert alert-danger text-center py-2 mb-3" role="alert">
+                                ${mensajeError}
+                        </div>
+                    </c:if>
+
                     <div class="mb-3">
                         <label class="fw-bold mb-1 fs-5">Contraseña actual:</label>
                         <input class="form-control" type="password" name="password" placeholder="Ingresa tu contraseña"/>
@@ -37,12 +43,12 @@
 
                     <div class="mb-3">
                         <label class="fw-bold mb-1 fs-5">Cambiar contraseña:</label>
-                        <input class="form-control" type="password" name="newPassword" placeholder="Ingresa tu contraseña"/>
+                        <input class="form-control" type="password" name="newPassword" placeholder="Ingresa la nueva contraseña"/>
                     </div>
 
                     <div class="mb-4">
                         <label class="fw-bold mb-1 fs-5">Confirmar contraseña:</label>
-                        <input class="form-control" type="password" name="confirmPassword" placeholder="Ingresa tu contraseña"/>
+                        <input class="form-control" type="password" name="confirmPassword" placeholder="Ingresa nuevamente la contraseña"/>
                     </div>
 
                     <div class="text-center">

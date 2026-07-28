@@ -20,7 +20,7 @@ import java.util.List;
 @WebServlet (name = "servletinicio", value = "/servlet-inicio")
 public class ServletInicio extends HttpServlet {
 
-    // --- NUEVO MÉTODO AGREGADO PARA LA NAVEGACIÓN ---
+    // --- NUEVO MÉTODO AGREGADO PARA LA NAVEGACIÓN
     @Override
     public void doGet(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
         HttpSession sesion = req.getSession(false);

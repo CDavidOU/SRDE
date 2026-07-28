@@ -62,7 +62,7 @@
 
                 <div id="CambioContraseña" class="row mt-5 p-2" style="border-top: 1px solid #c2c2c2;">
                     <h3 class="col-9">Cambiar contraseña</h3>
-                    <a class="btn text-white col-3" style="background-color: #429983;" href="#" role="button">Cambiar</a>
+                    <a class="btn text-white col-3" style="background-color: #429983;" href="${pageContext.request.contextPath}/servlet-cambiar-contra" role="button">Cambiar</a>
                 </div>
 
             </div>

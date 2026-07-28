@@ -11,7 +11,6 @@
 <div class="d-flex flex-column justify-content-between p-0 text-white min-vh-100" style="background-color: #002E60;">
 
     <div>
-        <!-- Logo con contenedor blanco para que resalte igual que en Figma -->
         <div class="bg-white p-3 text-center">
             <img src="${pageContext.request.contextPath}/imagenes/UtezLogo.png" class="img-fluid" alt="Logo UTEZ" style="height: 110px; width: 100%;">
         </div>
@@ -85,7 +84,7 @@
     <!-- Opción Notificaciones fijada abajo -->
     <div class="p-2 border-top border-secondary">
         <a href="#" class="btn text-white w-100 text-start d-flex align-items-center gap-2 border-0 bg-transparent">
-            <i class="bi bi-bell"></i> <!-- Si usas iconos de Bootstrap, o puedes usar tu propia <img> -->
+            <i class="bi bi-bell"></i>
             <span>Notificaciones</span>
         </a>
     </div>

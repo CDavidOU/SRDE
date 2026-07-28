@@ -44,4 +44,25 @@ public class DaoUsuario {
             throw new RuntimeException(e);
         }
     }
+
+    public boolean cambiarContrasena(int idUsuario, String nuevaContrasena) {
+        boolean actualizado = false;
+        String sql = "UPDATE USUARIO SET contrasena = STANDARD_HASH(?, 'SHA256') where id_Usuario=?";
+        try (Connection conexion = Conexion.getConexion();
+             PreparedStatement prs = conexion.prepareStatement(sql)) {
+
+            prs.setString(1, nuevaContrasena);
+            prs.setInt(2, idUsuario);
+
+            // executeUpdate() devuelve el número de filas afectadas
+            int filasAfectadas = prs.executeUpdate();
+            if (filasAfectadas > 0) {
+                actualizado = true;
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return actualizado;
+    }
 }

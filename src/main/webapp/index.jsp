@@ -41,6 +41,11 @@
                                 ${mensajeError}
                         </div>
                     </c:if>
+                    <c:if test="${param.exito eq 'true'}">
+                        <div class="alert alert-success text-center py-2 mb-3" role="alert">
+                            Contraseña actualizada correctamente. Inicia sesión nuevamente.
+                        </div>
+                    </c:if>
 
                     <!-- Campo Usuario -->
                     <div class="mb-3">
