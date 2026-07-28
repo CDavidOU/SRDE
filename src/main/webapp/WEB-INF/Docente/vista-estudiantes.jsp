@@ -12,6 +12,9 @@
     <title>Title</title>
 </head>
 <body>
+<form action="servlet-registro-estudiante" method="POST">
+    <button type="submit">registrar</button>
+</form>
 <tbody>
 <c:forEach var="asignacionEstadias" items="${listaEstudiantes}">
     <tr>
