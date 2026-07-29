@@ -23,11 +23,11 @@
 <tbody>
 <c:forEach var="asignacionEstadias" items="${listaEstudiantesActivos}">
     <tr>
-    <td><c:out value="${asignacionEstadias.matricula}" /></td>
-
-    <td>
-    <button type="button">Ver Reportes</button>
-    </td>
+        <td><c:out value="${asignacionEstadias.matricula}" /></td>
+        <td><c:out value="${asignacionEstadias.estudiante.nombre}" /></td>
+        <td>
+            <button type="button">Ver Reportes</button>
+        </td>
     </tr>
 </c:forEach>
 </tbody>

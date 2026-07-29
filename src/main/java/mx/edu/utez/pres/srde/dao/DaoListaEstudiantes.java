@@ -30,6 +30,7 @@ public class DaoListaEstudiantes {
                     estudiante.setMatricula(rs.getString("matricula"));
 
                     asignacion.setMatricula(estudiante.getMatricula());
+                    asignacion.setEstudiante(estudiante);
 
                     listaEstudiantes.add(asignacion);
                 }
