@@ -39,4 +39,8 @@ public class ServletListaEstudiantes extends HttpServlet {
         req.getRequestDispatcher("WEB-INF/Docente/vista-estudiantes.jsp").forward(req,res);
 
     }
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
+        doGet(req, res);
+    }
 }

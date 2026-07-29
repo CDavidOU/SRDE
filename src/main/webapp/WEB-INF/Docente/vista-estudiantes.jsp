@@ -17,7 +17,7 @@
             ${mensajeVacio}
     </div>
 </c:if>
-<form action="servlet-formulario-estudiante" method="POST">
+<form action="servlet-formulario-estudiantes" method="POST">
     <button type="submit">registrar</button>
 </form>
 <tbody>
