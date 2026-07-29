@@ -10,7 +10,7 @@ import java.sql.SQLException;
 
 public class DaoAsignacionEstadias {
     public int contarEstudiantesAsignados (int id_usuario_docente, int periodo){
-        String sql="select count(*) from asignacion_estadias where id_usuario_docente=? and id_periodo=?";
+        String sql="select count(*) from asignacion_estadias where id_usuario_docente=? and id_periodo=? and es.estado='Activo'";
 
         try(Connection conexion=Conexion.getConexion();
         PreparedStatement prs= conexion.prepareStatement(sql)){

@@ -12,14 +12,19 @@
     <title>Title</title>
 </head>
 <body>
-<form action="servlet-registro-estudiante" method="POST">
+<c:if test="${not empty mensajeVacio}">
+    <div class="alert alert-danger text-center py-2 mb-3" role="alert">
+            ${mensajeVacio}
+    </div>
+</c:if>
+<form action="servlet-formulario-estudiante" method="POST">
     <button type="submit">registrar</button>
 </form>
 <tbody>
-<c:forEach var="asignacionEstadias" items="${listaEstudiantes}">
+<c:forEach var="asignacionEstadias" items="${listaEstudiantesActivos}">
     <tr>
     <td><c:out value="${asignacionEstadias.matricula}" /></td>
-    <td><c:out value="${asignacionEstadias.datosEstudiante.nombre}" /></td>
+
     <td>
     <button type="button">Ver Reportes</button>
     </td>
