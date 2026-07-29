@@ -72,11 +72,12 @@ public class ServletRegistroEstudiante extends HttpServlet {
             ServicioAsignacionEstadias servicioAsignacionEstadias = new ServicioAsignacionEstadias();
             BeanAsignacionEstadias asignacionEstadias=servicioAsignacionEstadias.registroAsignacionEstadias(idDocente, periodoActual.getId_periodo(), registroEstudiante.getMatricula() );
 
-            req.getRequestDispatcher("WEB-INF/Docente/vista-estudiantes.jsp").forward(req,res);
+            req.getRequestDispatcher("/servlet-lista-estudiantes").forward(req,res);
 
 
 
         }else {
+            req.setAttribute("mnsjeError","No se registro el alumno faltan campos o limite de estudiantes alcanzado");
             req.getRequestDispatcher("WEB-INF/Docente/registro-estudiantes.jsp").forward(req,res);
         }
 

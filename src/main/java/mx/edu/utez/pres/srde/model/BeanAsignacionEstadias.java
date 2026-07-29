@@ -6,6 +6,16 @@ public class BeanAsignacionEstadias {
     private String matricula;
     private int id_asignacion;
 
+    private BeanEstudiante estudiante;
+
+    public BeanEstudiante getEstudiante() {
+        return estudiante;
+    }
+
+    public void setEstudiante(BeanEstudiante estudiante) {
+        this.estudiante = estudiante;
+    }
+
     public int getId_docente() {
         return id_docente;
     }
