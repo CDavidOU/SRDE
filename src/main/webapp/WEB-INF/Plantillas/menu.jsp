@@ -14,42 +14,40 @@
         <div class="bg-white p-3 text-center">
             <img src="${pageContext.request.contextPath}/imagenes/UtezLogo.png" class="img-fluid" alt="Logo UTEZ" style="height: 110px; width: 100%;">
         </div>
-        
         <c:if test="${not empty sessionScope.docenteLogueado}">
-            <!-- Menú de opciones sin bordes externos -->
-            <div class="list-group list-group-flush rounded-0 mt-2">
+        <!-- Menú de opciones sin bordes externos -->
+        <div class="list-group list-group-flush rounded-0 mt-2">
 
-                <!-- Opción Activa: Perfil / Docente (Fondo Verde) -->
-                <a href="${pageContext.request.contextPath}/servlet-inicio"
-                   class="list-group-item list-group-item-action text-white d-flex align-items-center border-0 px-3 py-2"
-                   style="background-color: #429983;">
+            <!-- Opción Activa: Perfil / Docente (Fondo Verde) -->
+            <a href="${pageContext.request.contextPath}/servlet-inicio"
+               class="list-group-item list-group-item-action text-white d-flex align-items-center border-0 px-3 py-2"
+               style="background-color: #429983;">
 
-                    <img src="${pageContext.request.contextPath}/imagenes/user.png" class="rounded-circle me-3" alt="Icono usuario" style="width: 35px; height: 35px; background: white; padding: 2px;">
+                <img src="${pageContext.request.contextPath}/imagenes/user.png" class="rounded-circle me-3" alt="Icono usuario" style="width: 35px; height: 35px; background: white; padding: 2px;">
 
-                    <div class="d-flex flex-column text-start w-100">
+                <div class="d-flex flex-column text-start w-100">
                         <span class="fw-bold" style="font-size: 0.95rem;">Docente</span>
                         <input type="text" value="${sessionScope.docenteLogueado.nombre}" class="form-control form-control-sm p-0 text-white bg-transparent border-0 fw-light" disabled style="font-size: 0.9rem;">
-                    </div>
-                </a>
+                </div>
+            </a>
 
-                <!-- Resto de enlaces con texto blanco y fondo transparente -->
-                <a href="#" class="list-group-item list-group-item-action text-white bg-transparent border-0 px-3 py-2">
-                    Periodos
-                </a>
-                <a href="${pageContext.request.contextPath}/servlet-lista-estudiantes" class="list-group-item list-group-item-action text-white bg-transparent border-0 px-3 py-2">
-                    Estudiantes
-                </a>
-                <a href="${pageContext.request.contextPath}/servlet-logout" class="list-group-item list-group-item-action text-white bg-transparent border-0 px-3 py-2">
-                    Salir
-                </a>
+            <!-- Resto de enlaces con texto blanco y fondo transparente -->
+            <a href="#" class="list-group-item list-group-item-action text-white bg-transparent border-0 px-3 py-2">
+                Periodos
+            </a>
+            <a href="${pageContext.request.contextPath}/servlet-lista-estudiantes" class="list-group-item list-group-item-action text-white bg-transparent border-0 px-3 py-2">
+                Estudiantes
+            </a>
+            <a href="${pageContext.request.contextPath}/servlet-logout" class="list-group-item list-group-item-action text-white bg-transparent border-0 px-3 py-2">
+                Salir
+            </a>
 
-            </div>
+        </div>
         </c:if>
-        
         <c:if test="${not empty sessionScope.adminLogueado}">
             <div class="list-group list-group-flush rounded-0 mt-2">
 
-                <!-- Opción Activa: Perfil / Admin (Fondo Verde) -->
+                <!-- Opción Activa: Perfil / Docente (Fondo Verde) -->
                 <a href="${pageContext.request.contextPath}/servlet-inicio"
                    class="list-group-item list-group-item-action text-white d-flex align-items-center border-0 px-3 py-2"
                    style="background-color: #429983;">
