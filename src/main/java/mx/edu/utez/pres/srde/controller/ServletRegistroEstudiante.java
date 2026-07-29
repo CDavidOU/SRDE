@@ -20,9 +20,30 @@ import java.io.IOException;
 public class ServletRegistroEstudiante extends HttpServlet {
 
     @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
+        HttpSession sesion = req.getSession(false);
+
+        // Validamos sesión
+        if (sesion == null || sesion.getAttribute("docenteLogueado") == null) {
+            res.sendRedirect(req.getContextPath() + "/index.jsp");
+            return;
+        }
+
+        // Solo redirige a la pantalla donde está el formulario para llenar los datos
+        req.getRequestDispatcher("WEB-INF/Docente/registro-estudiantes.jsp").forward(req, res);
+    }
+
+    @Override
     public void doPost(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
-        BeanEstudiante estudiante = new BeanEstudiante();
+        /* Vemos si alguien esta conectado */
         HttpSession sesion = req.getSession();
+        if (sesion == null || sesion.getAttribute("docenteLogueado") == null) {
+            res.sendRedirect(req.getContextPath() + "/index.jsp");
+            return;
+        }
+
+
+        BeanEstudiante estudiante = new BeanEstudiante();
         BeanDocente docenteLogueado= (BeanDocente) sesion.getAttribute("docenteLogueado");
         int idDocente = docenteLogueado.getId();
 
