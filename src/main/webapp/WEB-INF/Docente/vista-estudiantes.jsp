@@ -9,33 +9,19 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
 <head>
-    <title>Lista de Estudiantes</title>
+    <title>Title</title>
 </head>
 <body>
-
-<c:if test="${not empty mensajeVacio}">
-    <div class="alert alert-danger text-center py-2 mb-3" role="alert">
-        ${mensajeVacio}
-    </div>
-</c:if>
-
-<form action="servlet-formulario-estudiantes" method="POST">
-    <button type="submit">Registrar</button>
+<form action="servlet-registro-estudiante" method="POST">
+    <button type="submit">registrar</button>
 </form>
-
 <table>
-    <thead>
-        <tr>
-            <th>Matrícula</th>
-            <th>Nombre</th>
-            <th>Acciones</th>
-        </tr>
-    </thead>
+
     <tbody>
-    <c:forEach var="asignacionEstadias" items="${listaEstudiantesActivos}">
+    <c:forEach var="asignacionEstadias" items="${listaEstudiantes}">
         <tr>
             <td><c:out value="${asignacionEstadias.matricula}" /></td>
-            <td><c:out value="${asignacionEstadias.estudiante.nombre}" /></td>
+            <td><c:out value="${asignacionEstadias.datosEstudiante.nombre}" /></td>
             <td>
                 <button type="button">Ver Reportes</button>
             </td>
@@ -43,6 +29,5 @@
     </c:forEach>
     </tbody>
 </table>
-
 </body>
 </html>
