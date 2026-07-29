@@ -21,11 +21,11 @@
     </div>
 
     <div id="cambiantes" class="flex-grow-1 d-flex flex-column">
-        <div class="text-center w-150 mb-4">
+        <div class="text-center w-100 mb-4">
             <h1 style="background: #002E60; color: white; margin: 0; padding: 10px 0;">Perfil</h1>
         </div>
 
-        <div id="datos" class="p-4 flex-grow-1">
+        <div id="datos" class="p-4 flex-grow-1 shadow-sm">
             <div class="mx-auto" style="max-width: 950px;">
                 <div id="personal" class="row">
                     <div class="col-6">

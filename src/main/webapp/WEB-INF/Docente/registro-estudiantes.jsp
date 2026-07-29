@@ -4,6 +4,8 @@
   Date: 7/24/2026
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
 <!doctype html>
 <html lang="es">
 <head>
@@ -19,13 +21,13 @@
 
     <!-- Menú Lateral -->
     <div id="menu" class="bg-white border-end" style="width: 180px; flex-shrink: 0;">
-        <jsp:include page="WEB-INF/Plantillas/menu.jsp" />
+        <jsp:include page="../Plantillas/menu.jsp" />
     </div>
 
     <!-- Contenido Principal -->
     <div id="cambiantes" class="flex-grow-1 d-flex flex-column bg-light">
 
-        <!--Encabezado-->
+        <!-- Encabezado -->
         <div class="w-100 text-center mb-4">
             <h1 class="text-white m-0 py-2 fs-2 fw-normal" style="background: #002E60;">Registro Estudiante</h1>
         </div>
@@ -33,9 +35,17 @@
         <div id="datos" class="p-4 flex-grow-1 d-flex justify-content-center">
 
             <div class="card border-0 shadow-sm p-4 bg-white rounded-3 w-100" style="max-width: 800px; height: fit-content;">
+
+                <!-- Alerta de Error (JSTL) -->
+                <c:if test="${not empty mensajeError}">
+                    <div class="alert alert-danger text-center py-2 mb-3" role="alert">
+                        <c:out value="${mensajeError}" />
+                    </div>
+                </c:if>
+
                 <form action="servlet-registro-estudiante" method="POST">
 
-
+                    <!-- Fila 1: Nombre y Apellido -->
                     <div id="personal" class="row g-3 mb-3">
                         <div class="col-6">
                             <label class="fw-bold mb-1 fs-5 text-secondary" for="nombre">Nombre:</label>
@@ -47,13 +57,21 @@
                         </div>
                     </div>
 
-
-                    <div id="institucional" class="row g-3 mb-3">
-                        <div class="col-4">
+                    <!-- Fila 2: Matrícula y Correo (Rellena toda la fila) -->
+                    <div id="institucional-contacto" class="row g-3 mb-3">
+                        <div class="col-6">
                             <label class="fw-bold mb-1 fs-5 text-secondary" for="matricula">Matrícula:</label>
                             <input class="form-control p-2" type="text" id="matricula" name="matricula" required maxlength="10" minlength="10" placeholder="20253DS043">
                         </div>
-                        <div class="col-4">
+                        <div class="col-6">
+                            <label class="fw-bold mb-1 fs-5 text-secondary" for="correo">Correo:</label>
+                            <input class="form-control p-2" type="email" id="correo" name="correo" pattern="[a-zA-Z0-9.]+@utez\.edu\.mx$" required placeholder="20253DS043@utez.edu.mx">
+                        </div>
+                    </div>
+
+                    <!-- Fila 3: Cuatrimestre y Carrera -->
+                    <div id="academicos" class="row g-3 mb-4">
+                        <div class="col-6">
                             <label class="fw-bold mb-1 fs-5 text-secondary" for="cuatrimestre">Cuatrimestre:</label>
                             <select class="form-select p-2" id="cuatrimestre" name="cuatrimestre" required>
                                 <option value="">Selecciona una opción</option>
@@ -61,16 +79,9 @@
                                 <option value="11">11° Cuatrimestre</option>
                             </select>
                         </div>
-                        <div class="col-4">
+                        <div class="col-6">
                             <label class="fw-bold mb-1 fs-5 text-secondary" for="carrera">Carrera:</label>
                             <input class="form-control p-2" type="text" id="carrera" name="carrera" required minlength="3" placeholder="DSM">
-                        </div>
-                    </div>
-
-                    <div id="contacto" class="row g-3 mb-4">
-                        <div class="col-6">
-                            <label class="fw-bold mb-1 fs-5 text-secondary" for="correo">Correo:</label>
-                            <input class="form-control p-2" type="email" id="correo" name="correo" pattern="[a-zA-Z0-9.]+@utez\.edu\.mx$" required placeholder="20253DS043@utez.edu.mx">
                         </div>
                     </div>
 
