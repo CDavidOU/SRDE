@@ -15,16 +15,19 @@
 <form action="servlet-registro-estudiante" method="POST">
     <button type="submit">registrar</button>
 </form>
-<tbody>
-<c:forEach var="asignacionEstadias" items="${listaEstudiantes}">
-    <tr>
-    <td><c:out value="${asignacionEstadias.matricula}" /></td>
-    <td><c:out value="${asignacionEstadias.datosEstudiante.nombre}" /></td>
-    <td>
-    <button type="button">Ver Reportes</button>
-    </td>
-    </tr>
-</c:forEach>
-</tbody>
+<table>
+
+    <tbody>
+    <c:forEach var="asignacionEstadias" items="${listaEstudiantes}">
+        <tr>
+            <td><c:out value="${asignacionEstadias.matricula}" /></td>
+            <td><c:out value="${asignacionEstadias.datosEstudiante.nombre}" /></td>
+            <td>
+                <button type="button">Ver Reportes</button>
+            </td>
+        </tr>
+    </c:forEach>
+    </tbody>
+</table>
 </body>
 </html>

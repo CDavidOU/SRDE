@@ -19,7 +19,11 @@
         <label for="matricula">Matricula:</label>
         <input type="text" id="matricula" name="matricula" required max="10" min="10">
         <label for="cuatrimestre">Cuatrimestre:</label>
-        <input type="number" id="cuatrimestre" name="cuatrimestre"required>
+        <select id="cuatrimestre" name="cuatrimestre" required>
+            <option value="">Selecciona una opción</option>
+            <option value="6">6° Cuatrimestre</option>
+            <option value="11">11° Cuatrimestre</option>
+        </select>
         <label for="carrera">Carrera:</label>
         <input type="text" id="carrera" name="carrera" required min="3">
         <label for="correo">Correo:</label>

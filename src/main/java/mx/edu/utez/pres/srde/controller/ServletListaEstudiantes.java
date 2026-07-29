@@ -7,13 +7,14 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
+import java.util.List;
 
 @WebServlet(name = "servletlistaestudiantes", value = "/servlet-lista-estudiantes")
 public class ServletListaEstudiantes extends HttpServlet {
 
     @Override
-    public void doPost(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
-        req.getRequestDispatcher("WEB-INF/Docente/registro-estudiantes.jsp").forward(req,res);
-
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        req.getRequestDispatcher("WEB-INF/Docente/vista-estudiantes.jsp").forward(req,resp);
+        return;
     }
 }
