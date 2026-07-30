@@ -1,97 +1,75 @@
 <%--
   Created by IntelliJ IDEA.
-  User: jaca8
-  Date: 7/24/2026
+  User: Carlos
+  Date: 25/07/2026
+  Time: 10:58 p.m.
+  To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!doctype html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registro Estudiante</title>
-    <!-- Bootstrap CSS (versión estable) -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <title>Perfil Docente</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
 </head>
-<body>
+<body class="bg-light">
 
-<div id="contenido" class="d-flex min-vh-100">
+<div id="contenido" class="d-flex">
 
-    <!-- Menú Lateral -->
-    <div id="menu" class="bg-white border-end" style="width: 180px; flex-shrink: 0;">
+    <div id="menu" class="bg-white border-end min-vh-100" style="width: 180px;">
         <jsp:include page="WEB-INF/Plantillas/menu.jsp" />
     </div>
 
-    <!-- Contenido Principal -->
-    <div id="cambiantes" class="flex-grow-1 d-flex flex-column bg-light">
-
-        <!--Encabezado-->
-        <div class="w-100 text-center mb-4">
-            <h1 class="text-white m-0 py-2 fs-2 fw-normal" style="background: #002E60;">Registro Estudiante</h1>
+    <div id="cambiantes" class="flex-grow-1 d-flex flex-column">
+        <div class="text-center w-100 mb-4">
+            <h1 style="background: #002E60; color: white; margin: 0; padding: 10px 0;">Perfil</h1>
         </div>
 
-        <div id="datos" class="p-4 flex-grow-1 d-flex justify-content-center">
-
-            <div class="card border-0 shadow-sm p-4 bg-white rounded-3 w-100" style="max-width: 800px; height: fit-content;">
-                <form action="servlet-registro-estudiante" method="POST">
-
-
-                    <div id="personal" class="row g-3 mb-3">
-                        <div class="col-6">
-                            <label class="fw-bold mb-1 fs-5 text-secondary" for="nombre">Nombre:</label>
-                            <input class="form-control p-2" type="text" id="nombre" name="nombre" required minlength="2" placeholder="Mariam Carlos">
-                        </div>
-                        <div class="col-6">
-                            <label class="fw-bold mb-1 fs-5 text-secondary" for="apellido">Apellido:</label>
-                            <input class="form-control p-2" type="text" id="apellido" name="apellido" required minlength="2" placeholder="Ortega Valdez">
-                        </div>
+        <div id="datos" class="p-4 flex-grow-1 shadow-sm">
+            <div class="mx-auto" style="max-width: 950px;">
+                <div id="personal" class="row">
+                    <div class="col-6">
+                        <label class="fw-bold mb-1 fs-5">Nombre(s)</label>
+                        <input class="form-control" type="text" value="${sessionScope.docenteLogueado.nombre}" disabled readonly>
                     </div>
-
-
-                    <div id="institucional" class="row g-3 mb-3">
-                        <div class="col-4">
-                            <label class="fw-bold mb-1 fs-5 text-secondary" for="matricula">Matrícula:</label>
-                            <input class="form-control p-2" type="text" id="matricula" name="matricula" required maxlength="10" minlength="10" placeholder="20253DS043">
-                        </div>
-                        <div class="col-4">
-                            <label class="fw-bold mb-1 fs-5 text-secondary" for="cuatrimestre">Cuatrimestre:</label>
-                            <select class="form-select p-2" id="cuatrimestre" name="cuatrimestre" required>
-                                <option value="">Selecciona una opción</option>
-                                <option value="6">6° Cuatrimestre</option>
-                                <option value="11">11° Cuatrimestre</option>
-                            </select>
-                        </div>
-                        <div class="col-4">
-                            <label class="fw-bold mb-1 fs-5 text-secondary" for="carrera">Carrera:</label>
-                            <input class="form-control p-2" type="text" id="carrera" name="carrera" required minlength="3" placeholder="DSM">
-                        </div>
+                    <div class="col-6">
+                        <label class="fw-bold mb-1 fs-5">Apellido(s):</label>
+                        <input class="form-control" type="text" value="${sessionScope.docenteLogueado.apellido}" disabled readonly>
                     </div>
+                </div>
 
-                    <div id="contacto" class="row g-3 mb-4">
-                        <div class="col-6">
-                            <label class="fw-bold mb-1 fs-5 text-secondary" for="correo">Correo:</label>
-                            <input class="form-control p-2" type="email" id="correo" name="correo" pattern="[a-zA-Z0-9.]+@utez\.edu\.mx$" required placeholder="20253DS043@utez.edu.mx">
-                        </div>
+                <div id="contacto" class="row mt-4">
+                    <div class="col-6">
+                        <label class="fw-bold mb-1 fs-5">Correo electrónico:</label>
+                        <input class="form-control" type="text" value="${sessionScope.docenteLogueado.correo}" disabled readonly>
                     </div>
-
-                    <!-- Botones de Acción -->
-                    <div id="botones" class="row justify-content-between mt-4">
-                        <div class="col-5">
-                            <a class="btn btn-danger w-100 py-2 fs-5 text-white fw-medium rounded-3" href="${pageContext.request.contextPath}/servlet-lista-estudiantes">Cancelar</a>
-                        </div>
-                        <div class="col-5">
-                            <button class="btn w-100 py-2 fs-5 text-white fw-medium rounded-3" style="background-color: #429983;" type="submit">Registrar</button>
-                        </div>
+                    <div class="col-6">
+                        <label class="fw-bold mb-1 fs-5">Teléfono:</label>
+                        <input class="form-control" type="text" value="${sessionScope.docenteLogueado.telefono}" disabled readonly>
                     </div>
+                </div>
 
-                </form>
+                <div id="universidad" class="row mt-4">
+                    <div class="col-6">
+                        <label class="fw-bold mb-1 fs-5">Carrera:</label>
+                        <input class="form-control" type="text" value="${sessionScope.docenteLogueado.carrera}" disabled readonly>
+                    </div>
+                    <div class="col-6">
+                        <label class="fw-bold mb-1 fs-5">Academia:</label>
+                        <input class="form-control" type="text" value="${sessionScope.docenteLogueado.academia}" disabled readonly>
+                    </div>
+                </div>
+
+                <div id="CambioContraseña" class="row mt-5 p-2" style="border-top: 1px solid #c2c2c2;">
+                    <h3 class="col-9">Cambiar contraseña</h3>
+                    <a class="btn text-white col-3" style="background-color: #429983;" href="${pageContext.request.contextPath}/servlet-cambiar-contra" role="button">Cambiar</a>
+                </div>
+
             </div>
-
         </div>
     </div>
-</div>
 
-<!-- Bootstrap JS -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
 </body>
 </html>

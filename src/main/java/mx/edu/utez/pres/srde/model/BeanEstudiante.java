@@ -6,6 +6,7 @@ public class BeanEstudiante extends BeanPersona{
     private String estado;
     private int cuatrimestre;
     private String correo;
+    private String grupo;
 
     public String getCorreo() {
         return correo;
@@ -22,9 +23,7 @@ public class BeanEstudiante extends BeanPersona{
         this.matricula = matricula;
     }
 
-    public String getCarrera() {
-        return carrera;
-    }
+    public String getCarrera() {return carrera;}
 
     public void setCarrera(String carrera) {
         this.carrera = carrera;
@@ -45,4 +44,9 @@ public class BeanEstudiante extends BeanPersona{
     public void setCuatrimestre(int cuatrimestre) {
         this.cuatrimestre = cuatrimestre;
     }
+
+    public String getGrupo(){return grupo;}
+
+    public void setGrupo(String grupo){this.grupo = grupo;}
+
 }

@@ -38,7 +38,7 @@ public class DaoRegistroEstudiante {
         }
 
         BeanEstudiante estudianteRegistrado = null;
-        String sql = "INSERT INTO ESTUDIANTE (MATRICULA, NOMBRE, APELLIDO, CARRERA, CUATRIMESTRE, ESTADO, CORREO) VALUES (?, ?, ?, ?, ?, 'Activo', ?)";
+        String sql = "INSERT INTO ESTUDIANTE (MATRICULA, NOMBRE, APELLIDO, CARRERA, CUATRIMESTRE, ESTADO, CORREO, GRUPO) VALUES (?, ?, ?, ?, ?, 'Activo', ?,?)";
 
         try (Connection conexion = Conexion.getConexion();
              PreparedStatement prs = conexion.prepareStatement(sql)) {
@@ -49,6 +49,7 @@ public class DaoRegistroEstudiante {
             prs.setString(4, nuevoEstudiante.getCarrera());
             prs.setInt(5, nuevoEstudiante.getCuatrimestre());
             prs.setString(6, nuevoEstudiante.getCorreo());
+            prs.setString(7, nuevoEstudiante.getGrupo());
 
             int filasAfectadas = prs.executeUpdate();
 
