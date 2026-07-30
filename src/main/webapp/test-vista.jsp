@@ -1,62 +1,97 @@
-<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<!DOCTYPE html>
+<%--
+  Created by IntelliJ IDEA.
+  User: jaca8
+  Date: 7/24/2026
+--%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<!doctype html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cambio de Contraseña</title>
+    <title>Registro Estudiante</title>
+    <!-- Bootstrap CSS (versión estable) -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
-<body class="bg-light">
+<body>
 
-<div class="d-flex">
+<div id="contenido" class="d-flex min-vh-100">
 
-    <!-- 1. Menu lateral -->
-    <div id="menu" class="bg-white border-end min-vh-100" style="width: 180px;">
-        <jsp:include page="/WEB-INF/Plantillas/menu.jsp" />
+    <!-- Menú Lateral -->
+    <div id="menu" class="bg-white border-end" style="width: 180px; flex-shrink: 0;">
+        <jsp:include page="WEB-INF/Plantillas/menu.jsp" />
     </div>
 
-    <!-- 2. Contenido de la derecha -->
-    <div class="w-100">
+    <!-- Contenido Principal -->
+    <div id="cambiantes" class="flex-grow-1 d-flex flex-column bg-light">
 
-        <!-- Banner Azul del titulo -->
-        <div class="text-center mb-5">
-            <h1 class="m-0 text-white" style="background: #002E60;padding: 10px 0;">Cambiar Contraseña</h1>
+        <!--Encabezado-->
+        <div class="w-100 text-center mb-4">
+            <h1 class="text-white m-0 py-2 fs-2 fw-normal" style="background: #002E60;">Registro Estudiante</h1>
         </div>
 
-        <!-- Formulario centrado -->
-        <form action="${pageContext.request.contextPath}/servlet-cambiar-contra" method="post">
-            <div class="row justify-content-center">
-                <div class="col-5">
+        <div id="datos" class="p-4 flex-grow-1 d-flex justify-content-center">
 
-                    <div class="mb-3">
-                        <label class="fw-bold mb-1 fs-5">Contraseña actual:</label>
-                        <input class="form-control" type="password" name="password" placeholder="Ingresa tu contraseña"/>
+            <div class="card border-0 shadow-sm p-4 bg-white rounded-3 w-100" style="max-width: 800px; height: fit-content;">
+                <form action="servlet-registro-estudiante" method="POST">
+
+
+                    <div id="personal" class="row g-3 mb-3">
+                        <div class="col-6">
+                            <label class="fw-bold mb-1 fs-5 text-secondary" for="nombre">Nombre:</label>
+                            <input class="form-control p-2" type="text" id="nombre" name="nombre" required minlength="2" placeholder="Mariam Carlos">
+                        </div>
+                        <div class="col-6">
+                            <label class="fw-bold mb-1 fs-5 text-secondary" for="apellido">Apellido:</label>
+                            <input class="form-control p-2" type="text" id="apellido" name="apellido" required minlength="2" placeholder="Ortega Valdez">
+                        </div>
                     </div>
 
-                    <div class="mb-3">
-                        <label class="fw-bold mb-1 fs-5">Cambiar contraseña:</label>
-                        <input class="form-control" type="password" name="newPassword" placeholder="Ingresa tu contraseña"/>
+
+                    <div id="institucional" class="row g-3 mb-3">
+                        <div class="col-4">
+                            <label class="fw-bold mb-1 fs-5 text-secondary" for="matricula">Matrícula:</label>
+                            <input class="form-control p-2" type="text" id="matricula" name="matricula" required maxlength="10" minlength="10" placeholder="20253DS043">
+                        </div>
+                        <div class="col-4">
+                            <label class="fw-bold mb-1 fs-5 text-secondary" for="cuatrimestre">Cuatrimestre:</label>
+                            <select class="form-select p-2" id="cuatrimestre" name="cuatrimestre" required>
+                                <option value="">Selecciona una opción</option>
+                                <option value="6">6° Cuatrimestre</option>
+                                <option value="11">11° Cuatrimestre</option>
+                            </select>
+                        </div>
+                        <div class="col-4">
+                            <label class="fw-bold mb-1 fs-5 text-secondary" for="carrera">Carrera:</label>
+                            <input class="form-control p-2" type="text" id="carrera" name="carrera" required minlength="3" placeholder="DSM">
+                        </div>
                     </div>
 
-                    <div class="mb-4">
-                        <label class="fw-bold mb-1 fs-5">Confirmar contraseña:</label>
-                        <input class="form-control" type="password" name="confirmPassword" placeholder="Ingresa tu contraseña"/>
+                    <div id="contacto" class="row g-3 mb-4">
+                        <div class="col-6">
+                            <label class="fw-bold mb-1 fs-5 text-secondary" for="correo">Correo:</label>
+                            <input class="form-control p-2" type="email" id="correo" name="correo" pattern="[a-zA-Z0-9.]+@utez\.edu\.mx$" required placeholder="20253DS043@utez.edu.mx">
+                        </div>
                     </div>
 
-                    <div class="text-center">
-                        <button class="btn text-white fw-bold px-4" style="background-color: #429983;" type="submit">Confirmar</button>
+                    <!-- Botones de Acción -->
+                    <div id="botones" class="row justify-content-between mt-4">
+                        <div class="col-5">
+                            <a class="btn btn-danger w-100 py-2 fs-5 text-white fw-medium rounded-3" href="${pageContext.request.contextPath}/servlet-lista-estudiantes">Cancelar</a>
+                        </div>
+                        <div class="col-5">
+                            <button class="btn w-100 py-2 fs-5 text-white fw-medium rounded-3" style="background-color: #429983;" type="submit">Registrar</button>
+                        </div>
                     </div>
 
-                </div>
+                </form>
             </div>
-        </form>
 
+        </div>
     </div>
-
 </div>
 
+<!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
