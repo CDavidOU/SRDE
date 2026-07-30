@@ -35,8 +35,8 @@
             <a href="#" class="list-group-item list-group-item-action text-white bg-transparent border-0 px-3 py-2">
                 Periodos
             </a>
-            <a href="servlet-lista-estudiantes" class="list-group-item list-group-item-action text-white bg-transparent border-0 px-3 py-2">
-                Estudiantes
+            <a href="${pageContext.request.contextPath}/servlet-lista-estudiantes" class="list-group-item list-group-item-action text-white bg-transparent border-0 px-3 py-2">
+            Estudiantes
             </a>
             <a href="${pageContext.request.contextPath}/servlet-logout" class="list-group-item list-group-item-action text-white bg-transparent border-0 px-3 py-2">
                 Salir
