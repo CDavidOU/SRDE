@@ -43,19 +43,22 @@
                 <div class="card border-0 shadow-sm p-4 bg-white rounded-3 w-100" style="max-width: 850px;">
 
                     <!-- Barra de Búsqueda -->
-                    <div id="busqueda" class="row g-2 mb-4">
-                        <div class="col-9">
-                            <div class="input-group">
-                                <span class="input-group-text bg-white border-end-0">
-                                    <i class="bi bi-search text-muted"></i>
-                                </span>
-                                <input type="text" placeholder="Buscar" class="form-control border-start-0 p-2">
+
+                    <form action="${pageContext.request.contextPath}/servlet-lista-estudiantes" method="post">
+                        <div id="busqueda" class="row g-2 mb-4">
+                            <div class="col-9">
+                                <div class="input-group">
+                                    <span class="input-group-text bg-white border-end-0">
+                                        <i class="bi bi-search text-muted"></i>
+                                    </span>
+                                    <input id="buscador" name="buscador" type="text" placeholder="Buscar" class="form-control border-start-0 p-2">
+                                </div>
+                            </div>
+                            <div class="col-3">
+                                <button class="btn btn-success w-100 h-100 fw-medium" type="submit">Buscar</button>
                             </div>
                         </div>
-                        <div class="col-3">
-                            <button class="btn btn-success w-100 h-100 fw-medium">Buscar</button>
-                        </div>
-                    </div>
+                    </form>
                     <!-- En la vista de la Lista de Estudiantes (JSP) -->
                     <c:if test="${not empty sessionScope.mensajeOk}">
                         <div class="alert alert-success alert-dismissible fade show text-center m-3" role="alert">

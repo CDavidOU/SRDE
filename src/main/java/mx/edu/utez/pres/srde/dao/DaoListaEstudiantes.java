@@ -37,7 +37,7 @@ public class DaoListaEstudiantes {
                     estudiante.setMatricula(rs.getString("matricula"));
 
                     asignacion.setMatricula(estudiante.getMatricula());
-                    asignacion.setEstudiante(estudiante); // Revisa que exista setEstudiante() en tu Bean
+                    asignacion.setEstudiante(estudiante);
 
                     listaEstudiantes.add(asignacion);
                 }
@@ -49,6 +49,54 @@ public class DaoListaEstudiantes {
         return listaEstudiantes;
     }
 
+    public List<BeanAsignacionEstadias> buscarEstudiantes (int id_docente, int id_periodo, String condicion){
+        List<BeanAsignacionEstadias> listaEstudiantes = new ArrayList<>();
+
+        //Estructura de la sentencia donde pedimos  el id usuairo, pedido, nombre y matricula
+        String sql = "SELECT aes.id_usuario_docente, aes.id_periodo, es.nombre, es.matricula " +
+                "FROM asignacion_Etadias aes " +
+                "JOIN estudiante es ON aes.matricula = es.matricula" +
+                "WHERE aes.id_usuario_docente = ? " +
+                "AND aes.id_periodo = ? " +
+                "AND es.estado = 'Activo' " +
+                "AND (es.nombre LIKE ? OR es.apellido LIKE ? OR es.matricula LIKE ?";
+
+        try(Connection conexion = Conexion.getConexion();
+            PreparedStatement prs = conexion.prepareStatement(sql)) {
+            String textoBuscar = "%" + condicion + "%";
+
+                prs.setInt(1, id_docente);
+                prs.setInt(2, id_periodo);
+                prs.setString(3,textoBuscar);
+                prs.setString(4,textoBuscar);
+                prs.setString(5,textoBuscar);
+
+                try (ResultSet rs = prs.executeQuery()){
+                    while (rs.next()) {
+                        BeanAsignacionEstadias asignacion = new BeanAsignacionEstadias();
+                        asignacion.setId_docente(rs.getInt("id_usuario_docente"));
+                        asignacion.setId_periodo(rs.getInt("id_periodo"));
+
+                        // Mapeo usando BeanEstudiante igual que en listaEstudiantes
+                        BeanEstudiante estudiante = new BeanEstudiante();
+                        estudiante.setNombre(rs.getString("nombre"));
+                        estudiante.setMatricula(rs.getString("matricula"));
+
+                        asignacion.setMatricula(estudiante.getMatricula());
+                        asignacion.setEstudiante(estudiante);
+
+                        listaEstudiantes.add(asignacion);
+                    }
+                }
+
+        }catch (SQLException e){
+            System.out.println("Error al buscar al estudiante");
+            e.printStackTrace();
+        }
+        return listaEstudiantes;
+    }
+
+    //Aqui se borran los estudiantes
     public boolean eliminarEstudianteCompleto(String matricula) {
         String sqlEliminarAsignacion = "DELETE FROM ASIGNACION_ESTADIAS WHERE MATRICULA = ?";
         String sqlEliminarEstudiante = "DELETE FROM ESTUDIANTE WHERE MATRICULA = ?";
