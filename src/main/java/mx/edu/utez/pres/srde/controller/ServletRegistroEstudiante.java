@@ -53,9 +53,10 @@ public class ServletRegistroEstudiante extends HttpServlet {
         estudiante.setNombre(req.getParameter("nombre"));
         estudiante.setApellido(req.getParameter("apellido"));
         estudiante.setCarrera(req.getParameter("carrera"));
+        estudiante.setCorreo(req.getParameter("correo"));
         estudiante.setCuatrimestre(cuatrimestre);
         estudiante.setMatricula(req.getParameter("matricula"));
-        estudiante.setCorreo(req.getParameter("correo"));
+        estudiante.setGrupo(req.getParameter("grupo"));
 
         ServicioPeriodos servicioPeriodos = new ServicioPeriodos();
         BeanPeriodo periodoActual = servicioPeriodos.automatizacionPeriodos();

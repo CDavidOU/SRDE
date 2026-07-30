@@ -14,6 +14,8 @@
         <div class="bg-white p-3 text-center">
             <img src="${pageContext.request.contextPath}/imagenes/UtezLogo.png" class="img-fluid" alt="Logo UTEZ" style="height: 110px; width: 100%;">
         </div>
+
+        <!-- DOCENTE-->
         <c:if test="${not empty sessionScope.docenteLogueado}">
         <!-- Menú de opciones sin bordes externos -->
         <div class="list-group list-group-flush rounded-0 mt-2">
@@ -44,6 +46,9 @@
 
         </div>
         </c:if>
+
+
+        <!-- Admin-->
         <c:if test="${not empty sessionScope.adminLogueado}">
             <div class="list-group list-group-flush rounded-0 mt-2">
 
