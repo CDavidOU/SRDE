@@ -51,7 +51,13 @@
                                     <span class="input-group-text bg-white border-end-0">
                                         <i class="bi bi-search text-muted"></i>
                                     </span>
-                                    <input id="buscador" name="buscador" type="text" placeholder="Buscar" class="form-control border-start-0 p-2">
+                                    <!-- Mantener el texto buscado en el input -->
+                                    <input id="buscador"
+                                           name="buscador"
+                                           type="text"
+                                           value="${terminoBuscado}"
+                                           placeholder="Buscar por nombre, apellido o matrícula"
+                                           class="form-control border-start-0 p-2">
                                 </div>
                             </div>
                             <div class="col-3">

@@ -18,7 +18,7 @@ public class DaoListaEstudiantes {
         String sql = "SELECT aes.id_usuario_docente, aes.id_periodo, es.nombre, es.matricula " +
                 "FROM asignacion_estadias aes " +
                 "INNER JOIN estudiante es ON aes.matricula = es.matricula " +
-                "WHERE aes.id_usuario_docente = ? AND aes.id_periodo = ? AND es.estado = 'Activo'";
+                "WHERE (aes.id_usuario_docente = ? AND aes.id_periodo = ? AND es.estado = 'Activo')";
 
         try (Connection conexion = Conexion.getConexion();
              PreparedStatement prs = conexion.prepareStatement(sql)) {
@@ -54,12 +54,12 @@ public class DaoListaEstudiantes {
 
         //Estructura de la sentencia donde pedimos  el id usuairo, pedido, nombre y matricula
         String sql = "SELECT aes.id_usuario_docente, aes.id_periodo, es.nombre, es.matricula " +
-                "FROM asignacion_Etadias aes " +
-                "JOIN estudiante es ON aes.matricula = es.matricula" +
+                "FROM asignacion_estadias aes " +
+                "INNER JOIN estudiante es ON aes.matricula = es.matricula " +
                 "WHERE aes.id_usuario_docente = ? " +
                 "AND aes.id_periodo = ? " +
                 "AND es.estado = 'Activo' " +
-                "AND (es.nombre LIKE ? OR es.apellido LIKE ? OR es.matricula LIKE ?";
+                "AND (es.nombre LIKE ? OR es.apellido LIKE ? OR es.matricula LIKE ?)";
 
         try(Connection conexion = Conexion.getConexion();
             PreparedStatement prs = conexion.prepareStatement(sql)) {
