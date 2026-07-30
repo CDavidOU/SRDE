@@ -20,7 +20,7 @@
 
     <!-- Menú Lateral -->
     <div id="menu" class="bg-white border-end" style="width: 180px; flex-shrink: 0;">
-        <jsp:include page="WEB-INF/Plantillas/menu.jsp" />
+        <jsp:include page="../Plantillas/menu.jsp" />
     </div>
 
     <!-- Contenido Principal -->
