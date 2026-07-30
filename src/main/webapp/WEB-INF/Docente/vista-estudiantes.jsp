@@ -81,9 +81,11 @@
                                         </td>
                                         <td class="py-3 text-end text-nowrap">
                                             <!-- Botón de Detalles -->
-                                            <button class="btn px-3 py-1 me-2 text-white" style="background-color: #002E60" type="button">
-                                                Detalles <i class="bi bi-journal-text ms-1"></i>
-                                            </button>
+                                            <a href="servlet-datos-estudiante?matricula=${asignacionEstadias.estudiante.matricula}">
+                                                <button class="btn px-3 py-1 me-2 text-white" style="background-color: #002E60" type="button">
+                                                    Detalles <i class="bi bi-journal-text ms-1"></i>
+                                                </button>
+                                            </a>
 
                                             <!-- Formulario para Desasignar -->
                                             <form action="${pageContext.request.contextPath}/servlet-eliminar-asignacion" method="POST" class="d-inline" onsubmit="return confirm('¿Estás seguro de desasignar a este estudiante?');">
