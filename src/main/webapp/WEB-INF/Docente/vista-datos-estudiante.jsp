@@ -21,8 +21,8 @@
 <body>
 <div id="contenido" class="d-flex min-vh-100">
 
-        <!-- Menú Lateral -->
-        <div id="menu" class="border-end" style="width: 180px; flex-shrink: 0;">
+        <!-- Menú Lateral Estático -->
+        <div id="menu" class="border-end" style="width: 180px; flex-shrink: 0; position: sticky; top: 0; height: 100vh; overflow-y: auto;">
                 <jsp:include page="../Plantillas/menu.jsp" />
         </div>
 
@@ -89,56 +89,105 @@
                                         <input class="form-control" type="text" disabled readonly value="${datosEstudiante.estado}">
                                 </div>
                         </div>
+                        <!-- Título separador para la sección de documentos -->
+                        <div class="w-100 mt-5 mb-4 border-bottom pb-2">
+                                <h3 class="fw-bold" style="color: #002E60;">Documentos del Estudiante</h3>
+                        </div>
 
-<%--                        <!--Aqui se mostraran los archivos-->--%>
-<%--                        <c:forEach>--%>
-<%--                                <c:if test=""><!-- Aqui documento ya subido  -->--%>
-<%--                                        <div class="container">--%>
-<%--                                                <div class="row">--%>
-<%--                                                        <div class="col-4">--%>
-<%--                                                                <i class="bi bi-document fs-3 m-2"style="background-color: #429983"></i>--%>
-<%--                                                                <p class="fw-bold text-white p-2 " style="background-color: #429983">Nombre del documento</p>--%>
-<%--                                                        </div>--%>
-<%--                                                        <div class="col-8">--%>
-<%--                                                                <p class="fw-bold p-2">Observaciones</p>--%>
-<%--                                                                <input class="form-control" type="text" disabled readonly value="">--%>
-<%--                                                                <p>Fecha de entrega : 10/04/21</p>--%>
-<%--                                                        </div>--%>
-<%--                                                </div>--%>
-<%--                                                <div class="row">--%>
-<%--                                                        <div class="col-4">--%>
-<%--                                                                <a href="" class="btn btn-warning">Modificar</a>--%>
-<%--                                                        </div>--%>
-<%--                                                        <div class="col-4">--%>
-<%--                                                                <a href="" class="btn btn-danger">Eliminar</a>--%>
-<%--                                                        </div>--%>
-<%--                                                        <div class="col-4">--%>
-<%--                                                                <a href="" class="btn" style="background-color: #002E60">Abrir archivo</a>--%>
-<%--                                                        </div>--%>
-<%--                                                </div>--%>
-<%--                                        </div>--%>
-<%--                                </c:if>--%>
-<%--                                <c:if test=""> <!-- Aqui documento no sbuido pero a tiempo-->--%>
-<%--                                        <div class="container">--%>
-<%--                                                <div class="row">--%>
-<%--                                                        <div class="col-4">--%>
-<%--                                                                <i class="bi bi-document fs-3 m-2 br" style="background-color: darkkhaki"></i>--%>
-<%--                                                                <p class="fw-bold text-white p-2 " style="background-color: darkkhaki">Nombre del documento</p>--%>
-<%--                                                        </div>--%>
-<%--                                                        <div class="col-8">--%>
-<%--                                                                <p class="fw-bold p-2">Observaciones</p>--%>
-<%--                                                                <input class="form-control" type="text" disabled readonly value="">--%>
-<%--                                                                <p>Fecha de entrega: </p>--%>
-<%--                                                        </div>--%>
-<%--                                                </div>--%>
-<%--                                                <div class="row">--%>
-<%--                                                        <div class="col-4">--%>
-<%--                                                                <a href="" class="btn" style="background-color: #429983">Subir</a>--%>
-<%--                                                        </div>--%>
-<%--                                                </div>--%>
-<%--                                        </div>--%>
-<%--                                </c:if>--%>
-<%--                        </c:forEach>--%>
+                        <!-- Iterador de Documentos -->
+                        <c:forEach var="doc" items="${listaDocumentos}">
+
+                                <!-- ==========================================
+                                ESTADO 1: DOCUMENTO YA SUBIDO (VERDE)
+                                ========================================== -->
+                                <c:if test="${doc.estado == 'Completado'}">
+                                        <div class="card shadow-sm mb-4 border-0" style="background-color: #f8f9fa;">
+                                                <div class="card-body row g-0">
+                                                        <!-- Izquierda: Icono y Nombre -->
+                                                        <div class="col-3 d-flex flex-column align-items-center justify-content-center pe-3 border-end">
+                                                                <div class="w-100 text-center rounded p-3 mb-2 text-white shadow-sm" style="background-color: #429983;">
+                                                                        <i class="bi bi-file-earmark-text-fill" style="font-size: 4rem;"></i>
+                                                                </div>
+                                                                <div class="w-100 text-center py-2 rounded text-white fw-bold shadow-sm" style="background-color: #429983;">
+                                                                                ${doc.nombre_archivo}
+                                                                </div>
+                                                        </div>
+
+                                                        <!-- Derecha: Observaciones y Botones -->
+                                                        <div class="col-9 ps-4 d-flex flex-column justify-content-between">
+                                                                <div>
+                                                                        <label class="fw-bold fs-5 mb-1">Observaciones</label>
+                                                                        <textarea class="form-control mb-2 bg-light" rows="2" disabled readonly>${doc.observaciones}</textarea>
+                                                                        <span class="text-muted small fw-bold">Fecha de entrega: 10/04/26</span>
+                                                                </div>
+
+                                                                <div class="row g-2 mt-3">
+                                                                        <div class="col-4">
+                                                                                <button class="btn w-100 fw-bold text-white shadow-sm" style="background-color: #D4AC0D;">Modificar</button>
+                                                                        </div>
+                                                                        <div class="col-4">
+                                                                                <button class="btn btn-danger w-100 fw-bold shadow-sm">Eliminar</button>
+                                                                        </div>
+                                                                        <div class="col-4">
+                                                                                <!-- Conexión al Servlet para ver el PDF -->
+                                                                                <a href="servlet-ver-documento?idArchivo=${doc.id_archivo}" target="_blank" class="btn w-100 fw-bold text-white shadow-sm" style="background-color: #002E60;">
+                                                                                        Abrir archivo
+                                                                                </a>
+                                                                        </div>
+                                                                </div>
+                                                        </div>
+                                                </div>
+                                        </div>
+                                </c:if>
+
+                                <!-- ==========================================
+                                ESTADO 2: DOCUMENTO NO SUBIDO (AMARILLO)
+                                ========================================== -->
+                                <c:if test="${doc.estado == 'Pendiente'}">
+                                        <div class="card shadow-sm mb-4 border-0" style="background-color: #f8f9fa;">
+                                                <div class="card-body row g-0">
+                                                        <!-- Izquierda: Icono y Nombre -->
+                                                        <div class="col-3 d-flex flex-column align-items-center justify-content-center pe-3 border-end">
+                                                                <div class="w-100 text-center rounded p-3 mb-2 text-white shadow-sm" style="background-color: #D4AC0D;">
+                                                                        <i class="bi bi-file-earmark-text-fill" style="font-size: 4rem;"></i>
+                                                                </div>
+                                                                <div class="w-100 text-center py-2 rounded text-white fw-bold shadow-sm" style="background-color: #D4AC0D;">
+                                                                                ${doc.nombre_archivo}
+                                                                </div>
+                                                        </div>
+
+                                                        <!-- Derecha: Observaciones y Formulario -->
+                                                        <div class="col-9 ps-4 d-flex flex-column justify-content-between">
+                                                                <!-- Formulario con multipart/form-data -->
+                                                                <form action="${pageContext.request.contextPath}/servlet-subir-documento" method="POST" enctype="multipart/form-data" class="d-flex flex-column h-100">
+                                                                        <!-- ID Oculto para saber a qué alumno/documento pertenece -->
+                                                                        <input type="hidden" name="matricula" value="${datosEstudiante.matricula}">
+                                                                        <input type="hidden" name="idAsignacion" value="${datosEstudiante.idAsignacion}">
+                                                                        <input type="hidden" name="idTipoDoc" value="${doc.id_tipo_doc}">
+
+                                                                        <div>
+                                                                                <label class="fw-bold fs-5 mb-1">Observaciones</label>
+                                                                                <textarea class="form-control mb-2" name="observaciones" rows="2" placeholder="Agrega un comentario..."></textarea>
+                                                                                <span class="text-muted small fw-bold">Fecha de entrega: Pendiente</span>
+                                                                        </div>
+
+                                                                        <div class="row mt-3">
+                                                                                <div class="col-12">
+                                                                                        <div class="input-group shadow-sm">
+                                                                                                <input type="file" class="form-control" name="archivoPDF" accept=".pdf" required>
+                                                                                                <button type="submit" class="btn text-white fw-bold px-5" style="background-color: #429983;">
+                                                                                                        Subir
+                                                                                                </button>
+                                                                                        </div>
+                                                                                </div>
+                                                                        </div>
+                                                                </form>
+                                                        </div>
+                                                </div>
+                                        </div>
+                                </c:if>
+
+                        </c:forEach>
                 </div>
         </div>
 </div>

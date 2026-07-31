@@ -12,14 +12,17 @@ public class DaoDatosEstudiantes {
 
     public BeanEstudiante datosEstudiante(String matricula){
         BeanEstudiante estudiante = null;
-        String sql="select * from estudiante where matricula=?";
+        // Unimos la tabla ESTUDIANTE con ASIGNACION_ESTADIAS para obtener el ID_ASIGNACION
+        String sql = "SELECT e.*, a.ID_ASIGNACION FROM ESTUDIANTE e " +
+                "LEFT JOIN ASIGNACION_ESTADIAS a ON e.MATRICULA = a.MATRICULA " +
+                "WHERE e.MATRICULA = ?";
 
-        try(Connection conexion= Conexion.getConexion();
-            PreparedStatement prs=conexion.prepareStatement(sql)){
-            prs.setString(1,matricula);
-            try (ResultSet rs=prs.executeQuery()){
+        try(Connection conexion = Conexion.getConexion();
+            PreparedStatement prs = conexion.prepareStatement(sql)){
+            prs.setString(1, matricula);
+            try (ResultSet rs = prs.executeQuery()){
                 if (rs.next()){
-                    estudiante=new BeanEstudiante();
+                    estudiante = new BeanEstudiante();
                     estudiante.setMatricula(rs.getString("matricula"));
                     estudiante.setNombre(rs.getString("nombre"));
                     estudiante.setApellido(rs.getString("apellido"));
@@ -28,13 +31,16 @@ public class DaoDatosEstudiantes {
                     estudiante.setCorreo(rs.getString("correo"));
                     estudiante.setGrupo(rs.getString("grupo"));
                     estudiante.setEstado(rs.getString("estado"));
+
+                    // ¡Aquí mapeamos el ID de asignación que faltaba!
+                    estudiante.setIdAsignacion(rs.getInt("ID_ASIGNACION"));
                 }
             }catch (SQLException e) {
-                ; e.printStackTrace();
+                e.printStackTrace();
             }
 
         }catch (SQLException e) {
-            ; e.printStackTrace();
+            e.printStackTrace();
         }
         return estudiante;
     }
