@@ -1,12 +1,16 @@
 package mx.edu.utez.pres.srde.model;
 
 import java.sql.Date;
+import java.util.List; // Agregamos la importación para usar Listas
 
 public class BeanPeriodo {
     private String nombre_periodo;
     private Date fecha_inicio;
     private Date fecha_fin;
     private int id_periodo;
+
+    // NUEVA VARIABLE: Aquí guardaremos a los alumnos que pertenecen a este periodo
+    private List<BeanEstudiante> listaEstudiantes;
 
     public String getNombre_periodo() {
         return nombre_periodo;
@@ -38,5 +42,14 @@ public class BeanPeriodo {
 
     public void setId_periodo(int id_periodo) {
         this.id_periodo = id_periodo;
+    }
+
+    // NUEVOS MÉTODOS: Getter y Setter para poder meter y sacar la lista de estudiantes
+    public List<BeanEstudiante> getListaEstudiantes() {
+        return listaEstudiantes;
+    }
+
+    public void setListaEstudiantes(List<BeanEstudiante> listaEstudiantes) {
+        this.listaEstudiantes = listaEstudiantes;
     }
 }

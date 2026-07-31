@@ -1,9 +1,5 @@
 <%--
-  Created by IntelliJ IDEA.
-  User: car15
-  Date: 29/07/2026
-  Time: 08:40 p.m.
-  To change this template use File | Settings | File Templates.
+  Vista de Periodos
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
@@ -52,114 +48,88 @@
             <!-- Contenedor principal alineado -->
             <div class="w-100" style="max-width: 850px;">
 
-                <!-- Buscador superior -->
-                <div class="row g-2 mb-4 justify-content-center">
+                <!-- Buscador / Filtro superior -->
+                <!-- Buscador / Filtro superior -->
+                <form action="${pageContext.request.contextPath}/servlet-periodos" method="POST" class="row g-2 mb-4 justify-content-center">
                     <div class="col-9">
                         <div class="input-group">
-                            <span class="input-group-text bg-white border-end-0">
-                                <i class="bi bi-search"></i>
-                            </span>
-                            <select class="form-select border-start-0 p-2" id="filtroPeriodo">
-                                <option value="" selected disabled>Periodo:</option>
-                                <option value="Mayo-Junio">Mayo-Junio</option>
-                                <option value="Febrero-Marzo">Febrero-Marzo</option>
+            <span class="input-group-text bg-white border-end-0">
+                <i class="bi bi-search"></i>
+            </span>
+                            <select class="form-select border-start-0 p-2" name="filtroPeriodo" id="filtroPeriodo" required>
+                                <option value="" disabled>Periodo:</option>
+                                <c:forEach var="p" items="${listaPeriodos}">
+                                    <option value="${p.id_periodo}" ${idPeriodoActivo == p.id_periodo ? 'selected' : ''}>
+                                        <c:out value="${p.nombre_periodo}"/>
+                                    </option>
+                                </c:forEach>
                             </select>
                         </div>
                     </div>
                     <div class="col-3">
-                        <button class="btn w-100 py-2 text-white fw-medium rounded-3" style="background-color: #429983;" type="button">
+                        <button class="btn w-100 py-2 text-white fw-medium rounded-3" style="background-color: #429983;" type="submit">
                             Buscar
                         </button>
                     </div>
-                </div>
+                </form>
 
-                <!-- Lista de Periodos (Acordeón) -->
+                <!-- Lista de Periodos -->
                 <div class="accordion d-flex flex-column gap-3" id="acordeonPeriodos">
 
-                    <!-- PERIODO 1: MAYO-JUNIO (Desplegado) -->
-                    <div class="card border border-secondary border-opacity-25 rounded-3 shadow-sm bg-white">
+                    <c:forEach var="p" items="${listaPeriodos}">
 
-                        <!-- Cabecera del Periodo -->
-                        <div class="card-header bg-white border-0 py-2 px-3 d-flex align-items-center justify-content-between">
-                            <span class="fw-normal fs-5 text-dark">PERIODO : Mayo-Junio</span>
-                            <button class="btn p-0 border-0 fs-4 text-dark" type="button" data-bs-toggle="collapse" data-bs-target="#periodoMayoJunio" aria-expanded="true">
-                                <!-- Icono flecha hacia abajo -->
-                                <i class="bi bi-chevron-down"></i>
-                            </button>
-                        </div>
+                        <c:set var="estaAbierto" value="${idPeriodoActivo == p.id_periodo}" />
 
-                        <!-- Contenido Desplegable (Lista de Alumnos) -->
-                        <div id="periodoMayoJunio" class="collapse show" data-bs-parent="#acordeonPeriodos">
-                            <div class="card-body pt-0 px-3 pb-3 d-flex flex-column gap-2">
+                        <div class="card border border-secondary border-opacity-25 rounded-3 shadow-sm bg-white">
 
-                                <!-- Alumno 1 -->
-                                <div class="border border-secondary border-opacity-25 rounded-2 p-2 d-flex align-items-center justify-content-between bg-white">
-                                    <span class="fs-5 text-secondary ps-2">Ismael Medina Villagomez</span>
-                                    <div class="d-flex align-items-center gap-2">
-                                        <button class="btn text-white px-3 py-1 d-flex align-items-center gap-2" style="background-color: #002E60;" type="button">
-                                            Detalles <i class="bi bi-file-earmark-text-fill"></i>
-                                        </button>
-                                        <button class="btn btn-link text-dark p-0 fs-5"></button>
-                                    </div>
-                                </div>
-
-                                <!-- Alumno 2 -->
-                                <div class="border border-secondary border-opacity-25 rounded-2 p-2 d-flex align-items-center justify-content-between bg-white">
-                                    <span class="fs-5 text-secondary ps-2">Carlos David Ortega Urias</span>
-                                    <div class="d-flex align-items-center gap-2">
-                                        <button class="btn text-white px-3 py-1 d-flex align-items-center gap-2" style="background-color: #002E60;" type="button">
-                                            Detalles <i class="bi bi-file-earmark-text-fill"></i>
-                                        </button>
-                                        <button class="btn btn-link text-dark p-0 fs-5"></button>
-                                    </div>
-                                </div>
-
-                                <!-- Alumno 3 -->
-                                <div class="border border-secondary border-opacity-25 rounded-2 p-2 d-flex align-items-center justify-content-between bg-white">
-                                    <span class="fs-5 text-secondary ps-2">Samantha Terrones Moreno</span>
-                                    <div class="d-flex align-items-center gap-2">
-                                        <button class="btn text-white px-3 py-1 d-flex align-items-center gap-2" style="background-color: #002E60;" type="button">
-                                            Detalles <i class="bi bi-file-earmark-text-fill"></i>
-                                        </button>
-                                        <button class="btn btn-link text-dark p-0 fs-5"></button>
-                                    </div>
-                                </div>
-
+                            <!-- Cabecera -->
+                            <div class="card-header bg-white border-0 py-2 px-3 d-flex align-items-center justify-content-between">
+                                <span class="fw-normal fs-5 text-dark">PERIODO : <c:out value="${p.nombre_periodo}"/></span>
+                                <button class="btn p-0 border-0 fs-4 text-dark ${estaAbierto ? '' : 'collapsed'}"
+                                        type="button"
+                                        data-bs-toggle="collapse"
+                                        data-bs-target="#periodo_${p.id_periodo}">
+                                    <i class="bi bi-chevron-down"></i>
+                                </button>
                             </div>
-                        </div>
 
-                    </div>
+                            <!-- Contenido desplegable -->
+                            <div id="periodo_${p.id_periodo}" class="collapse ${estaAbierto ? 'show' : ''}">
+                                <div class="card-body pt-0 px-3 pb-3 d-flex flex-column gap-2">
 
-                    <!-- PERIODO 2: Febrero-Marzo (Cerrado por defecto) -->
-                    <div class="card border border-secondary border-opacity-25 rounded-3 shadow-sm bg-white">
+                                    <!-- Revisamos directamente la lista que guardamos dentro del objeto "p" -->
+                                    <c:choose>
+                                        <c:when test="${not empty p.listaEstudiantes}">
+                                            <c:forEach var="est" items="${p.listaEstudiantes}">
 
-                        <!-- Cabecera del Periodo -->
-                        <div class="card-header bg-white border-0 py-2 px-3 d-flex align-items-center justify-content-between">
-                            <span class="fw-normal fs-5 text-dark">PERIODO : Febrero-Marzo</span>
-                            <button class="btn p-0 border-0 fs-4 text-dark collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#periodoFebMar" aria-expanded="false">
-                                <!-- Icono flecha hacia abajo -->
-                                <i class="bi bi-chevron-down"></i>
-                            </button>
-                        </div>
+                                                <div class="border border-secondary border-opacity-25 rounded-2 p-2 d-flex align-items-center justify-content-between bg-white">
+                        <span class="fs-5 text-secondary ps-2">
+                            <c:out value="${est.nombre} ${est.apellido}"/>
+                        </span>
+                                                    <a href="${pageContext.request.contextPath}/servlet-datos-estudiante?matricula=${est.matricula}"
+                                                       class="btn text-white px-3 py-1 d-flex align-items-center gap-2"
+                                                       style="background-color: #002E60;">
+                                                        Detalles <i class="bi bi-file-earmark-text-fill"></i>
+                                                    </a>
+                                                </div>
 
-                        <!-- Contenido Desplegable -->
-                        <div id="periodoFebMar" class="collapse" data-bs-parent="#acordeonPeriodos">
-                            <div class="card-body pt-0 px-3 pb-3 d-flex flex-column gap-2">
+                                            </c:forEach>
+                                        </c:when>
 
-                                <div class="border border-secondary border-opacity-25 rounded-2 p-2 d-flex align-items-center justify-content-between bg-white">
-                                    <span class="fs-5 text-secondary ps-2">Juan Perez Gomez</span>
-                                    <div class="d-flex align-items-center gap-2">
-                                        <button class="btn text-white px-3 py-1 d-flex align-items-center gap-2" style="background-color: #002E60;" type="button">
-                                            Detalles <i class="bi bi-file-earmark-text-fill"></i>
-                                        </button>
-                                        <button class="btn btn-link text-dark p-0 fs-5"></button>
-                                    </div>
+                                        <c:otherwise>
+                                            <div class="text-muted p-2 text-center fs-6">
+                                                No hay estudiantes asignados en este periodo.
+                                            </div>
+                                        </c:otherwise>
+                                    </c:choose>
+
                                 </div>
-
                             </div>
+                            </div>
+
                         </div>
 
-                    </div>
+                    </c:forEach>
 
                 </div>
 
