@@ -5,6 +5,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import mx.edu.utez.pres.srde.model.BeanEstudiante;
 import mx.edu.utez.pres.srde.service.ServicioDatosEstudiantes;
 
@@ -14,6 +15,12 @@ import java.io.IOException;
 public class ServletDatosEstudiante extends HttpServlet {
     @Override
     public void doGet(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
+        HttpSession sesion = req.getSession(false);
+        if (sesion == null || sesion.getAttribute("docenteLogueado") == null) {
+            res.sendRedirect(req.getContextPath() + "/index.jsp");
+            return;
+        }
+
         ServicioDatosEstudiantes servicioDatosEstudiante = new ServicioDatosEstudiantes();
         String matricula= req.getParameter("matricula");
 
@@ -32,5 +39,7 @@ public class ServletDatosEstudiante extends HttpServlet {
         }
 
     }
+
+    //Aqui estara el doPost
 
 }

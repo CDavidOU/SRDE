@@ -16,7 +16,7 @@
 
 <div id="contenido" class="d-flex">
 
-    <div id="menu" class="bg-white border-end min-vh-100" style="width: 180px;">
+    <div id="menu" class="border-end min-vh-100" style="width: 180px;">
         <jsp:include page="../Plantillas/menu.jsp" />
     </div>
 

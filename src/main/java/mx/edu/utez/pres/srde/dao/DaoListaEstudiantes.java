@@ -1,6 +1,7 @@
 package mx.edu.utez.pres.srde.dao;
 
 import mx.edu.utez.pres.srde.model.BeanAsignacionEstadias;
+import mx.edu.utez.pres.srde.model.BeanDocente;
 import mx.edu.utez.pres.srde.model.BeanEstudiante;
 import mx.edu.utez.pres.srde.util.Conexion;
 

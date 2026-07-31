@@ -34,7 +34,7 @@
             </a>
 
             <!-- Resto de enlaces con texto blanco y fondo transparente -->
-            <a href="#" class="list-group-item list-group-item-action text-white bg-transparent border-0 px-3 py-2">
+            <a href="${pageContext.request.contextPath}/servlet-periodos" class="list-group-item list-group-item-action text-white bg-transparent border-0 px-3 py-2">
                 Periodos
             </a>
             <a href="${pageContext.request.contextPath}/servlet-lista-estudiantes" class="list-group-item list-group-item-action text-white bg-transparent border-0 px-3 py-2">

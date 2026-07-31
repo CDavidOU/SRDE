@@ -26,6 +26,7 @@ public class DaoDatosEstudiantes {
                     estudiante.setCarrera(rs.getString("carrera"));
                     estudiante.setCuatrimestre(rs.getInt("cuatrimestre"));
                     estudiante.setCorreo(rs.getString("correo"));
+                    estudiante.setGrupo(rs.getString("grupo"));
                     estudiante.setEstado(rs.getString("estado"));
                 }
             }catch (SQLException e) {
