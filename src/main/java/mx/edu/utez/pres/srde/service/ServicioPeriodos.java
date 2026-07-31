@@ -26,7 +26,7 @@ public class ServicioPeriodos {
                 fechaFin = LocalDate.of(anio, 8, 31);
                 break;
             default: nombreCalculado = "Septiembre - Diciembre "+anio;
-                     fechaInicio = LocalDate.of(anio,9,30);
+                     fechaInicio = LocalDate.of(anio,9,1);
                      fechaFin = LocalDate.of(anio,10,31);
             break;
         }

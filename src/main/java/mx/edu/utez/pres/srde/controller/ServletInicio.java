@@ -1,6 +1,7 @@
 package mx.edu.utez.pres.srde.controller;
 
 import jakarta.servlet.ServletException;
+import jakarta.servlet.ServletOutputStream;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -57,6 +58,7 @@ public class ServletInicio extends HttpServlet {
                 sesion.setAttribute("adminLogueado", admin);
 
                 int idAdmin = admin.getId();
+                System.out.println(idAdmin);
                 req.getRequestDispatcher("/WEB-INF/Admin/perfil.jsp").forward(req, res);
 
             } else {
