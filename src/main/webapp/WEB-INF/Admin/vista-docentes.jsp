@@ -1,153 +1,71 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: car15
-  Date: 29/07/2026
-  Time: 07:34 p.m.
-  To change this template use File | Settings | File Templates.
---%>
-<%--
-  Created by IntelliJ IDEA.
-  User: jaca8
-  Date: 7/24/2026
---%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-
-<!doctype html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lista de Docentes</title>
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Bootstrap Icons -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <title>Docentes</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
 </head>
-<body>
+<body class="bg-light">
 
-<div id="contenido" class="d-flex min-vh-100">
-
-    <!-- Menú Lateral -->
-    <div id="menu" class="bg-white border-end" style="width: 180px; flex-shrink: 0;">
-        <jsp:include page="../Plantillas/menu.jsp" />
+<div class="d-flex">
+    <!-- 1. Menú Lateral -->
+    <div style="width: 250px; min-height: 100vh;">
+        <jsp:include page="/WEB-INF/Plantillas/menu.jsp" />
     </div>
 
-    <!-- Contenido Principal -->
-    <div id="cambiantes" class="flex-grow-1 d-flex flex-column bg-light">
+    <!-- 2. Área Principal de Contenido -->
+    <div class="flex-grow-1">
 
-        <!-- Encabezado -->
-        <div class="w-100 text-center mb-4">
-            <h1 class="text-white m-0 py-3 fs-2 fw-semibold" style="background-color: #002E60;">Docentes</h1>
+        <!-- Cabecera / Header Superior -->
+        <div class="w-100 text-center text-white py-3 fw-bold fs-3" style="background-color: #002B66;">
+            Docentes
         </div>
 
-        <div id="datos" class="p-4 flex-grow-1 d-flex justify-content-center">
+        <!-- Contenido Central (Lista de tarjetas según Wireframe) -->
+        <div class="container my-4 px-5" style="max-width: 900px;">
 
-            <!-- Contenedor principal alineado con la maqueta -->
-            <div class="w-100" style="max-width: 850px;">
+            <!-- Mensaje si no hay registros -->
+            <c:if test="${not empty mensajeVacio}">
+                <div class="alert alert-warning text-center">${mensajeVacio}</div>
+            </c:if>
 
+            <!-- Tarjetas de Docentes -->
+            <c:if test="${not empty listaDocentesActivos}">
+                <c:forEach var="doc" items="${listaDocentesActivos}">
+                    <div class="card mb-3 border shadow-sm">
+                        <div class="card-body d-flex align-items-center justify-content-between p-2">
 
-                <!-- Lista de Docentes -->
-                <div class="d-flex flex-column gap-2 mb-4">
-
-                    <!-- Docente 1 -->
-                    <div class="card border border-secondary border-opacity-25 rounded-3 shadow-sm">
-                        <div class="card-body py-2 px-3 d-flex align-items-center justify-content-between">
-                            <div class="d-flex align-items-center gap-3">
-                                <div class="rounded-circle bg-dark text-white d-flex align-items-center justify-content-center" style="width: 38px; height: 38px;">
-                                    <i class="bi bi-person-fill fs-5"></i>
-                                </div>
-                                <span class="fw-semibold text-secondary fs-5">Nathaly Escalona Ruiz</span>
+                            <!-- Icono y Nombre -->
+                            <div class="d-flex align-items-center ms-2">
+                                <i class="bi bi-person-fill fs-2 me-3"></i>
+                                <span class="fs-5 fw-semibold">${doc.nombre}</span>
                             </div>
-                            <div class="d-flex align-items-center gap-3">
-                                <span class="fw-bold text-secondary fs-5">Alumnos: 10</span>
-                                <a href="#" class="btn text-white d-flex align-items-center justify-content-center px-3" style="background-color: #002E60;"><i class="bi bi-file-earmark-text-fill fs-5"></i></a>
+
+                            <!-- Alumnos y Botón -->
+                            <div class="d-flex align-items-center">
+                                <span class="fs-5 me-3">Alumnos: ${doc.totalAlumnos}</span>
+                                <button class="btn text-white px-3 py-2" style="background-color: #002B66;">
+                                    <i class="bi bi-card-text"></i>
+                                </button>
                             </div>
+
                         </div>
                     </div>
+                </c:forEach>
+            </c:if>
 
-                    <!-- Docente 2 -->
-                    <div class="card border border-secondary border-opacity-25 rounded-3 shadow-sm">
-                        <div class="card-body py-2 px-3 d-flex align-items-center justify-content-between">
-                            <div class="d-flex align-items-center gap-3">
-                                <div class="rounded-circle bg-dark text-white d-flex align-items-center justify-content-center" style="width: 38px; height: 38px;">
-                                    <i class="bi bi-person-fill fs-5"></i>
-                                </div>
-                                <span class="fw-semibold text-secondary fs-5">Jose Christian Narvaez Figueroa</span>
-                            </div>
-                            <div class="d-flex align-items-center gap-3">
-                                <span class="fw-bold text-secondary fs-5">Alumnos: 8</span>
-                                <a href="#" class="btn text-white d-flex align-items-center justify-content-center px-3" style="background-color: #002E60;"><i class="bi bi-file-earmark-text-fill fs-5"></i></a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Docente 3 -->
-                    <div class="card border border-secondary border-opacity-25 rounded-3 shadow-sm">
-                        <div class="card-body py-2 px-3 d-flex align-items-center justify-content-between">
-                            <div class="d-flex align-items-center gap-3">
-                                <div class="rounded-circle bg-dark text-white d-flex align-items-center justify-content-center" style="width: 38px; height: 38px;">
-                                    <i class="bi bi-person-fill fs-5"></i>
-                                </div>
-                                <span class="fw-semibold text-secondary fs-5">José Juan Romero Arroyo</span>
-                            </div>
-                            <div class="d-flex align-items-center gap-3">
-                                <span class="fw-bold text-secondary fs-5">Alumnos: 2</span>
-                                <a href="#" class="btn text-white d-flex align-items-center justify-content-center px-3" style="background-color: #002E60;"><i class="bi bi-file-earmark-text-fill fs-5"></i></a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Docente 4 -->
-                    <div class="card border border-secondary border-opacity-25 rounded-3 shadow-sm">
-                        <div class="card-body py-2 px-3 d-flex align-items-center justify-content-between">
-                            <div class="d-flex align-items-center gap-3">
-                                <div class="rounded-circle bg-dark text-white d-flex align-items-center justify-content-center" style="width: 38px; height: 38px;">
-                                    <i class="bi bi-person-fill fs-5"></i>
-                                </div>
-                                <span class="fw-semibold text-secondary fs-5">Nelida Baron Perez</span>
-                            </div>
-                            <div class="d-flex align-items-center gap-3">
-                                <span class="fw-bold text-secondary fs-5">Alumnos: 10</span>
-                                <a href="#" class="btn text-white d-flex align-items-center justify-content-center px-3" style="background-color: #002E60;"><i class="bi bi-file-earmark-text-fill fs-5"></i></a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Docente 5 -->
-                    <div class="card border border-secondary border-opacity-25 rounded-3 shadow-sm">
-                        <div class="card-body py-2 px-3 d-flex align-items-center justify-content-between">
-                            <div class="d-flex align-items-center gap-3">
-                                <div class="rounded-circle bg-dark text-white d-flex align-items-center justify-content-center" style="width: 38px; height: 38px;">
-                                    <i class="bi bi-person-fill fs-5"></i>
-                                </div>
-                                <span class="fw-semibold text-secondary fs-5">Miguel Delgado Reyes</span>
-                            </div>
-                            <div class="d-flex align-items-center gap-3">
-                                <span class="fw-bold text-secondary fs-5">Alumnos: 5</span>
-                                <a href="#" class="btn text-white d-flex align-items-center justify-content-center px-3" style="background-color: #002E60;"><i class="bi bi-file-earmark-text-fill fs-5"></i></a>
-                            </div>
-                        </div>
-                    </div>
-
-
-                </div>
-
-                <!-- Botón 'Registrar docente '-->
-                <div class="d-flex justify-content-end align-items-center gap-2 mt-4">
-                    <span class="fw-bold text-secondary fs-5">Registrar docente</span>
-                    <a href="${pageContext.request.contextPath}/vistas/registroDocente.jsp" class="btn border border-secondary border-opacity-50 bg-white fs-4 fw-bold px-3 py-0 shadow-sm text-dark">
-                        +
-                    </a>
-                </div>
-
+            <!-- Botón Registrar Docente (Abajo a la derecha) -->
+            <div class="d-flex justify-content-end align-items-center mt-4">
+                <span class="me-2 fw-semibold fs-5">Registrar docente</span>
+                <a href="#" class="btn btn-outline-dark px-3 py-1 fw-bold fs-4">+</a>
             </div>
 
         </div>
     </div>
 </div>
 
-<!-- Bootstrap JS -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
