@@ -10,6 +10,7 @@ import mx.edu.utez.pres.srde.model.BeanDocente;
 import mx.edu.utez.pres.srde.model.BeanEstudiante;
 import mx.edu.utez.pres.srde.model.BeanPeriodo;
 import mx.edu.utez.pres.srde.service.ServicioAsignacionEstadias;
+import mx.edu.utez.pres.srde.service.ServicioDocumento;
 import mx.edu.utez.pres.srde.service.ServicioPeriodos;
 import mx.edu.utez.pres.srde.service.ServicioRegistroEstudiante;
 
@@ -53,9 +54,10 @@ public class ServletRegistroEstudiante extends HttpServlet {
         estudiante.setNombre(req.getParameter("nombre"));
         estudiante.setApellido(req.getParameter("apellido"));
         estudiante.setCarrera(req.getParameter("carrera"));
+        estudiante.setCorreo(req.getParameter("correo"));
         estudiante.setCuatrimestre(cuatrimestre);
         estudiante.setMatricula(req.getParameter("matricula"));
-        estudiante.setCorreo(req.getParameter("correo"));
+        estudiante.setGrupo(req.getParameter("grupo"));
 
         ServicioPeriodos servicioPeriodos = new ServicioPeriodos();
         BeanPeriodo periodoActual = servicioPeriodos.automatizacionPeriodos();
@@ -67,13 +69,22 @@ public class ServletRegistroEstudiante extends HttpServlet {
         // En ServletRegistroEstudiante.java (dentro del doPost):
         if (registroEstudiante != null) {
             ServicioAsignacionEstadias servicioAsignacionEstadias = new ServicioAsignacionEstadias();
-            servicioAsignacionEstadias.registroAsignacionEstadias(
+
+            // 1. Haces la asignación y capturas el ID de la asignación que acaba de crear la base de datos
+            int idAsignacionGenerada = servicioAsignacionEstadias.registroAsignacionEstadias(
                     idDocente,
                     periodoActual.getId_periodo(),
                     registroEstudiante.getMatricula()
             );
 
+            // 2. Verificas que la asignación se haya guardado correctamente antes de inicializar los documentos
+            if (idAsignacionGenerada > 0) {
+                ServicioDocumento servicioDoc = new ServicioDocumento();
+                servicioDoc.inicializarDocumento(idAsignacionGenerada, idDocente);
+            }
+
             // GUARDAR EN SESIÓN PARA SOBREVIVIR AL REDIRECT
+            System.out.printf("Estoy en servletRegistro y si ingrese al estudiante");
             sesion.setAttribute("mensajeOk", "Se ha ingresado el estudiante correctamente.");
             res.sendRedirect(req.getContextPath() + "/servlet-lista-estudiantes");
         } else {

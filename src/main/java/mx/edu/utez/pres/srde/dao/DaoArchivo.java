@@ -1,0 +1,203 @@
+package mx.edu.utez.pres.srde.dao;
+
+import mx.edu.utez.pres.srde.model.BeanArchivo;
+import mx.edu.utez.pres.srde.util.Conexion;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
+public class DaoArchivo {
+
+    public int registrarDocumento(BeanArchivo archivo) {
+        // Retornaremos el ID generado. Si retorna 0, significa que falló.
+        int idGenerado = 0;
+        String sql = "INSERT INTO ARCHIVO (ARCHIVO, NOMBRE_ORIGINAL_ARCHIVO, TAMANO) values (?, ?, ?)";
+
+        try (Connection conexion = Conexion.getConexion();
+             // Le indicamos a Oracle que queremos recuperar la columna ID_ARCHIVO
+             PreparedStatement prs = conexion.prepareStatement(sql, new String[]{"ID_ARCHIVO"})) {
+
+            prs.setBinaryStream(1, archivo.getContenido_achivo(), archivo.getTamano());
+            prs.setString(2, archivo.getNombre_archivo());
+            prs.setLong(3, archivo.getTamano());
+
+            int filasInsertadas = prs.executeUpdate();
+
+            if (filasInsertadas > 0) {
+                // Recuperamos las llaves generadas
+                try (java.sql.ResultSet rs = prs.getGeneratedKeys()) {
+                    if (rs.next()) {
+                        idGenerado = rs.getInt(1); // Guardamos el ID que creó Oracle
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("Error al registrar el documento en DaoArchivo");
+            e.printStackTrace();
+        }
+
+        return idGenerado;
+    }
+
+    public boolean registrarDetallesDocumento(int idAsignacion, int idTipoDoc, int idArchivoGenerado, String estado, String observaciones, int idUsuarioModificador) {
+
+        String sql = "UPDATE CONTROL_DOC SET ID_ARCHIVO = ?, ESTADO = ?, OBSERVACIONES = ?, MODIFICADO_POR = ? WHERE ID_ASIGNACION = ? AND ID_TIPO_DOC = ?";
+
+        try (Connection conexion = Conexion.getConexion();
+             PreparedStatement prs = conexion.prepareStatement(sql)) {
+
+            prs.setInt(1, idArchivoGenerado); // El ID que se generó en la tabla ARCHIVO
+            prs.setString(2, estado);
+            prs.setString(3, observaciones);
+            prs.setInt(4, idUsuarioModificador);
+            prs.setInt(5, idAsignacion);
+            prs.setInt(6, idTipoDoc);
+
+            int filas = prs.executeUpdate();
+
+            return filas > 0;
+
+        } catch (SQLException e) {
+            System.err.println("Error al registrar detalles del documento en CONTROL_DOC");
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public boolean modificarObservaciones(int idAsignacion, int idTipoDoc, String observaciones, int idUsuarioModificador) {
+        // Un UPDATE enfocado solo en guardar lo que el docente escribió en la caja de texto
+        String sql = "UPDATE CONTROL_DOC SET OBSERVACIONES = ?, MODIFICADO_POR = ? WHERE ID_ASIGNACION = ? AND ID_TIPO_DOC = ?";
+
+        try (Connection conexion = Conexion.getConexion();
+             PreparedStatement prs = conexion.prepareStatement(sql)) {
+
+            prs.setString(1, observaciones);
+            prs.setInt(2, idUsuarioModificador);
+            prs.setInt(3, idAsignacion);
+            prs.setInt(4, idTipoDoc);
+
+            return prs.executeUpdate() > 0;
+
+        } catch (SQLException e) {
+            System.err.println("Error al modificar las observaciones en CONTROL_DOC");
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public boolean eliminarDocumento(int idAsignacion, int idTipoDoc, int idUsuarioModificador) {
+        // En lugar de DELETE, hacemos un UPDATE para "limpiar" el registro y regresarlo a Pendiente
+        String sql = "UPDATE CONTROL_DOC SET ID_ARCHIVO = NULL, ESTADO = 'Pendiente', OBSERVACIONES = NULL, MODIFICADO_POR = ? WHERE ID_ASIGNACION = ? AND ID_TIPO_DOC = ?";
+
+        try (Connection conexion = Conexion.getConexion();
+             PreparedStatement prs = conexion.prepareStatement(sql)) {
+
+            prs.setInt(1, idUsuarioModificador);
+            prs.setInt(2, idAsignacion);
+            prs.setInt(3, idTipoDoc);
+
+            return prs.executeUpdate() > 0;
+
+        } catch (SQLException e) {
+            System.err.println("Error al 'eliminar' (resetear) el documento en CONTROL_DOC");
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+
+    public List<BeanArchivo> consultarDocumentosPorMatricula(String matricula) {
+        List<BeanArchivo> listaDocumentos = new ArrayList<>();
+
+        // La consulta SQL que une las 4 tablas
+        String sql = "SELECT td.ID_TIPO_DOC, td.NOMBRE_DOC, cd.ESTADO, cd.OBSERVACIONES, ar.ID_ARCHIVO " +
+                "FROM ASIGNACION_ESTADIAS ae " +
+                "INNER JOIN CONTROL_DOC cd ON ae.ID_ASIGNACION = cd.ID_ASIGNACION " +
+                "INNER JOIN TIPO_DOC td ON cd.ID_TIPO_DOC = td.ID_TIPO_DOC " +
+                "LEFT JOIN ARCHIVO ar ON cd.ID_ARCHIVO = ar.ID_ARCHIVO " +
+                "WHERE ae.MATRICULA = ?";
+
+        // Conexión a la base de datos (asegúrate de que el método para obtener tu conexión se llame así)
+        try (Connection con = new Conexion().getConexion(); // o Conexion.getConnection(), según tu proyecto
+             PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setString(1, matricula);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    BeanArchivo doc = new BeanArchivo();
+
+                /* ========================================================
+                   IMPORTANTE:
+                   Es muy probable que algunos de estos métodos .set te
+                   marquen error en rojo. Si es así, significa que debes
+                   abrir tu clase BeanArchivo y agregarle esos atributos
+                   (con sus getters y setters) para que pueda transportar
+                   toda esta información.
+                   ======================================================== */
+                    doc.setId_tipo_doc(rs.getInt("ID_TIPO_DOC"));
+                    doc.setNombre_archivo(rs.getString("NOMBRE_DOC")); // o setNombre_archivo
+                    doc.setEstado(rs.getString("ESTADO"));
+
+                    // Manejo de valores nulos para las observaciones
+                    String obs = rs.getString("OBSERVACIONES");
+                    doc.setObservaciones(obs != null ? obs : "Sin observaciones");
+
+                    // Manejo de valores nulos por si el archivo aún no se sube (estado Pendiente)
+                    int idArchivo = rs.getInt("ID_ARCHIVO");
+                    if (!rs.wasNull()) {
+                        doc.setId_archivo(idArchivo); // o setId_archivo
+                    }
+
+                    // Agregamos el documento a la lista
+                    listaDocumentos.add(doc);
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("Error al consultar documentos: " + e.getMessage());
+            e.printStackTrace();
+        }
+
+        return listaDocumentos;
+    }
+
+    public boolean insertarControlDocPendiente(int idAsignacion, int idTipoDoc, int idDocente) {
+        String sql = "INSERT INTO CONTROL_DOC (ID_ASIGNACION, ID_TIPO_DOC, ESTADO, MODIFICADO_POR) VALUES (?, ?, 'Pendiente', ?)";
+        try (Connection conexion = Conexion.getConexion();
+             PreparedStatement prs = conexion.prepareStatement(sql)) {
+            prs.setInt(1, idAsignacion);
+            prs.setInt(2, idTipoDoc);
+            prs.setInt(3, idDocente);
+            return prs.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public List<Integer> obtenerTodosIds() {
+        List<Integer> idsTiposDocumento = new ArrayList<>();
+        String sql = "SELECT ID_TIPO_DOC FROM TIPO_DOC";
+
+        try (Connection conexion = Conexion.getConexion();
+             PreparedStatement prs = conexion.prepareStatement(sql);
+             ResultSet rs = prs.executeQuery()) {
+
+            while (rs.next()) {
+                // Extraemos el ID de cada tipo de documento y lo agregamos a la lista
+                int idTipoDoc = rs.getInt("ID_TIPO_DOC");
+                idsTiposDocumento.add(idTipoDoc);
+            }
+
+        } catch (SQLException e) {
+            System.err.println("Error al obtener los IDs de los tipos de documento");
+            e.printStackTrace();
+        }
+
+        return idsTiposDocumento;
+    }
+}

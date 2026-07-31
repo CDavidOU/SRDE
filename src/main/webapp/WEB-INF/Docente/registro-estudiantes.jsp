@@ -71,7 +71,7 @@
 
                     <!-- Fila 3: Cuatrimestre y Carrera -->
                     <div id="academicos" class="row g-3 mb-4">
-                        <div class="col-6">
+                        <div class="col-4">
                             <label class="fw-bold mb-1 fs-5 text-secondary" for="cuatrimestre">Cuatrimestre:</label>
                             <select class="form-select p-2" id="cuatrimestre" name="cuatrimestre" required>
                                 <option value="">Selecciona una opción</option>
@@ -79,9 +79,13 @@
                                 <option value="11">11° Cuatrimestre</option>
                             </select>
                         </div>
-                        <div class="col-6">
+                        <div class="col-4">
                             <label class="fw-bold mb-1 fs-5 text-secondary" for="carrera">Carrera:</label>
                             <input class="form-control p-2" type="text" id="carrera" name="carrera" required minlength="3" placeholder="DSM">
+                        </div>
+                        <div class="col-4">
+                            <label class="fw-bold fs-5 mb-1 text-secondary" for="grupo">Grupo:</label>
+                            <input class="form-control p-2" type="text" id="grupo" name="grupo" required>
                         </div>
                     </div>
 

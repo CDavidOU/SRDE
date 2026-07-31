@@ -35,6 +35,7 @@ public class ServletListaEstudiantes extends HttpServlet {
         int id_periodo = periodoEncontrado.getId_periodo();
 
         ServicioListaEstudiante listaServicio = new ServicioListaEstudiante();
+
         List<BeanAsignacionEstadias> listaEstudiantesActivos = listaServicio.listaEstudiantes(id_docente, id_periodo);
 
         if (listaEstudiantesActivos != null && !listaEstudiantesActivos.isEmpty()) {
@@ -48,6 +49,32 @@ public class ServletListaEstudiantes extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
-        doGet(req, res);
+        HttpSession sesion = req.getSession(false);
+
+        if (sesion == null || sesion.getAttribute("docenteLogueado") == null) {
+            res.sendRedirect(req.getContextPath() + "/index.jsp");
+            return;
+        }
+
+        BeanDocente docenteLogueado = (BeanDocente) sesion.getAttribute("docenteLogueado");
+        int id_docente = docenteLogueado.getId();
+
+        ServicioPeriodos periodoActual = new ServicioPeriodos();
+        BeanPeriodo periodoEncontrado = periodoActual.automatizacionPeriodos();
+        int id_periodo = periodoEncontrado.getId_periodo();
+
+        String buscador = req.getParameter("buscador");
+
+        ServicioListaEstudiante listaServicio = new ServicioListaEstudiante();
+
+        List<BeanAsignacionEstadias> listaBuscada = listaServicio.listaBuscoEstudiantes(id_docente,id_periodo, buscador);
+
+        if (listaBuscada != null && !listaBuscada.isEmpty()) {
+            req.setAttribute("listaEstudiantesActivos", listaBuscada);
+        } else {
+            req.setAttribute("mensajeVacio", "No hay ninguna coincidencia.");
+        }
+
+        req.getRequestDispatcher("WEB-INF/Docente/vista-estudiantes.jsp").forward(req, res);
     }
 }

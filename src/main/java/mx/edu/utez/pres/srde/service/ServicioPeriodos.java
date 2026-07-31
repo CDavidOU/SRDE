@@ -1,12 +1,35 @@
 package mx.edu.utez.pres.srde.service;
 
 import mx.edu.utez.pres.srde.dao.DaoPeriodo;
+import mx.edu.utez.pres.srde.model.BeanEstudiante;
 import mx.edu.utez.pres.srde.model.BeanPeriodo;
 import java.time.LocalDate;
 import java.sql.Date;
+import java.util.List;
 
 public class ServicioPeriodos {
+
     DaoPeriodo nuevoPeriodo = new DaoPeriodo();
+
+    // Método para obtener la lista de periodos asociados al docente (para el acordeón)
+    public List<BeanPeriodo> obtenerPeriodosPorDocente(int idDocente) {
+        return nuevoPeriodo.obtenerPeriodosPorDocente(idDocente);
+    }
+
+    // Nuevo método delegado para obtener los estudiantes de un periodo
+    public List<BeanEstudiante> consultarEstudiantePeriodo(int idDocente, int idPeriodo) {
+        return nuevoPeriodo.consultarEstudiantePeriodo(idDocente, idPeriodo);
+    }
+
+    // Métodos delegados del DAO
+    public BeanPeriodo buscarPeriodo(String periodo) {
+        return nuevoPeriodo.buscarPeriodo(periodo);
+    }
+
+    public BeanPeriodo registrarNuevoPeriodo(BeanPeriodo periodo) {
+        return nuevoPeriodo.registrarNuevoPeriodo(periodo);
+    }
+
     public BeanPeriodo automatizacionPeriodos() {
         LocalDate fechaHoy = LocalDate.now();
         int mes = fechaHoy.getMonthValue();
@@ -26,9 +49,9 @@ public class ServicioPeriodos {
                 fechaFin = LocalDate.of(anio, 8, 31);
                 break;
             default: nombreCalculado = "Septiembre - Diciembre "+anio;
-                     fechaInicio = LocalDate.of(anio,9,30);
-                     fechaFin = LocalDate.of(anio,10,31);
-            break;
+                fechaInicio = LocalDate.of(anio,9,1);
+                fechaFin = LocalDate.of(anio,10,31);
+                break;
         }
         BeanPeriodo periodoExistente = nuevoPeriodo.buscarPeriodo(nombreCalculado);
         if(periodoExistente!=null){

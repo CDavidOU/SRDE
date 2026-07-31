@@ -14,6 +14,8 @@
         <div class="bg-white p-3 text-center">
             <img src="${pageContext.request.contextPath}/imagenes/UtezLogo.png" class="img-fluid" alt="Logo UTEZ" style="height: 110px; width: 100%;">
         </div>
+
+        <!-- DOCENTE-->
         <c:if test="${not empty sessionScope.docenteLogueado}">
         <!-- Menú de opciones sin bordes externos -->
         <div class="list-group list-group-flush rounded-0 mt-2">
@@ -32,7 +34,7 @@
             </a>
 
             <!-- Resto de enlaces con texto blanco y fondo transparente -->
-            <a href="#" class="list-group-item list-group-item-action text-white bg-transparent border-0 px-3 py-2">
+            <a href="${pageContext.request.contextPath}/servlet-periodos" class="list-group-item list-group-item-action text-white bg-transparent border-0 px-3 py-2">
                 Periodos
             </a>
             <a href="${pageContext.request.contextPath}/servlet-lista-estudiantes" class="list-group-item list-group-item-action text-white bg-transparent border-0 px-3 py-2">
@@ -44,6 +46,9 @@
 
         </div>
         </c:if>
+
+
+        <!-- Admin-->
         <c:if test="${not empty sessionScope.adminLogueado}">
             <div class="list-group list-group-flush rounded-0 mt-2">
 
