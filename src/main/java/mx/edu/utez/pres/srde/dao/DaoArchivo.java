@@ -45,18 +45,17 @@ public class DaoArchivo {
 
     public boolean registrarDetallesDocumento(int idAsignacion, int idTipoDoc, int idArchivoGenerado, String estado, String observaciones, int idUsuarioModificador) {
 
-        String sql = "INSERT INTO CONTROL_DOC (ID_ASIGNACION, ID_TIPO_DOC, ID_ARCHIVO, ESTADO, OBSERVACIONES, MODIFICADO_POR) VALUES (?, ?, ?, ?, ?, ?)";
+        String sql = "UPDATE CONTROL_DOC SET ID_ARCHIVO = ?, ESTADO = ?, OBSERVACIONES = ?, MODIFICADO_POR = ? WHERE ID_ASIGNACION = ? AND ID_TIPO_DOC = ?";
 
         try (Connection conexion = Conexion.getConexion();
              PreparedStatement prs = conexion.prepareStatement(sql)) {
 
-            // Se asignan los 6 parámetros en el orden exacto de la consulta SQL
-            prs.setInt(1, idAsignacion);
-            prs.setInt(2, idTipoDoc);
-            prs.setInt(3, idArchivoGenerado); // El ID que se generó en la tabla ARCHIVO
-            prs.setString(4, estado);         // 'Pendiente', 'Completado', o 'Sin entregar'
-            prs.setString(5, observaciones);
-            prs.setInt(6, idUsuarioModificador);
+            prs.setInt(1, idArchivoGenerado); // El ID que se generó en la tabla ARCHIVO
+            prs.setString(2, estado);
+            prs.setString(3, observaciones);
+            prs.setInt(4, idUsuarioModificador);
+            prs.setInt(5, idAsignacion);
+            prs.setInt(6, idTipoDoc);
 
             int filas = prs.executeUpdate();
 
@@ -69,9 +68,47 @@ public class DaoArchivo {
         return false;
     }
 
-    // Asegúrate de importar List y ArrayList si no los tienes:
-    // import java.util.List;
-    // import java.util.ArrayList;
+    public boolean modificarObservaciones(int idAsignacion, int idTipoDoc, String observaciones, int idUsuarioModificador) {
+        // Un UPDATE enfocado solo en guardar lo que el docente escribió en la caja de texto
+        String sql = "UPDATE CONTROL_DOC SET OBSERVACIONES = ?, MODIFICADO_POR = ? WHERE ID_ASIGNACION = ? AND ID_TIPO_DOC = ?";
+
+        try (Connection conexion = Conexion.getConexion();
+             PreparedStatement prs = conexion.prepareStatement(sql)) {
+
+            prs.setString(1, observaciones);
+            prs.setInt(2, idUsuarioModificador);
+            prs.setInt(3, idAsignacion);
+            prs.setInt(4, idTipoDoc);
+
+            return prs.executeUpdate() > 0;
+
+        } catch (SQLException e) {
+            System.err.println("Error al modificar las observaciones en CONTROL_DOC");
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public boolean eliminarDocumento(int idAsignacion, int idTipoDoc, int idUsuarioModificador) {
+        // En lugar de DELETE, hacemos un UPDATE para "limpiar" el registro y regresarlo a Pendiente
+        String sql = "UPDATE CONTROL_DOC SET ID_ARCHIVO = NULL, ESTADO = 'Pendiente', OBSERVACIONES = NULL, MODIFICADO_POR = ? WHERE ID_ASIGNACION = ? AND ID_TIPO_DOC = ?";
+
+        try (Connection conexion = Conexion.getConexion();
+             PreparedStatement prs = conexion.prepareStatement(sql)) {
+
+            prs.setInt(1, idUsuarioModificador);
+            prs.setInt(2, idAsignacion);
+            prs.setInt(3, idTipoDoc);
+
+            return prs.executeUpdate() > 0;
+
+        } catch (SQLException e) {
+            System.err.println("Error al 'eliminar' (resetear) el documento en CONTROL_DOC");
+            e.printStackTrace();
+        }
+        return false;
+    }
+
 
     public List<BeanArchivo> consultarDocumentosPorMatricula(String matricula) {
         List<BeanArchivo> listaDocumentos = new ArrayList<>();
