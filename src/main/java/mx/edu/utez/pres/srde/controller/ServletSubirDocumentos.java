@@ -11,7 +11,6 @@ import mx.edu.utez.pres.srde.model.BeanArchivo;
 import mx.edu.utez.pres.srde.service.ServicioDocumento;
 
 import java.io.IOException;
-// ... tus demás importaciones ...
 
 @WebServlet(name = "servletSubirDocumentos", value = "/servlet-subir-documentos")
 @MultipartConfig(
@@ -27,12 +26,34 @@ public class ServletSubirDocumentos extends HttpServlet {
         // 1. Recibir los datos del formulario JSP
         int idAsignacion = Integer.parseInt(request.getParameter("idAsignacion"));
         int idTipoDoc = Integer.parseInt(request.getParameter("idTipoDoc"));
-        int idUsuarioModificador = Integer.parseInt(request.getParameter("idUsuarioModificador"));
+        // 1. Obtener la sesión actual
+        jakarta.servlet.http.HttpSession sesion = request.getSession();
+        int idUsuarioModificador = 0;
+
+        // 2. Verificar quién está en la sesión y extraer su ID
+        if (sesion.getAttribute("adminLogueado") != null) {
+            // Es un Administrador
+            mx.edu.utez.pres.srde.model.BeanAdmin admin = (mx.edu.utez.pres.srde.model.BeanAdmin) sesion.getAttribute("adminLogueado");
+            idUsuarioModificador = admin.getId();
+
+        } else if (sesion.getAttribute("docenteLogueado") != null) {
+            // Es un Docente
+            mx.edu.utez.pres.srde.model.BeanDocente docente = (mx.edu.utez.pres.srde.model.BeanDocente) sesion.getAttribute("docenteLogueado");
+            idUsuarioModificador = docente.getId();
+
+        } else {
+            // Si por alguna razón la sesión está vacía (ej. entraron directo a la URL)
+            // los mandamos al login para que no truene el servidor.
+            response.sendRedirect(request.getContextPath() + "/index.jsp");
+            return; // ¡Importante para detener la ejecución del Servlet!
+        }
         String estado = request.getParameter("estado"); // 'Pendiente', 'Completado', o 'Sin entregar'
         String observaciones = request.getParameter("observaciones");
 
+        System.out.println(idAsignacion + " / " + idTipoDoc + " / " + idUsuarioModificador + " / " + estado + " / " + observaciones+ " / " + " / ");
+
         // 2. Obtener el archivo y armar el Bean
-        Part archivoPart = request.getPart("archivoPdf");
+        Part archivoPart = request.getPart("archivoPDF");
 
         BeanArchivo beanArchivo = new BeanArchivo();
         beanArchivo.setNombre_archivo(archivoPart.getSubmittedFileName());
@@ -48,10 +69,11 @@ public class ServletSubirDocumentos extends HttpServlet {
         );
 
         // 5. Responder al usuario
+        String matricula = request.getParameter("matricula");
         if (exito) {
-            response.sendRedirect("ruta_de_exito.jsp?mensaje=Documento procesado correctamente");
+            response.sendRedirect("servlet-datos-estudiante?matricula=" + matricula);
         } else {
-            response.sendRedirect("ruta_de_error.jsp?mensaje=Error al procesar el documento");
+            response.sendRedirect("servlet-datos-estudiante?matricula=" + matricula);
         }
     }
 

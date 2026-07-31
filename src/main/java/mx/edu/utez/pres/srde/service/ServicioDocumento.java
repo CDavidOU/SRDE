@@ -45,4 +45,20 @@ public class ServicioDocumento {
         }
     }
 
+    // Método puente para "Eliminar" (resetear a Pendiente)
+    public boolean procesoEliminarDocumento(int idAsignacion, int idTipoDoc, int idUsuarioModificador) {
+        DaoArchivo dao = new DaoArchivo();
+        // Aquí podrías agregar validaciones extra de negocio en el futuro si las necesitas
+        return dao.eliminarDocumento(idAsignacion, idTipoDoc, idUsuarioModificador);
+    }
+
+    // Método puente para Modificar Observaciones
+    public boolean procesoModificarObservaciones(int idAsignacion, int idTipoDoc, String observaciones, int idUsuarioModificador) {
+        DaoArchivo dao = new DaoArchivo();
+        // Verificamos que las observaciones no vengan completamente nulas antes de mandarlas
+        if (observaciones == null) {
+            observaciones = "";
+        }
+        return dao.modificarObservaciones(idAsignacion, idTipoDoc, observaciones, idUsuarioModificador);
+    }
 }

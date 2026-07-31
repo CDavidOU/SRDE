@@ -115,21 +115,41 @@
 
                                                         <!-- Derecha: Observaciones y Botones -->
                                                         <div class="col-9 ps-4 d-flex flex-column justify-content-between">
-                                                                <div>
-                                                                        <label class="fw-bold fs-5 mb-1">Observaciones</label>
-                                                                        <textarea class="form-control mb-2 bg-light" rows="2" disabled readonly>${doc.observaciones}</textarea>
-                                                                        <span class="text-muted small fw-bold">Fecha de entrega: 10/04/26</span>
-                                                                </div>
+
+                                                                <!-- FORMULARIO PARA MODIFICAR (Solo envuelve el textarea) -->
+                                                                <form action="<%=request.getContextPath()%>/servlet-modificar-observacion" method="POST" id="formModificar_${doc.id_tipo_doc}">
+                                                                        <!-- CORRECCIÓN: Usar idAsignacion en lugar de matricula -->
+                                                                        <input type="hidden" name="idAsignacion" value="${datosEstudiante.idAsignacion}">
+                                                                        <input type="hidden" name="idTipoDoc" value="${doc.id_tipo_doc}">
+
+                                                                        <div>
+                                                                                <label class="fw-bold fs-5 mb-1">Observaciones</label>
+                                                                                <!-- CORRECCIÓN: Quitamos disabled/readonly y agregamos name="observaciones" -->
+                                                                                <textarea class="form-control mb-2 bg-light" name="observaciones" rows="2">${doc.observaciones}</textarea>
+                                                                                <span class="text-muted small fw-bold">Fecha de entrega: 10/04/26</span>
+                                                                        </div>
+                                                                </form>
 
                                                                 <div class="row g-2 mt-3">
                                                                         <div class="col-4">
-                                                                                <button class="btn w-100 fw-bold text-white shadow-sm" style="background-color: #D4AC0D;">Modificar</button>
+                                                                                <!-- CORRECCIÓN: Botón enlazado al form de arriba mediante el ID -->
+                                                                                <button type="submit" form="formModificar_${doc.id_tipo_doc}" class="btn w-100 fw-bold text-white shadow-sm" style="background-color: #D4AC0D;">
+                                                                                        Modificar
+                                                                                </button>
                                                                         </div>
+
                                                                         <div class="col-4">
-                                                                                <button class="btn btn-danger w-100 fw-bold shadow-sm">Eliminar</button>
+                                                                                <!-- FORMULARIO PARA ELIMINAR -->
+                                                                                <form action="<%=request.getContextPath()%>/servlet-eliminar-documento" method="POST">
+                                                                                        <input type="hidden" name="idAsignacion" value="${datosEstudiante.idAsignacion}">
+                                                                                        <input type="hidden" name="idTipoDoc" value="${doc.id_tipo_doc}">
+                                                                                        <button type="submit" class="btn btn-danger w-100 fw-bold shadow-sm">
+                                                                                                Eliminar
+                                                                                        </button>
+                                                                                </form>
                                                                         </div>
+
                                                                         <div class="col-4">
-                                                                                <!-- Conexión al Servlet para ver el PDF -->
                                                                                 <a href="servlet-ver-documento?idArchivo=${doc.id_archivo}" target="_blank" class="btn w-100 fw-bold text-white shadow-sm" style="background-color: #002E60;">
                                                                                         Abrir archivo
                                                                                 </a>
@@ -158,12 +178,13 @@
 
                                                         <!-- Derecha: Observaciones y Formulario -->
                                                         <div class="col-9 ps-4 d-flex flex-column justify-content-between">
-                                                                <!-- Formulario con multipart/form-data -->
-                                                                <form action="${pageContext.request.contextPath}/servlet-subir-documento" method="POST" enctype="multipart/form-data" class="d-flex flex-column h-100">
-                                                                        <!-- ID Oculto para saber a qué alumno/documento pertenece -->
+                                                                <form action="${pageContext.request.contextPath}/servlet-subir-documentos" method="POST" enctype="multipart/form-data" class="d-flex flex-column h-100">
+
+                                                                        <!-- CORRECCIÓN: Borré el input de "idUsuarioModificador" que daba error de EL. El Servlet lo leerá de la sesión. -->
                                                                         <input type="hidden" name="matricula" value="${datosEstudiante.matricula}">
                                                                         <input type="hidden" name="idAsignacion" value="${datosEstudiante.idAsignacion}">
                                                                         <input type="hidden" name="idTipoDoc" value="${doc.id_tipo_doc}">
+                                                                        <input type="hidden" name="estado" value="Completado">
 
                                                                         <div>
                                                                                 <label class="fw-bold fs-5 mb-1">Observaciones</label>

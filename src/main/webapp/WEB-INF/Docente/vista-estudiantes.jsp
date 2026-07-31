@@ -65,7 +65,8 @@
                             </div>
                         </div>
                     </form>
-                    <!-- En la vista de la Lista de Estudiantes (JSP) -->
+
+                    <!-- Muestra si se agrego correctamente al estudiante -->
                     <c:if test="${not empty sessionScope.mensajeOk}">
                         <div class="alert alert-success alert-dismissible fade show text-center m-3" role="alert">
                             <c:out value="${sessionScope.mensajeOk}" />
