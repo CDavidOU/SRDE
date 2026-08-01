@@ -88,7 +88,7 @@
 
     <!-- Opción Notificaciones fijada abajo -->
     <div class="p-2 border-top border-secondary">
-        <a href="#" class="btn text-white w-100 text-start d-flex align-items-center gap-2 border-0 bg-transparent">
+        <a href="${pageContext.request.contextPath}/servlet-crear-notificacion" class="btn text-white w-100 text-start d-flex align-items-center gap-2 border-0 bg-transparent">
             <i class="bi bi-bell"></i>
             <span>Notificaciones</span>
         </a>
