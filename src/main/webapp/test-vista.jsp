@@ -1,8 +1,14 @@
-<<<<<<< HEAD
 <%--
   Created by IntelliJ IDEA.
   User: car15
-  Date: 29/07/2026
+  Date: 30/07/2026
+  Time: 05:55 p.m.
+  To change this template use File | Settings | File Templates.
+--%>
+<%--
+  Created by IntelliJ IDEA.
+  User: jaca8
+  Date: 7/24/2026
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
@@ -12,8 +18,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Título dinámico -->
-    <title><c:out value="${not empty docente ? 'Editar Docente' : 'Registro Docente'}" /></title>
+    <title>Programar Notificación</title>
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Bootstrap Icons -->
@@ -31,103 +36,48 @@
     <!-- Contenido Principal -->
     <div id="cambiantes" class="flex-grow-1 d-flex flex-column bg-light">
 
-        <!-- Encabezado Dinámico -->
+        <!-- Encabezado -->
         <div class="w-100 text-center mb-4">
-            <h1 class="text-white m-0 py-3 fs-2 fw-semibold" style="background-color: #002E60;">
-                <c:out value="${not empty docente ? 'Editar Docente' : 'Registro Docente'}" />
-            </h1>
+            <h1 class="text-white m-0 py-3 fs-2 fw-semibold" style="background-color: #002E60;">Programar notificación</h1>
         </div>
 
         <div id="datos" class="p-4 flex-grow-1 d-flex justify-content-center">
 
             <div class="card border-0 shadow-sm p-4 bg-white rounded-3 w-100" style="max-width: 900px; height: fit-content;">
 
-                <!-- Alerta de Error (JSTL) -->
-                <c:if test="${not empty mensajeError}">
-                    <div class="alert alert-danger text-center py-2 mb-3" role="alert">
-                        <c:out value="${mensajeError}" />
-                    </div>
-                </c:if>
+                <form action="#" method="POST">
 
-                <!-- El action del form cambia según si registras o actualizas -->
-                <form action="${not empty docente ? 'servlet-actualizar-docente' : 'servlet-registro-docente'}" method="POST">
-
-                    <!-- Campo oculto con el ID para la edición -->
-                    <c:if test="${not empty docente}">
-                        <input type="hidden" name="id" value="${docente.id}">
-                    </c:if>
-
-                    <!-- Fila 1: Nombre, Apellido Paterno, Apellido Materno -->
-                    <div id="nombre-completo" class="row g-3 mb-3">
-                        <div class="col-4">
-                            <label class="fw-bold mb-1 fs-5 text-secondary" for="nombre">Nombre:</label>
-                            <input class="form-control p-2" type="text" id="nombre" name="nombre" required minlength="2" placeholder="Ej: Nathaly" value="${docente.nombre}">
+                    <!-- Fila 1: Fecha límite, Documento y Comentario (3 Columnas) -->
+                    <div id="campos-notificacion" class="row g-3 mb-4">
+                        <div class="col-md-4">
+                            <label class="fw-bold mb-1 fs-5 text-secondary" for="fechaLimite">Fecha límite:</label>
+                            <input class="form-control p-2" type="date" id="fechaLimite" name="fechaLimite" value="2026-07-29">
                         </div>
-                        <div class="col-4">
-                            <label class="fw-bold mb-1 fs-5 text-secondary" for="apellidoPaterno">Apellido Paterno:</label>
-                            <input class="form-control p-2" type="text" id="apellidoPaterno" name="apellidoPaterno" required minlength="2" placeholder="Ej: Escalona" value="${docente.apellidoPaterno}">
+                        <div class="col-md-4">
+                            <label class="fw-bold mb-1 fs-5 text-secondary" for="documento">Documento:</label>
+                            <input class="form-control p-2" type="text" id="documento" name="documento" placeholder="El documento deberá ser PDF">
                         </div>
-                        <div class="col-4">
-                            <label class="fw-bold mb-1 fs-5 text-secondary" for="apellidoMaterno">Apellido Materno:</label>
-                            <input class="form-control p-2" type="text" id="apellidoMaterno" name="apellidoMaterno" required minlength="2" placeholder="Ej: Ruiz" value="${docente.apellidoMaterno}">
+                        <div class="col-md-4">
+                            <label class="fw-bold mb-1 fs-5 text-secondary" for="comentario">Comentario:</label>
+                            <input class="form-control p-2" type="text" id="comentario" name="comentario" placeholder="El documento deberá ser PDF">
                         </div>
                     </div>
 
-                    <!-- Fila 2: Periodo y Área -->
-                    <div id="academico-docente" class="row g-3 mb-3">
-                        <div class="col-6">
-                            <label class="fw-bold mb-1 fs-5 text-secondary" for="periodo">Periodo:</label>
-                            <select class="form-select p-2" id="periodo" name="periodo" required>
-                                <option value="" disabled ${empty docente ? 'selected' : ''}>Seleccione Periodo</option>
-                                <option value="Enero - Abril 2026" ${docente.periodo == 'Enero - Abril 2026' ? 'selected' : ''}>Enero - Abril 2026</option>
-                                <option value="Mayo - Agosto 2026" ${docente.periodo == 'Mayo - Agosto 2026' ? 'selected' : ''}>Mayo - Agosto 2026</option>
-                                <option value="Septiembre - Diciembre 2026" ${docente.periodo == 'Septiembre - Diciembre 2026' ? 'selected' : ''}>Septiembre - Diciembre 2026</option>
-                            </select>
+                    <!-- Fila 2: Botones Cancelar y Programar -->
+                    <div id="botones-accion" class="row g-3 mb-4">
+                        <div class="col-md-6">
+                            <button class="btn w-100 py-2 fs-5 text-white fw-medium rounded-3" style="background-color: #C85252;" type="button">Cancelar</button>
                         </div>
-                        <div class="col-6">
-                            <label class="fw-bold mb-1 fs-5 text-secondary" for="area">Área:</label>
-                            <select class="form-select p-2" id="area" name="area" required>
-                                <option value="" disabled ${empty docente ? 'selected' : ''}>Seleccione Academia</option>
-                                <option value="DATIC" ${docente.area == 'DATIC' ? 'selected' : ''}>DATIC</option>
-                                <option value="DAMI" ${docente.area == 'DAMI' ? 'selected' : ''}>DAMI</option>
-                                <option value="DCEA" ${docente.area == 'DCEA' ? 'selected' : ''}>DCEA</option>
-                            </select>
+                        <div class="col-md-6">
+                            <button class="btn w-100 py-2 fs-5 text-white fw-medium rounded-3" style="background-color: #429983;" type="button">Programar</button>
                         </div>
                     </div>
 
-                    <!-- Fila 3: Teléfono y Correo Electrónico -->
-                    <div id="contacto-docente" class="row g-3 mb-4">
-                        <div class="col-6">
-                            <label class="fw-bold mb-1 fs-5 text-secondary" for="telefono">Teléfono:</label>
-                            <input class="form-control p-2" type="tel" id="telefono" name="telefono" required pattern="[0-9]{10}" placeholder="Ej: 7773712397" value="${docente.telefono}">
-                        </div>
-                        <div class="col-6">
-                            <label class="fw-bold mb-1 fs-5 text-secondary" for="correo">Correo Electrónico:</label>
-                            <input class="form-control p-2" type="email" id="correo" name="correo" pattern="[a-zA-Z0-9.]+@utez\.edu\.mx$" required placeholder="Ej: nathaly.escalona@utez.edu.mx" value="${docente.correo}">
-                        </div>
+                    <!-- Fila 3: Sección Programadas recientes -->
+                    <div id="seccion-recientes" class="border border-secondary border-opacity-25 rounded-3 p-3 d-flex align-items-center gap-3 bg-white">
+                        <i class="bi bi-bell-fill fs-3 text-dark"></i>
+                        <span class="fw-normal fs-4 text-dark">Programadas recientes</span>
                     </div>
-
-                    <!-- Botones de Acción -->
-                    <div id="botones" class="row justify-content-between mt-4">
-                        <div class="col-5">
-                            <a class="btn btn-danger w-100 py-2 fs-5 text-white fw-medium rounded-3" href="${pageContext.request.contextPath}/servlet-lista-docentes">Cancelar</a>
-                        </div>
-                        <div class="col-5">
-                            <button class="btn w-100 py-2 fs-5 text-white fw-medium rounded-3" style="background-color: #429983;" type="submit">
-                                <c:out value="${not empty docente ? 'Actualizar' : 'Registrar'}" />
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- Sección Restablecer Contraseña (SOLO VISIBLE EN MODO EDICIÓN) -->
-                    <c:if test="${not empty docente}">
-                        <div id="seccion-restablecer" class="d-flex align-items-center justify-content-between mt-4 pt-3 border-top">
-                            <span class="fw-bold fs-3 text-dark">Restablecer Contraseña</span>
-                            <a href="${pageContext.request.contextPath}/servlet-restablecer-pass?id=${docente.id}" class="btn text-white px-4 py-2 fs-5 rounded-3 d-flex align-items-center justify-content-center" style="background-color: #429983;" title="Restablecer">
-                                <i class="bi bi-arrow-counterclockwise fs-4"></i>
-                            </a>
-                        </div>
-                    </c:if>
 
                 </form>
             </div>
