@@ -26,6 +26,5 @@
         </button>
     </form>
 </c:forEach>
-
 </body>
 </html>

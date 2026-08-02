@@ -24,22 +24,6 @@ public class ServletMostrarNotificaciones extends HttpServlet {
 
         List<BeanNotificacion> listaNotificaciones = servicioListaNotificaciones.buscarListaNotificaciones(idDocente);
         req.setAttribute("listaNotificaciones", listaNotificaciones);
-
-        System.out.println("====== PRUEBA DE NOTIFICACIONES EN CONSOLA ======");
-        System.out.println("🔍 BUSCANDO NOTIFICACIONES PARA EL ID_DOCENTE: " + idDocente);
-
-        if (listaNotificaciones != null && !listaNotificaciones.isEmpty()) {
-            for (BeanNotificacion noti : listaNotificaciones) {
-                System.out.println("------------------------------------");
-                System.out.println("Comentario: " + noti.getDescripcion());
-                System.out.println("Fecha Límite: " + noti.getFechaLimite());
-                System.out.println("ID Docente: " + noti.getId_usuario_docente());
-            }
-        } else {
-            System.out.println("❌ No se encontraron notificaciones en consola.");
-        }
-        System.out.println("=================================================");
-
         if (listaNotificaciones != null && !listaNotificaciones.isEmpty()) {
             req.getRequestDispatcher("WEB-INF/Docente/notificaciones.jsp").forward(req, res);
         } else {
@@ -52,17 +36,15 @@ public class ServletMostrarNotificaciones extends HttpServlet {
     @Override
     public void doPost (HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
         ServicioNotificacion servicio = new ServicioNotificacion();
-
-        // 1. Jalamos el ID que viene desde el <input type="hidden"> del formulario
         String idParam = req.getParameter("idNoti");
 
         if (idParam != null && !idParam.isEmpty()) {
             int idNoti = Integer.parseInt(idParam);
+            servicio.ocultarNotificacion(idNoti);
         }
         HttpSession session = req.getSession();
         BeanDocente docente = (BeanDocente) session.getAttribute("docenteLogueado");
         int idDocente = (docente != null) ? docente.getId() : 0;
-
         List<BeanNotificacion> listaNotificaciones = servicio.buscarListaNotificaciones(idDocente);
         req.setAttribute("listaNotificaciones", listaNotificaciones);
 
