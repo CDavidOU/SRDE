@@ -29,8 +29,6 @@ public class DaoAdmin {
                     datosAdmin.setCorreo(rs.getString("correo"));
                     datosAdmin.setTelefono(rs.getString("telefono"));
                 }
-            } catch (SQLException e) {
-                e.printStackTrace();
             }
         } catch (SQLException e) {
             e.printStackTrace();

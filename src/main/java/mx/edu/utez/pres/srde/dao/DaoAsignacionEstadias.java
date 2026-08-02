@@ -27,23 +27,33 @@ public class DaoAsignacionEstadias {
         }
         return 0;
     }
-    public BeanAsignacionEstadias registroAsignacionEstadias(BeanAsignacionEstadias asignacion) {
-        BeanAsignacionEstadias nuevaAsignacion=null;
-        String sql="insert into asignacion_estadias(id_periodo,matricula,id_usuario_docente) values(?,?,?)";
+    public int registroAsignacionEstadias(BeanAsignacionEstadias asignacion) {
+        int idGenerado = 0;
+        // Le indicamos a Oracle que queremos recuperar la columna ID_ASIGNACION
+        String sql = "INSERT INTO ASIGNACION_ESTADIAS (ID_PERIODO, MATRICULA, ID_USUARIO_DOCENTE) VALUES (?, ?, ?)";
 
-        try(Connection conexion= Conexion.getConexion();
-            PreparedStatement prs=conexion.prepareStatement(sql)){
-            prs.setInt(1,asignacion.getId_periodo());
-            prs.setString(2,asignacion.getMatricula());
-            prs.setInt(3,asignacion.getId_docente());
+        try (Connection conexion = Conexion.getConexion();
+             PreparedStatement prs = conexion.prepareStatement(sql, new String[]{"ID_ASIGNACION"})) {
+
+            prs.setInt(1, asignacion.getId_periodo());
+            prs.setString(2, asignacion.getMatricula());
+            prs.setInt(3, asignacion.getId_docente());
 
             int filasInsertadas = prs.executeUpdate();
-            if(filasInsertadas>0){
-                nuevaAsignacion= asignacion;
+
+            if (filasInsertadas > 0) {
+                // Recuperamos la llave generada por la base de datos
+                try (ResultSet rs = prs.getGeneratedKeys()) {
+                    if (rs.next()) {
+                        idGenerado = rs.getInt(1); // Guardamos el ID de la asignación
+                    }
+                }
             }
-        }catch (SQLException e) {
+        } catch (SQLException e) {
+            System.err.println("Error al registrar asignación de estadías");
             e.printStackTrace();
-                                }
-        return nuevaAsignacion;
+        }
+
+        return idGenerado; // Retorna el ID generado (o 0 si falló)
     }
 }
