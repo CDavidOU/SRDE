@@ -23,4 +23,8 @@ public class ServicioListaEstudiante {
         DaoListaEstudiantes dao = new DaoListaEstudiantes();
         return dao.listaTodosLosEstudiantes(id_periodoActual);
     }
+    public List<BeanAsignacionEstadias> buscarEstudiantesAdmin (int idPeriodo,String buscador) {
+        DaoListaEstudiantes buscarEstudiantes =new DaoListaEstudiantes();
+        return buscarEstudiantes.buscarTodosLosEstudiantesAdmin(idPeriodo, buscador);
+    }
 }

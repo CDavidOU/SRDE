@@ -31,11 +31,10 @@
     <div id="cambiantes" class="flex-grow-1 d-flex flex-column bg-light">
 
         <!-- Encabezado con Botón de Registro Integrado -->
-        <!-- Usamos bg-primary (o style solo si el azul institucional es estricto) -->
         <div class="w-100 position-relative d-flex align-items-center justify-content-center py-3 text-white" style="background-color: #002E60">
             <h1 class="m-0 fs-2 fw-normal">Estudiantes</h1>
 
-            <!-- Botón de registrar (Usando clases de posición y tamaño de Bootstrap) -->
+            <!-- Botón de registrar -->
             <a href="${pageContext.request.contextPath}/servlet-registro-estudiante"
                class="btn btn-success position-absolute end-0 me-4 d-flex align-items-center justify-content-center p-0 rounded"
                style="width: 38px; height: 38px;"
@@ -51,7 +50,7 @@
 
                     <!-- Barra de Búsqueda -->
 
-                    <form action="${pageContext.request.contextPath}/servlet-lista-estudiantes" method="post">
+                    <form action="${pageContext.request.contextPath}/servlet-estudiantes-admin" method="post">
                         <div id="busqueda" class="row g-2 mb-4">
                             <div class="col-9">
                                 <div class="input-group">
