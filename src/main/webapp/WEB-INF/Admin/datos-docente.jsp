@@ -41,15 +41,11 @@
                     <div id="nombre-completo" class="row g-3 mb-3">
                         <div class="col-md-4">
                             <label class="fw-bold mb-1 fs-5 text-secondary" for="nombre">Nombre(s):</label>
-                            <input class="form-control p-2" type="text" id="nombre" name="nombre" value="Nathaly" readonly>
+                            <input class="form-control p-2" type="text" id="nombre" name="nombre" value="${datoDocente.nombre}" readonly disabled>
                         </div>
                         <div class="col-md-4">
-                            <label class="fw-bold mb-1 fs-5 text-secondary" for="apellidoPaterno">Apellido Paterno:</label>
-                            <input class="form-control p-2" type="text" id="apellidoPaterno" name="apellidoPaterno" value="Escalona" readonly>
-                        </div>
-                        <div class="col-md-4">
-                            <label class="fw-bold mb-1 fs-5 text-secondary" for="apellidoMaterno">Apellido Materno:</label>
-                            <input class="form-control p-2" type="text" id="apellidoMaterno" name="apellidoMaterno" value="Ruiz" readonly>
+                            <label class="fw-bold mb-1 fs-5 text-secondary" for="apellidoPaterno">Apellidos:</label>
+                            <input class="form-control p-2" type="text" id="apellidoPaterno" name="apellidoPaterno" value="${datoDocente.apellido}" readonly disabled>
                         </div>
                     </div>
 
@@ -57,11 +53,11 @@
                     <div id="contacto-docente" class="row g-3 mb-3">
                         <div class="col-md-6">
                             <label class="fw-bold mb-1 fs-5 text-secondary" for="correo">Correo electrónico:</label>
-                            <input class="form-control p-2" type="email" id="correo" name="correo" value="nathalyescalona@utez.edu.mx" readonly>
+                            <input class="form-control p-2" type="email" id="correo" name="correo" value="${datoDocente.correo}" readonly>
                         </div>
                         <div class="col-md-6">
                             <label class="fw-bold mb-1 fs-5 text-secondary" for="telefono">Teléfono:</label>
-                            <input class="form-control p-2" type="tel" id="telefono" name="telefono" value="7773712397" readonly>
+                            <input class="form-control p-2" type="tel" id="telefono" name="telefono" value="${datoDocente.telefono}" readonly>
                         </div>
                     </div>
 
@@ -69,7 +65,7 @@
                     <div id="academico-area" class="row g-3 mb-4">
                         <div class="col-md-6">
                             <label class="fw-bold mb-1 fs-5 text-secondary" for="area">Área:</label>
-                            <input class="form-control p-2" type="text" id="area" name="area" value="DATIC" readonly>
+                            <input class="form-control p-2" type="text" id="area" name="area" value="${datoDocente.academia}" readonly>
                         </div>
                     </div>
 
