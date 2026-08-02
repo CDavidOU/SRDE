@@ -16,4 +16,9 @@ public class ServicioNotificacion {
         DaoNotificaciones daoNotificacionesBuscar = new DaoNotificaciones();
         return  daoNotificacionesBuscar.mostrarNotificaciones(idDocente);
     }
+
+    public boolean ocultarNotificacion(int idNotificacion) {
+        DaoNotificaciones daoOcultarNotificaciones = new DaoNotificaciones();
+        return daoOcultarNotificaciones.ocultarNotificacion(idNotificacion);
+    }
 }
