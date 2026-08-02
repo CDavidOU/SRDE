@@ -18,6 +18,15 @@ public class ServletListaDocente extends HttpServlet {
     public void doGet(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
         List<BeanDocente> listaDocentes = servicioDocente.listaDocente();
         req.setAttribute("listaDocentes",listaDocentes);
+        String idParam = req.getParameter("idDocente");
+
+        if (idParam != null && !idParam.isEmpty()) {
+            int idDocente = Integer.parseInt(idParam);
+            BeanDocente docenteDato = servicioDocente.datosDocente(idDocente);
+            req.setAttribute("datoDocente", docenteDato);
+            req.getRequestDispatcher("WEB-INF/Admin/datos-docente.jsp").forward(req, res);
+            return;
+        }
         req.getRequestDispatcher("WEB-INF/Admin/lista-docentes.jsp").forward(req,res);
     }
 

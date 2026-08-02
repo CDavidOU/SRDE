@@ -20,12 +20,4 @@ public class ServicioRegistroDocente {
 
         return "ERROR";
     }
-
-    public boolean registrarDocente(BeanDocente nuevo, int idUsuarioGenerado) {
-        return dao.registrarDocente(nuevo, idUsuarioGenerado);
-    }
-
-    public int registrarUsuario(BeanUsuario docenteUsuario, BeanDocente docente) {
-        return dao.registrarUsuario(docenteUsuario, docente);
-    }
 }
