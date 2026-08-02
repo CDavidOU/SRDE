@@ -70,7 +70,7 @@
                 <a href="#" class="list-group-item list-group-item-action text-white bg-transparent border-0 px-3 py-2">
                     Periodos
                 </a>
-                <a href="#" class="list-group-item list-group-item-action text-white bg-transparent border-0 px-3 py-2">
+                <a href="${pageContext.request.contextPath}/servlet-estudiantes-admin" class="list-group-item list-group-item-action text-white bg-transparent border-0 px-3 py-2">
                     Estudiantes
                 </a>
                 <a href="servlet-lista-docente" class="list-group-item list-group-item-action text-white bg-transparent border-0 px-3 py-2">

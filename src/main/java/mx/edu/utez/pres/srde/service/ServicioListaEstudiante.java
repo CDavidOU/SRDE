@@ -18,4 +18,9 @@ public class ServicioListaEstudiante {
         DaoListaEstudiantes lista = new DaoListaEstudiantes();
         return lista.listaEstudiantes(id_docente, id_periodo);
     }
+
+    public List<BeanAsignacionEstadias> listaTodosLosEstudiantes(int id_periodoActual) {
+        DaoListaEstudiantes dao = new DaoListaEstudiantes();
+        return dao.listaTodosLosEstudiantes(id_periodoActual);
+    }
 }

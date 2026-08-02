@@ -14,6 +14,40 @@ import java.util.List;
 
 public class DaoListaEstudiantes {
 
+    public List<BeanAsignacionEstadias> listaTodosLosEstudiantes(int idPeriodoActual){
+        List<BeanAsignacionEstadias> listaCompleta = new ArrayList<>();
+        String sql = "SELECT e.matricula, e.nombre, e.apellido, e.estado, e.carrera, e.correo, e.cuatrimestre, e.grupo, a.id_usuario_docente, a.id_periodo FROM estudiante e LEFT JOIN asignacion_estadias a ON e.matricula = a.matricula AND a.id_periodo = ? ORDER BY e.apellido ASC";
+        try(Connection conexion = Conexion.getConexion();
+            PreparedStatement prs = conexion.prepareStatement(sql)){
+            prs.setInt(1, idPeriodoActual);
+            try (ResultSet rs = prs.executeQuery()) {
+                while (rs.next()) {
+                    BeanEstudiante estudianteEncontrado = new BeanEstudiante();
+                    estudianteEncontrado.setMatricula(rs.getString("matricula"));
+                    estudianteEncontrado.setNombre(rs.getString("nombre"));
+                    estudianteEncontrado.setApellido(rs.getString("apellido"));
+                    estudianteEncontrado.setEstado(rs.getString("estado"));
+                    estudianteEncontrado.setCarrera(rs.getString("carrera"));
+                    estudianteEncontrado.setCorreo(rs.getString("correo"));
+                    estudianteEncontrado.setCuatrimestre(rs.getInt("cuatrimestre"));
+                    estudianteEncontrado.setGrupo(rs.getString("grupo"));
+
+                    BeanAsignacionEstadias asignacion = new BeanAsignacionEstadias();
+                    asignacion.setId_docente(rs.getInt("id_usuario_docente"));
+                    asignacion.setId_periodo(rs.getInt("id_periodo"));
+                    asignacion.setMatricula(rs.getString("matricula"));
+                    asignacion.setEstudiante(estudianteEncontrado);
+
+                    listaCompleta.add(asignacion);
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("Error al generar lista global del Admin: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return listaCompleta;
+    }
+
     public List<BeanAsignacionEstadias> listaEstudiantes(int id_docente, int id_periodo) {
         List<BeanAsignacionEstadias> listaEstudiantes = new ArrayList<>();
         String sql = "SELECT aes.id_usuario_docente, aes.id_periodo, es.nombre, es.matricula " +
