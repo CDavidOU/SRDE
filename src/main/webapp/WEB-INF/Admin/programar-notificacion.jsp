@@ -43,7 +43,11 @@
                         </div>
                         <div class="col-md-4">
                             <label class="fw-bold mb-1 fs-5 text-secondary" for="documento">Documento:</label>
-                            <input class="form-control p-2" type="text" id="documento" name="documento" placeholder="El documento deberá ser PDF">
+                            <select name="tipoDoc">
+                                <c:forEach items="${listaTiposDocs}" var="listaDocs">
+                                    <option value="${listaDocs.id_tipo}">${listaDocs.nombreDoc}</option>
+                                </c:forEach>
+                            </select>
                         </div>
                         <div class="col-md-4">
                             <label class="fw-bold mb-1 fs-5 text-secondary" for="comentario">Comentario:</label>
@@ -75,6 +79,9 @@
                     <div id="seccion-recientes" class="border border-secondary border-opacity-25 rounded-3 p-3 d-flex align-items-center gap-3 bg-white">
                         <i class="bi bi-bell-fill fs-3 text-dark"></i>
                         <span class="fw-normal fs-4 text-dark">Programadas recientes</span>
+                        <c:forEach items="lista">
+
+                        </c:forEach>
                     </div>
 
                 </form>

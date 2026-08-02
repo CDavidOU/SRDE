@@ -8,9 +8,11 @@ import jakarta.servlet.http.HttpServletResponse;
 import mx.edu.utez.pres.srde.model.BeanDocente;
 import mx.edu.utez.pres.srde.model.BeanNotificacion;
 import mx.edu.utez.pres.srde.model.BeanPeriodo;
+import mx.edu.utez.pres.srde.model.BeanTipoDocumento;
 import mx.edu.utez.pres.srde.service.ServicioDocente;
 import mx.edu.utez.pres.srde.service.ServicioNotificacion;
 import mx.edu.utez.pres.srde.service.ServicioPeriodos;
+import mx.edu.utez.pres.srde.service.ServicioTiposDocumento;
 
 import java.io.IOException;
 import java.sql.Date;
@@ -21,32 +23,39 @@ import java.util.List;
 public class ServletNotificaciones extends HttpServlet {
 
     @Override
-    public void doGet(HttpServletRequest req,HttpServletResponse res) throws IOException, ServletException {
+    public void doGet(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
         ServicioDocente datosDocente = new ServicioDocente();
         List<BeanDocente> listaDocentes = datosDocente.listaDocente();
+        ServicioTiposDocumento servicioTiposDocumento = new ServicioTiposDocumento();
+        List<BeanTipoDocumento> listaTiposDocs = servicioTiposDocumento.consultarTiposDocumento();
+        req.setAttribute("listaTiposDocs", listaTiposDocs);
         req.setAttribute("docentesDisponibles", listaDocentes);
         req.getRequestDispatcher("/WEB-INF/Admin/programar-notificacion.jsp").forward(req, res);
     }
 
     @Override
-    public void doPost(HttpServletRequest req,HttpServletResponse res) throws IOException {
+    public void doPost(HttpServletRequest req, HttpServletResponse res) throws IOException {
         ServicioPeriodos servicioPeriodos = new ServicioPeriodos();
         BeanPeriodo periodoActivo = servicioPeriodos.automatizacionPeriodos();
         req.setAttribute("periodoActivo", periodoActivo);
-
+        String tipoDocParam = req.getParameter("tipoDoc");
+        int tipoDocId = (tipoDocParam != null) ? Integer.parseInt(tipoDocParam) : 0;
         int docenteId = Integer.parseInt(req.getParameter("idDocenteSelect"));
-        String comentario =req.getParameter("comentario");
-        String fechaLimite =req.getParameter("fechaLimite");
+        String comentario = req.getParameter("comentario");
+        String fechaLimite = req.getParameter("fechaLimite");
         BeanNotificacion creandoNotificacion = new BeanNotificacion();
         ServicioNotificacion servicioNotificacion = new ServicioNotificacion();
         creandoNotificacion.setDescripcion(comentario);
+        if (tipoDocId != 0) {
+            creandoNotificacion.setTipo_doc(tipoDocId);
+        }
         if (fechaLimite != null && !fechaLimite.trim().isEmpty()) {
             creandoNotificacion.setFechaLimite(Date.valueOf(LocalDate.parse(fechaLimite)));
         }
         if (periodoActivo != null) {
             creandoNotificacion.setId_periodo(periodoActivo.getId_periodo()); // O como se llame tu getter en BeanPeriodo
         }
-        if (docenteId!=0) {
+        if (docenteId != 0) {
             creandoNotificacion.setId_usuario_docente((docenteId));
         }
         //Prueba de datos notificaciones
@@ -57,7 +66,7 @@ public class ServletNotificaciones extends HttpServlet {
         System.out.println("tipoDocumento: " + creandoNotificacion.getTipo_doc());
         System.out.println("Periodo ID: " + creandoNotificacion.getId_periodo());
         System.out.println("======================================");
-        BeanNotificacion nuevaNoti=servicioNotificacion.crearNotificacion(creandoNotificacion);
+        BeanNotificacion nuevaNoti = servicioNotificacion.crearNotificacion(creandoNotificacion);
         if (nuevaNoti != null) {
             req.getRequestDispatcher("WEB-INF/Admin/perfil.jsp");
         } else {
