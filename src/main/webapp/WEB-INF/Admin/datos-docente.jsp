@@ -50,7 +50,18 @@
                         </div>
                     </div>
 
-                    <!-- Fila 2: Correo electrónico y Teléfono -->
+                    <!-- Fila 2: Área y carrera-->
+                    <div id="academico-area" class="row g-3 mb-4">
+                        <div class="col-md-6">
+                                <label class="fw-bold mb-1 fs-5 text-secondary" for="area">Carrera:</label>
+                                <input class="form-control p-2" type="text" id="carrera" name="carrera" value="${datoDocente.carrera}" disabled>
+                            </div>
+                        <div class="col-md-6">
+                            <label class="fw-bold mb-1 fs-5 text-secondary" for="area">Área:</label>
+                            <input class="form-control p-2" type="text" id="area" name="area" value="${datoDocente.academia}" disabled>
+                        </div>
+                    </div>
+                    <!-- Fila 3: Correo electrónico y Teléfono -->
                     <div id="contacto-docente" class="row g-3 mb-3">
                         <div class="col-md-6">
                             <label class="fw-bold mb-1 fs-5 text-secondary" for="correo">Correo electrónico:</label>
@@ -61,25 +72,19 @@
                             <input class="form-control p-2" type="tel" id="telefono" name="telefono" value="${datoDocente.telefono}" disabled>
                         </div>
                     </div>
-
-                    <!-- Fila 3: Área y estado -->
-                    <div id="academico-area" class="row g-3 mb-4">
-                        <div class="col-md-6">
-                            <label class="fw-bold mb-1 fs-5 text-secondary" for="area">Área:</label>
-                            <input class="form-control p-2" type="text" id="area" name="area" value="${datoDocente.academia}" disabled>
-                        </div>
-
-                        <div id="estado" class="col-md-6">
-                            <label class="fw-bold mb-1 fs-5 text-secondary d-block">Estado:</label>
-                            <div class="form-check form-check-inline mt-2">
-                                <input class="form-check-input" type="radio" name="estado" id="estadoActivo" value="activo" ${datoDocente.estado.toLowerCase() == 'activo' ? 'checked' : ''} disabled>
-                                <label class="form-check-label fs-5" for="estadoActivo">Activo</label>
+                    <!-- Fila 4: Estado-->
+                        <div id="estado-columna" class="row g-3 mb-4">
+                            <div id="estado" class="col-md-6">
+                                <label class="fw-bold mb-1 fs-5 text-secondary d-block">Estado:</label>
+                                <div class="form-check form-check-inline mt-2">
+                                    <input class="form-check-input" type="radio" name="estado" id="estadoActivo" value="activo" ${datoDocente.estado.toLowerCase() == 'activo' ? 'checked' : ''} disabled>
+                                    <label class="form-check-label fs-5" for="estadoActivo">Activo</label>
+                                </div>
+                                <div class="form-check form-check-inline mt-2">
+                                    <input class="form-check-input" type="radio" name="estado" id="estadoInactivo" value="inactivo" ${datoDocente.estado.toLowerCase() == 'inactivo' ? 'checked' : ''} disabled>
+                                    <label class="form-check-label fs-5" for="estadoInactivo">Inactivo</label>
+                                </div>
                             </div>
-                            <div class="form-check form-check-inline mt-2">
-                                <input class="form-check-input" type="radio" name="estado" id="estadoInactivo" value="inactivo" ${datoDocente.estado.toLowerCase() == 'inactivo' ? 'checked' : ''} disabled>
-                                <label class="form-check-label fs-5" for="estadoInactivo">Inactivo</label>
-                            </div>
-                        </div>
                     </div>
 
                     <!-- Botón "Editar" -->

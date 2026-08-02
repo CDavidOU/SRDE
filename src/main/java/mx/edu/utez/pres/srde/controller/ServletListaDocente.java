@@ -27,7 +27,7 @@ public class ServletListaDocente extends HttpServlet {
             req.getRequestDispatcher("WEB-INF/Admin/datos-docente.jsp").forward(req, res);
             return;
         }
-        req.getRequestDispatcher("WEB-INF/Admin/lista-docentes.jsp").forward(req,res);
+        req.getRequestDispatcher("WEB-INF/Admin/vista-docentes.jsp").forward(req,res);
     }
 
     @Override
@@ -42,7 +42,7 @@ public class ServletListaDocente extends HttpServlet {
             req.getRequestDispatcher("WEB-INF/Admin/datos-docente.jsp").forward(req,res);
         }else{
             System.out.println("id docente no encontrada");
-            req.getRequestDispatcher("WEB-INF/Admin/lista-docente.jsp").forward(req,res);
+            req.getRequestDispatcher("WEB-INF/Admin/vista-docente.jsp").forward(req,res);
         }
     }
 }
