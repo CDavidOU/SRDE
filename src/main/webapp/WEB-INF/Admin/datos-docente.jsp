@@ -1,8 +1,3 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: jaca8
-  Date: 7/24/2026
---%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <!doctype html>
@@ -13,6 +8,8 @@
     <title>Datos Docente</title>
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons (Agregado para la flecha de regresar) -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 </head>
 <body>
 
@@ -26,9 +23,20 @@
     <!-- Contenido Principal -->
     <div id="cambiantes" class="flex-grow-1 d-flex flex-column bg-light">
 
-        <!-- Encabezado -->
-        <div class="w-100 text-center mb-4">
-            <h1 class="text-white m-0 py-3 fs-2 fw-semibold" style="background-color: #002E60;">Datos Docente</h1>
+        <!-- Encabezado adaptado con botón regresar -->
+        <div class="w-100 text-center mb-4 position-relative d-flex align-items-center justify-content-center" style="background-color: #002E60;">
+
+            <!-- Botón Regresar -->
+            <button type="button"
+                    onclick="window.history.back()"
+                    class="btn btn-outline-light position-absolute start-0 ms-3 d-flex align-items-center justify-content-center"
+                    style="width: 42px; height: 42px; border-radius: 8px;"
+                    title="Volver a la página anterior">
+                <i class="bi bi-arrow-left fs-4"></i>
+            </button>
+
+            <!-- Título Principal (se mantiene perfectamente centrado) -->
+            <h1 class="text-white m-0 py-3 fs-2 fw-semibold">Datos Docente</h1>
         </div>
 
         <div id="datos" class="p-4 flex-grow-1 d-flex justify-content-center">
@@ -53,9 +61,9 @@
                     <!-- Fila 2: Área y carrera-->
                     <div id="academico-area" class="row g-3 mb-4">
                         <div class="col-md-6">
-                                <label class="fw-bold mb-1 fs-5 text-secondary" for="area">Carrera:</label>
-                                <input class="form-control p-2" type="text" id="carrera" name="carrera" value="${datoDocente.carrera}" disabled>
-                            </div>
+                            <label class="fw-bold mb-1 fs-5 text-secondary" for="area">Carrera:</label>
+                            <input class="form-control p-2" type="text" id="carrera" name="carrera" value="${datoDocente.carrera}" disabled>
+                        </div>
                         <div class="col-md-6">
                             <label class="fw-bold mb-1 fs-5 text-secondary" for="area">Área:</label>
                             <input class="form-control p-2" type="text" id="area" name="area" value="${datoDocente.academia}" disabled>
@@ -73,18 +81,18 @@
                         </div>
                     </div>
                     <!-- Fila 4: Estado-->
-                        <div id="estado-columna" class="row g-3 mb-4">
-                            <div id="estado" class="col-md-6">
-                                <label class="fw-bold mb-1 fs-5 text-secondary d-block">Estado:</label>
-                                <div class="form-check form-check-inline mt-2">
-                                    <input class="form-check-input" type="radio" name="estado" id="estadoActivo" value="activo" ${datoDocente.estado.toLowerCase() == 'activo' ? 'checked' : ''} disabled>
-                                    <label class="form-check-label fs-5" for="estadoActivo">Activo</label>
-                                </div>
-                                <div class="form-check form-check-inline mt-2">
-                                    <input class="form-check-input" type="radio" name="estado" id="estadoInactivo" value="inactivo" ${datoDocente.estado.toLowerCase() == 'inactivo' ? 'checked' : ''} disabled>
-                                    <label class="form-check-label fs-5" for="estadoInactivo">Inactivo</label>
-                                </div>
+                    <div id="estado-columna" class="row g-3 mb-4">
+                        <div id="estado" class="col-md-6">
+                            <label class="fw-bold mb-1 fs-5 text-secondary d-block">Estado:</label>
+                            <div class="form-check form-check-inline mt-2">
+                                <input class="form-check-input" type="radio" name="estado" id="estadoActivo" value="activo" ${datoDocente.estado.toLowerCase() == 'activo' ? 'checked' : ''} disabled>
+                                <label class="form-check-label fs-5" for="estadoActivo">Activo</label>
                             </div>
+                            <div class="form-check form-check-inline mt-2">
+                                <input class="form-check-input" type="radio" name="estado" id="estadoInactivo" value="inactivo" ${datoDocente.estado.toLowerCase() == 'inactivo' ? 'checked' : ''} disabled>
+                                <label class="form-check-label fs-5" for="estadoInactivo">Inactivo</label>
+                            </div>
+                        </div>
                     </div>
 
                     <!-- Botón "Editar" -->

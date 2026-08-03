@@ -1,10 +1,14 @@
 package mx.edu.utez.pres.srde.model;
 
-public class BeanDocente extends BeanPersona{
+public class BeanDocente extends BeanPersona {
     private String telefono;
     private String academia;
     private String carrera;
     private String estado;
+    private int totalAlumnos;
+
+    public BeanDocente() {
+    }
 
     public String getTelefono() {
         return telefono;
@@ -36,5 +40,13 @@ public class BeanDocente extends BeanPersona{
 
     public void setEstado(String estado) {
         this.estado = estado;
+    }
+
+    public int getTotalAlumnos() {
+        return totalAlumnos;
+    }
+
+    public void setTotalAlumnos(int totalAlumnos) {
+        this.totalAlumnos = totalAlumnos;
     }
 }

@@ -17,7 +17,7 @@
 <div id="contenido" class="d-flex min-vh-100">
 
     <!-- Menú Lateral -->
-    <div id="menu" class="bg-white border-end" style="width: 180px; flex-shrink: 0;">
+    <div id="menu" class="flex-shrink-0">
         <jsp:include page="../Plantillas/menu.jsp" />
     </div>
 
@@ -33,55 +33,63 @@
 
             <div class="card border-0 shadow-sm p-4 bg-white rounded-3 w-100" style="max-width: 900px; height: fit-content;">
 
-                <form action="#" method="POST">
+                <form method="POST" action="servlet-crear-notificacion">
 
-                    <!-- Fila 1: Fecha límite, Documento y Comentario (3 Columnas) -->
+                    <!-- Campos Notificación -->
                     <div id="campos-notificacion" class="row g-3 mb-4">
+
+                        <!-- FILA 1: 3 Campos en 4 columnas cada uno (4 + 4 + 4 = 12) -->
+
+                        <!-- 1. Fecha Límite -->
                         <div class="col-md-4">
-                            <label class="fw-bold mb-1 fs-5 text-secondary" for="fechaLimite">Fecha límite:</label>
+                            <label class="fw-bold mb-1 fs-6 text-secondary" for="fechaLimite">Fecha límite:</label>
                             <input class="form-control p-2" type="date" id="fechaLimite" name="fechaLimite" value="2026-07-29">
                         </div>
+
+                        <!-- 2. Documento -->
                         <div class="col-md-4">
-                            <label class="fw-bold mb-1 fs-5 text-secondary" for="documento">Documento:</label>
-                            <select name="tipoDoc">
+                            <label class="fw-bold mb-1 fs-6 text-secondary" for="tipoDoc">Documento:</label>
+                            <select class="form-select p-2" id="tipoDoc" name="tipoDoc">
+                                <option value="" selected disabled>Selecciona documento...</option>
                                 <c:forEach items="${listaTiposDocs}" var="listaDocs">
                                     <option value="${listaDocs.id_tipo}">${listaDocs.nombreDoc}</option>
                                 </c:forEach>
                             </select>
                         </div>
+
+                        <!-- 3. Selecciona al Docente -->
                         <div class="col-md-4">
-                            <label class="fw-bold mb-1 fs-5 text-secondary" for="comentario">Comentario:</label>
-                            <input class="form-control p-2" type="text" id="comentario" name="comentario" placeholder="El documento deberá ser PDF">
-                        </div>
-                        <div class="col-md-4">
-                            <label>Selecciona al Docente:</label>
-                            <select name="idDocenteSelect">
+                            <label class="fw-bold mb-1 fs-6 text-secondary" for="idDocenteSelect">Docente:</label>
+                            <select class="form-select p-2" id="idDocenteSelect" name="idDocenteSelect">
+                                <option value="" selected disabled>Selecciona docente...</option>
                                 <c:forEach items="${docentesDisponibles}" var="docente">
                                     <option value="${docente.id}">${docente.nombre} ${docente.apellido}</option>
                                 </c:forEach>
                             </select>
                         </div>
+
+                        <!-- FILA 2: Comentario ocupando las 12 columnas abajo de las tres superiores -->
+                        <div class="col-12 mt-3">
+                            <label class="fw-bold mb-1 fs-6 text-secondary" for="comentario">Comentario:</label>
+                            <input class="form-control p-2" type="text" id="comentario" name="comentario" placeholder="Escribe un comentario u observación (El documento deberá ser formato PDF)">
+                        </div>
+
                     </div>
 
-                    <!-- Fila 2: Botones Cancelar y Programar -->
+                    <!-- Fila 3: Botones Cancelar y Programar -->
                     <div id="botones-accion" class="row g-3 mb-4">
                         <div class="col-md-6">
                             <button class="btn w-100 py-2 fs-5 text-white fw-medium rounded-3" style="background-color: #C85252;" type="button">Cancelar</button>
                         </div>
                         <div class="col-md-6">
-                            <form method="POST" action="servlet-crear-notificacion">
                             <button class="btn w-100 py-2 fs-5 text-white fw-medium rounded-3" style="background-color: #429983;" type="submit">Programar</button>
-                            </form>
                         </div>
                     </div>
 
-                    <!-- Fila 3: Sección Programadas recientes -->
+                    <!-- Fila 4: Sección Programadas recientes -->
                     <div id="seccion-recientes" class="border border-secondary border-opacity-25 rounded-3 p-3 d-flex align-items-center gap-3 bg-white">
                         <i class="bi bi-bell-fill fs-3 text-dark"></i>
                         <span class="fw-normal fs-4 text-dark">Programadas recientes</span>
-                        <c:forEach items="lista">
-
-                        </c:forEach>
                     </div>
 
                 </form>
@@ -91,7 +99,5 @@
     </div>
 </div>
 
-<!-- Bootstrap JS -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
