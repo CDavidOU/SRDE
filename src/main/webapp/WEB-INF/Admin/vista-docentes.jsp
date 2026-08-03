@@ -34,7 +34,6 @@
             <!-- Contenedor principal alineado con la maqueta -->
             <div class="w-100" style="max-width: 850px;">
 
-
                 <!-- Lista de Docentes -->
                 <div class="d-flex flex-column gap-2 mb-4">
 
@@ -42,36 +41,43 @@
                     <c:forEach items="${listaDocentes}" var="docente">
                         <div class="card border border-secondary border-opacity-25 rounded-3 shadow-sm">
                             <div class="card-body py-2 px-3 d-flex align-items-center justify-content-between">
+
+                                <!-- LADO IZQUIERDO: Icono, Nombre y Estado -->
                                 <div class="d-flex align-items-center gap-3">
-                                    <div class="rounded-circle bg-dark text-white d-flex align-items-center justify-content-center" style="width: 38px; height: 38px;">
+                                    <div class="rounded-circle bg-dark text-white d-flex align-items-center justify-content-center flex-shrink-0" style="width: 38px; height: 38px;">
                                         <i class="bi bi-person-fill fs-5"></i>
                                     </div>
 
-                                    <p>${docente.nombre} ${docente.apellido}</p> <p>${docente.estado}</p>
-                                    <form action="servlet-lista-docente" method="post">
-                                        <input type="hidden" name="idDocente" value="${docente.id}">
-                                        <button type="submit">Detalles</button>
-                                    </form>
+                                    <p class="m-0 fw-medium">${docente.nombre} ${docente.apellido}</p>
+                                    <span class="text-secondary small ms-2">${docente.estado}</span>
                                 </div>
+
+                                <!-- LADO DERECHO: Formulario y Botón "Detalles" a la extrema derecha -->
+                                <form action="servlet-lista-docente" method="post" class="m-0">
+                                    <input type="hidden" name="idDocente" value="${docente.id}">
+                                    <button type="submit" class="btn btn-outline-dark btn-sm px-3 border border-dark">Detalles</button>
+                                </form>
+
                             </div>
                         </div>
                     </c:forEach>
-                    <!-- Botón 'Registrar docente '-->
+
+                    <!-- Botón 'Registrar docente' -->
                     <div class="d-flex justify-content-end align-items-center gap-2 mt-4">
                         <span class="fw-bold text-secondary fs-5">Registrar docente</span>
                         <a href="${pageContext.request.contextPath}/servlet-registro-docente" class="btn border border-secondary border-opacity-50 bg-white fs-4 fw-bold px-3 py-0 shadow-sm text-dark">
                             +
                         </a>
                     </div>
-                </div>
+
                 </div>
 
             </div>
         </div>
     </div>
+</div>
 
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
-
 </html>
