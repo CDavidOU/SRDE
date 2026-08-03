@@ -55,8 +55,8 @@
               <input class="form-control p-2" type="text" id="nombre" name="nombre" required minlength="2" placeholder="Ej: Nathaly" required>
             </div>
             <div class="col-6">
-              <label class="fw-bold mb-1 fs-5 text-secondary" for="apellidos">Apellidos:</label>
-              <input class="form-control p-2" type="text" id="apellidos" name="apellido" required minlength="2" placeholder="Ej: Escalona" required>
+              <label class="fw-bold mb-1 fs-5 text-secondary" for="apellido">Apellidos:</label>
+              <input class="form-control p-2" type="text" id="apellido" name="apellido" required minlength="2" placeholder="Ej: Escalona" required>
             </div>
           </div>
 

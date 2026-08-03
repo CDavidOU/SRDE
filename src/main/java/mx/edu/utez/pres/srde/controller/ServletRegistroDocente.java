@@ -25,7 +25,6 @@ public class ServletRegistroDocente extends HttpServlet {
         String telefono = req.getParameter("telefono");
         String academia = req.getParameter("academia");
         String carrera = req.getParameter("carrera");
-        BeanUsuario usuarioDocente = new BeanUsuario();
         BeanDocente nuevoDocente = new BeanDocente();
         nuevoDocente.setNombre(nombre);
         nuevoDocente.setApellido(apellido);
@@ -33,13 +32,16 @@ public class ServletRegistroDocente extends HttpServlet {
         nuevoDocente.setAcademia(academia);
         nuevoDocente.setCarrera(carrera);
         nuevoDocente.setCorreo(correo);
+        BeanUsuario usuarioDocente = new BeanUsuario();
+        usuarioDocente.setRol("Docente");
+        usuarioDocente.setDatosPersona(nuevoDocente);
         String contrasenaAutomatica = (nombre + apellido).toLowerCase().replace(" ", "");
         usuarioDocente.setPassword(contrasenaAutomatica);
 
         String resultado = servicioRegistroDocente.registrarTodoElDocente(nuevoDocente, usuarioDocente);
         if ("EXISTE".equals(resultado)) {
             req.setAttribute("mensajeError", "El correo ya se encuentra registrado por otro docente.");
-            req.getRequestDispatcher("WEB-INF/Admin/registro-docente.jsp").forward(req,res);
+            req.getRequestDispatcher("WEB-INF/Admin/registro-docente.jsp").forward(req, res);
         } else if ("EXITO".equals(resultado)) {
             req.setAttribute("mensajeExito", "¡Docente registrado con éxito!");
             req.getRequestDispatcher("WEB-INF/Admin/registro-docente.jsp").forward(req, res);
@@ -48,4 +50,4 @@ public class ServletRegistroDocente extends HttpServlet {
             req.getRequestDispatcher("WEB-INF/Admin/perfil.jsp").forward(req, res);
         }
     }
-}
+    }
