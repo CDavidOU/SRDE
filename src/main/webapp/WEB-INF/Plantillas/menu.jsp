@@ -32,8 +32,8 @@
                     </div>
                 </a>
 
-                <!-- Opciones -->
-                <a href="${pageContext.request.contextPath}/servlet-periodo-admin" class="list-group-item list-group-item-action text-white bg-transparent border-0 px-3 py-2">
+                <!-- Resto de enlaces con texto blanco y fondo transparente -->
+                <a href="${pageContext.request.contextPath}/servlet-periodos" class="list-group-item list-group-item-action text-white bg-transparent border-0 px-3 py-2">
                     Periodos
                 </a>
                 <a href="${pageContext.request.contextPath}/servlet-lista-estudiantes" class="list-group-item list-group-item-action text-white bg-transparent border-0 px-3 py-2">
@@ -62,14 +62,14 @@
                     </div>
                 </a>
 
-                <!-- Opciones -->
-                <a href="#" class="list-group-item list-group-item-action text-white bg-transparent border-0 px-3 py-2">
+                <!-- Resto de enlaces con texto blanco y fondo transparente -->
+                <a href="${pageContext.request.contextPath}/servlet-periodo-admin" class="list-group-item list-group-item-action text-white bg-transparent border-0 px-3 py-2">
                     Periodos
                 </a>
                 <a href="${pageContext.request.contextPath}/servlet-estudiantes-admin" class="list-group-item list-group-item-action text-white bg-transparent border-0 px-3 py-2">
                     Estudiantes
                 </a>
-                <a href="servlet-lista-docente" class="list-group-item list-group-item-action text-white bg-transparent border-0 px-3 py-2">
+                <a href="${pageContext.request.contextPath}/servlet-lista-docente" class="list-group-item list-group-item-action text-white bg-transparent border-0 px-3 py-2">
                     Docente
                 </a>
                 <a href="#" class="list-group-item list-group-item-action text-white bg-transparent border-0 px-3 py-2">

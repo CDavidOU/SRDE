@@ -107,6 +107,49 @@ public class DaoPeriodo {
         }
         return lista;
     }
+    public List<BeanPeriodo> consultarTodosLosPeriodos() {
+        List<BeanPeriodo> lista = new ArrayList<>();
+        String sql = "SELECT id_periodo, nombre_periodo, fecha_inicio, fecha_fin FROM periodo ORDER BY fecha_inicio DESC";
+        try (Connection conexion = Conexion.getConexion();
+             PreparedStatement prs = conexion.prepareStatement(sql);
+             ResultSet rs = prs.executeQuery()) {
+            while (rs.next()) {
+                BeanPeriodo p = new BeanPeriodo();
+                p.setId_periodo(rs.getInt("id_periodo"));
+                p.setNombre_periodo(rs.getString("nombre_periodo"));
+                p.setFecha_inicio(rs.getDate("fecha_inicio"));
+                p.setFecha_fin(rs.getDate("fecha_fin"));
+                lista.add(p);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return lista;
+    }
+    public List<BeanEstudiante> consultarTodosLosEstudiantesPorPeriodo(int idPeriodo) {
+        List<BeanEstudiante> lista = new ArrayList<>();
+        String sql = "SELECT e.matricula, e.nombre, e.apellido " +
+                "FROM asignacion_estadias aes " +
+                "INNER JOIN estudiante e ON aes.matricula = e.matricula " +
+                "WHERE aes.id_periodo = ?";
 
+        try (Connection conexion = Conexion.getConexion();
+             PreparedStatement prs = conexion.prepareStatement(sql)) {
 
+            prs.setInt(1, idPeriodo);
+
+            try (ResultSet rs = prs.executeQuery()) {
+                while (rs.next()) {
+                    BeanEstudiante e = new BeanEstudiante();
+                    e.setMatricula(rs.getString("matricula"));
+                    e.setNombre(rs.getString("nombre"));
+                    e.setApellido(rs.getString("apellido"));
+                    lista.add(e);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return lista;
+    }
 }
