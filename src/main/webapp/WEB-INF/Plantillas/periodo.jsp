@@ -49,7 +49,6 @@
             <div class="w-100" style="max-width: 850px;">
 
                 <!-- Buscador / Filtro superior -->
-                <!-- Buscador / Filtro superior -->
                 <form action="${pageContext.request.contextPath}/servlet-periodos" method="POST" class="row g-2 mb-4 justify-content-center">
                     <div class="col-9">
                         <div class="input-group">

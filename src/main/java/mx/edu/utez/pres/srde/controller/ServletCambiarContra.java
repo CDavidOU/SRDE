@@ -27,9 +27,9 @@ public class ServletCambiarContra extends HttpServlet {
             res.sendRedirect(req.getContextPath() + "/index.jsp");
         }
     }
-
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
+        req.setCharacterEncoding("UTF-8");
         HttpSession sesion = req.getSession(false);
 
         if (sesion == null) {
@@ -46,24 +46,19 @@ public class ServletCambiarContra extends HttpServlet {
 
         // Obtenemos el correo del usuario en sesión
         String correo = "";
+        int idUsuario = 0;
         if (docente != null) {
             correo = docente.getCorreo();
+            idUsuario = docente.getId();
         } else if (admin != null) {
             correo = admin.getCorreo();
+            idUsuario = admin.getId();
         }
-
-        // Armamos el BeanUsuario igualito a como lo haces en ServletInicio
-        BeanPersona persona = new BeanPersona();
-        persona.setCorreo(correo);
-
-        BeanUsuario usuarioPrueba = new BeanUsuario();
-        usuarioPrueba.setDatosPersona(persona);
-        usuarioPrueba.setPassword(passActual);
 
         ServiceUsuario servicioUsuario = new ServiceUsuario();
 
         // Llamamos al método usando el objeto BeanUsuario (coincide con tu Service)
-        BeanUsuario usuarioValido = servicioUsuario.verificarUsuario(usuarioPrueba);
+        BeanUsuario usuarioValido = servicioUsuario.verificarUsuario(correo, passActual);
 
         if (usuarioValido == null) {
             req.setAttribute("mensajeError", "La contraseña actual es incorrecta.");
@@ -77,12 +72,11 @@ public class ServletCambiarContra extends HttpServlet {
             return;
         }
 
-        boolean actualizado = servicioUsuario.cambiarContrasena(usuarioValido.getId(), passNueva);
+        boolean actualizado = servicioUsuario.cambiarContrasena(idUsuario, passNueva);
 
         if (actualizado) {
             sesion.invalidate();
             res.sendRedirect(req.getContextPath() + "/index.jsp?exito=true");
-            return;
         } else {
             req.setAttribute("mensajeError", "Ocurrió un error al actualizar la contraseña");
             req.getRequestDispatcher("/WEB-INF/cambiar-contrasena.jsp").forward(req, res);
