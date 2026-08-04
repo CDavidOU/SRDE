@@ -19,7 +19,7 @@ public class ServletDatosEstudiante extends HttpServlet {
     @Override
     public void doGet(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
         HttpSession sesion = req.getSession(false);
-        if (sesion == null || sesion.getAttribute("docenteLogueado") == null) {
+        if (sesion == null || (sesion.getAttribute("docenteLogueado") == null && sesion.getAttribute("adminLogueado") == null)) {
             res.sendRedirect(req.getContextPath() + "/index.jsp");
             return;
         }

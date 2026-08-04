@@ -16,6 +16,8 @@
   <title>Registro Docente</title>
   <!-- Bootstrap CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Bootstrap Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 </head>
 <body>
 
@@ -64,17 +66,8 @@
             </div>
           </div>
 
-          <!-- Fila 2: Periodo y Área (2 Columnas) -->
+          <!-- Fila 2: Área y Carrera (2 Columnas) -->
           <div id="academico-docente" class="row g-3 mb-3">
-            <div class="col-6">
-              <label class="fw-bold mb-1 fs-5 text-secondary" for="periodo">Periodo:</label>
-              <select class="form-select p-2" id="periodo" name="periodo" required>
-                <option value="" selected disabled>Seleccione Periodo</option>
-                <option value="Enero - Abril 2026">Enero - Abril 2026</option>
-                <option value="Mayo - Agosto 2026">Mayo - Agosto 2026</option>
-                <option value="Septiembre - Diciembre 2026">Septiembre - Diciembre 2026</option>
-              </select>
-            </div>
             <div class="col-6">
               <label class="fw-bold mb-1 fs-5 text-secondary" for="area">Área:</label>
               <select class="form-select p-2" id="area" name="area" required>
@@ -83,6 +76,10 @@
                 <option value="DAMI">DAMI</option>
                 <option value="DCEA">DCEA</option>
               </select>
+            </div>
+            <div class="col-6">
+              <label class="fw-bold mb-1 fs-5 text-secondary" for="carrera">Carrera:</label>
+              <input class="form-control p-2" type="text" id="carrera" name="carrera" required minlength="2" placeholder="Ej: DSM">
             </div>
           </div>
 

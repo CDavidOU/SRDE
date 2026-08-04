@@ -51,7 +51,12 @@ public class ServletInicio extends HttpServlet {
         BeanUsuario usuarioLogueado = servicioUsuario.verificarUsuario(usuario);
 
         if (usuarioLogueado != null) {
-            HttpSession sesion = req.getSession();
+            // Invalidamos cualquier sesión previa para no arrastrar el rol de un login anterior
+            HttpSession sesionPrevia = req.getSession(false);
+            if (sesionPrevia != null) {
+                sesionPrevia.invalidate();
+            }
+            HttpSession sesion = req.getSession(true);
             if ("Administrador".equals(usuarioLogueado.getRol())) {
                 ServicioAdmin servicioAdmin = new ServicioAdmin();
                 BeanAdmin admin = servicioAdmin.datosAdmin(usuarioLogueado.getId());

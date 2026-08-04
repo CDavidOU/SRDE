@@ -21,6 +21,15 @@ public class ServicioPeriodos {
         return nuevoPeriodo.consultarEstudiantePeriodo(idDocente, idPeriodo);
     }
 
+    // Métodos para la vista administrativa de periodos
+    public List<BeanPeriodo> listarTodosPeriodos() {
+        return nuevoPeriodo.listarTodosPeriodos();
+    }
+
+    public int contarEstudiantesPorPeriodo(int idPeriodo) {
+        return nuevoPeriodo.contarEstudiantesPorPeriodo(idPeriodo);
+    }
+
     // Métodos delegados del DAO
     public BeanPeriodo buscarPeriodo(String periodo) {
         return nuevoPeriodo.buscarPeriodo(periodo);
@@ -50,7 +59,7 @@ public class ServicioPeriodos {
                 break;
             default: nombreCalculado = "Septiembre - Diciembre "+anio;
                 fechaInicio = LocalDate.of(anio,9,1);
-                fechaFin = LocalDate.of(anio,10,31);
+                fechaFin = LocalDate.of(anio,12,31);
                 break;
         }
         BeanPeriodo periodoExistente = nuevoPeriodo.buscarPeriodo(nombreCalculado);
@@ -62,6 +71,13 @@ public class ServicioPeriodos {
         periodoNuevo.setFecha_fin(Date.valueOf(fechaFin));
         periodoNuevo.setFecha_inicio(Date.valueOf(fechaInicio));
 
-        return nuevoPeriodo.registrarNuevoPeriodo(periodoNuevo);
+        BeanPeriodo periodoRegistrado = nuevoPeriodo.registrarNuevoPeriodo(periodoNuevo);
+        if (periodoRegistrado != null) {
+            return periodoRegistrado;
+        }
+
+        // Si el insert falló (p.ej. dos peticiones concurrentes insertando el mismo periodo nuevo),
+        // reintentamos la búsqueda: es probable que la otra petición ya lo haya creado.
+        return nuevoPeriodo.buscarPeriodo(nombreCalculado);
     }
 }

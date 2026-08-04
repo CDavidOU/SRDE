@@ -8,6 +8,15 @@ public class BeanEstudiante extends BeanPersona{
     private String correo;
     private String grupo;
     private int idAsignacion;
+    private String docenteAsignado;
+
+    public String getDocenteAsignado() {
+        return docenteAsignado;
+    }
+
+    public void setDocenteAsignado(String docenteAsignado) {
+        this.docenteAsignado = docenteAsignado;
+    }
 
     public int getIdAsignacion() {
         return idAsignacion;

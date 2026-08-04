@@ -16,4 +16,14 @@ public class ServiceUsuario {
         DaoUsuario daoUsuario = new DaoUsuario();
         return daoUsuario.cambiarContrasena(idUsuario, nuevaContrasena);
     }
+
+    public boolean existeCorreo(String correo) {
+        DaoUsuario daoUsuario = new DaoUsuario();
+        return daoUsuario.existeCorreo(correo);
+    }
+
+    public boolean restablecerContrasena(String correo, String nuevaContrasena) {
+        DaoUsuario daoUsuario = new DaoUsuario();
+        return daoUsuario.restablecerContrasena(correo, nuevaContrasena);
+    }
 }

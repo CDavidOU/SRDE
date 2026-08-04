@@ -45,6 +45,42 @@ public class DaoUsuario {
         }
     }
 
+    public boolean existeCorreo(String correo) {
+        String sql = "SELECT COUNT(*) FROM USUARIO WHERE CORREO = ?";
+        try (Connection conexion = Conexion.getConexion();
+             PreparedStatement prs = conexion.prepareStatement(sql)) {
+
+            prs.setString(1, correo);
+            try (ResultSet rs = prs.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1) > 0;
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public boolean restablecerContrasena(String correo, String nuevaContrasena) {
+        boolean actualizado = false;
+        String sql = "UPDATE USUARIO SET contrasena = STANDARD_HASH(?, 'SHA256') WHERE correo = ?";
+        try (Connection conexion = Conexion.getConexion();
+             PreparedStatement prs = conexion.prepareStatement(sql)) {
+
+            prs.setString(1, nuevaContrasena);
+            prs.setString(2, correo);
+
+            int filasAfectadas = prs.executeUpdate();
+            if (filasAfectadas > 0) {
+                actualizado = true;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return actualizado;
+    }
+
     public boolean cambiarContrasena(int idUsuario, String nuevaContrasena) {
         boolean actualizado = false;
         String sql = "UPDATE USUARIO SET contrasena = STANDARD_HASH(?, 'SHA256') where id_Usuario=?";

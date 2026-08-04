@@ -4,6 +4,7 @@
   Date: 7/24/2026
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <!doctype html>
 <html lang="es">
@@ -13,6 +14,8 @@
     <title>Datos Docente</title>
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 </head>
 <body>
 
@@ -37,19 +40,15 @@
 
                 <form action="#" method="POST">
 
-                    <!-- Fila 1: Nombres, Apellido Paterno, Apellido Materno -->
+                    <!-- Fila 1: Nombre(s) y Apellidos -->
                     <div id="nombre-completo" class="row g-3 mb-3">
-                        <div class="col-md-4">
+                        <div class="col-md-6">
                             <label class="fw-bold mb-1 fs-5 text-secondary" for="nombre">Nombre(s):</label>
-                            <input class="form-control p-2" type="text" id="nombre" name="nombre" value="Nathaly" readonly>
+                            <input class="form-control p-2" type="text" id="nombre" name="nombre" value="${docente.nombre}" readonly>
                         </div>
-                        <div class="col-md-4">
-                            <label class="fw-bold mb-1 fs-5 text-secondary" for="apellidoPaterno">Apellido Paterno:</label>
-                            <input class="form-control p-2" type="text" id="apellidoPaterno" name="apellidoPaterno" value="Escalona" readonly>
-                        </div>
-                        <div class="col-md-4">
-                            <label class="fw-bold mb-1 fs-5 text-secondary" for="apellidoMaterno">Apellido Materno:</label>
-                            <input class="form-control p-2" type="text" id="apellidoMaterno" name="apellidoMaterno" value="Ruiz" readonly>
+                        <div class="col-md-6">
+                            <label class="fw-bold mb-1 fs-5 text-secondary" for="apellido">Apellidos:</label>
+                            <input class="form-control p-2" type="text" id="apellido" name="apellido" value="${docente.apellido}" readonly>
                         </div>
                     </div>
 
@@ -57,19 +56,23 @@
                     <div id="contacto-docente" class="row g-3 mb-3">
                         <div class="col-md-6">
                             <label class="fw-bold mb-1 fs-5 text-secondary" for="correo">Correo electrónico:</label>
-                            <input class="form-control p-2" type="email" id="correo" name="correo" value="nathalyescalona@utez.edu.mx" readonly>
+                            <input class="form-control p-2" type="email" id="correo" name="correo" value="${docente.correo}" readonly>
                         </div>
                         <div class="col-md-6">
                             <label class="fw-bold mb-1 fs-5 text-secondary" for="telefono">Teléfono:</label>
-                            <input class="form-control p-2" type="tel" id="telefono" name="telefono" value="7773712397" readonly>
+                            <input class="form-control p-2" type="tel" id="telefono" name="telefono" value="${docente.telefono}" readonly>
                         </div>
                     </div>
 
-                    <!-- Fila 3: Área  -->
+                    <!-- Fila 3: Área y Carrera  -->
                     <div id="academico-area" class="row g-3 mb-4">
                         <div class="col-md-6">
                             <label class="fw-bold mb-1 fs-5 text-secondary" for="area">Área:</label>
-                            <input class="form-control p-2" type="text" id="area" name="area" value="DATIC" readonly>
+                            <input class="form-control p-2" type="text" id="area" name="area" value="${docente.academia}" readonly>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="fw-bold mb-1 fs-5 text-secondary" for="carrera">Carrera:</label>
+                            <input class="form-control p-2" type="text" id="carrera" name="carrera" value="${docente.carrera}" readonly>
                         </div>
                     </div>
 

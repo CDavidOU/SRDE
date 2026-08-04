@@ -5,6 +5,15 @@ public class BeanDocente extends BeanPersona{
     private String academia;
     private String carrera;
     private String estado;
+    private int numAlumnos;
+
+    public int getNumAlumnos() {
+        return numAlumnos;
+    }
+
+    public void setNumAlumnos(int numAlumnos) {
+        this.numAlumnos = numAlumnos;
+    }
 
     public String getTelefono() {
         return telefono;
