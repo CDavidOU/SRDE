@@ -1,14 +1,19 @@
 package mx.edu.utez.pres.srde.service;
+
 import mx.edu.utez.pres.srde.dao.DaoUsuario;
 import mx.edu.utez.pres.srde.model.BeanUsuario;
 
-
 public class ServiceUsuario {
-
-    public BeanUsuario verificarUsuario(BeanUsuario usuario) {
-        DaoUsuario daoUsuario = new DaoUsuario();
-        String correo = (usuario.getDatosPersona() != null) ? usuario.getDatosPersona().getCorreo() : "";
-        String password = usuario.getPassword();
+    private final DaoUsuario daoUsuario = new DaoUsuario();
+    public BeanUsuario verificarUsuario(String correo, String password) {
+        if (correo == null || password == null || correo.trim().isEmpty() || password.trim().isEmpty()) {
+            return null;
+        }
         return daoUsuario.verificarUsuario(correo, password);
+    }
+
+    public boolean cambiarContrasena(int idUsuario, String nuevaContrasena) {
+        DaoUsuario daoUsuario = new DaoUsuario();
+        return daoUsuario.cambiarContrasena(idUsuario, nuevaContrasena);
     }
 }

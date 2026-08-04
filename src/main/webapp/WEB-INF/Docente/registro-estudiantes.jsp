@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <%--
   Created by IntelliJ IDEA.
   User: jaca8
@@ -13,6 +14,10 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
+=======
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %> <%-- O "http://java.sun.com/jsp/jstl/core" si usas una versión anterior a Jakarta --%>
+>>>>>>> 67f14d35925100cfeb86833b4f77989b397c1287
 <!doctype html>
 <html lang="es">
 <head>
@@ -64,7 +69,11 @@
                         </div>
                     </div>
 
+<<<<<<< HEAD
                     <!-- Fila 2: Matrícula y Correo (Rellena toda la fila) -->
+=======
+                    <!-- Fila 2: Matrícula y Correo -->
+>>>>>>> 67f14d35925100cfeb86833b4f77989b397c1287
                     <div id="institucional-contacto" class="row g-3 mb-3">
                         <div class="col-6">
                             <label class="fw-bold mb-1 fs-5 text-secondary" for="matricula">Matrícula:</label>
@@ -76,9 +85,15 @@
                         </div>
                     </div>
 
+<<<<<<< HEAD
                     <!-- Fila 3: Cuatrimestre y Carrera -->
                     <div id="academicos" class="row g-3 mb-4">
                         <div class="col-6">
+=======
+                    <!-- Fila 3: Cuatrimestre, Carrera y Grupo -->
+                    <div id="academicos" class="row g-3 mb-3">
+                        <div class="col-4">
+>>>>>>> 67f14d35925100cfeb86833b4f77989b397c1287
                             <label class="fw-bold mb-1 fs-5 text-secondary" for="cuatrimestre">Cuatrimestre:</label>
                             <select class="form-select p-2" id="cuatrimestre" name="cuatrimestre" required>
                                 <option value="">Selecciona una opción</option>
@@ -86,19 +101,52 @@
                                 <option value="11">11° Cuatrimestre</option>
                             </select>
                         </div>
+<<<<<<< HEAD
                         <div class="col-6">
                             <label class="fw-bold mb-1 fs-5 text-secondary" for="carrera">Carrera:</label>
                             <input class="form-control p-2" type="text" id="carrera" name="carrera" required minlength="3" placeholder="DSM">
                         </div>
+=======
+                        <div class="col-4">
+                            <label class="fw-bold mb-1 fs-5 text-secondary" for="carrera">Carrera:</label>
+                            <input class="form-control p-2" type="text" id="carrera" name="carrera" required minlength="3" placeholder="DSM">
+                        </div>
+                        <div class="col-4">
+                            <label class="fw-bold fs-5 mb-1 text-secondary" for="grupo">Grupo:</label>
+                            <input class="form-control p-2" type="text" id="grupo" name="grupo" required>
+                        </div>
+                    </div>
+
+                    <!--Fila 4 Asignar profesor-->
+                    <div id="asignacion-tutor" class="row g-3 mb-4">
+                        <div class="col-12">
+                            <label class="fw-bold mb-1 fs-5 text-secondary" for="idDocenteAsignado">Profesor a Cargo:</label>
+                            <select class="form-select p-2" name="idDocenteAsignado" id="idDocenteAsignado" required>
+                                <option value="">-- Selecciona un Docente --</option>
+                                <c:forEach var="docente" items="${listaDocente}">
+                                    <option value="${docente.id}">${docente.nombre} ${docente.apellido}</option>
+                                </c:forEach>
+                            </select>
+                        </div>
+>>>>>>> 67f14d35925100cfeb86833b4f77989b397c1287
                     </div>
 
                     <!-- Botones de Acción -->
                     <div id="botones" class="row justify-content-between mt-4">
                         <div class="col-5">
+<<<<<<< HEAD
                             <a class="btn btn-danger w-100 py-2 fs-5 text-white fw-medium rounded-3" href="${pageContext.request.contextPath}/servlet-lista-estudiantes">Cancelar</a>
                         </div>
                         <div class="col-5">
                             <button class="btn w-100 py-2 fs-5 text-white fw-medium rounded-3" style="background-color: #429983;" type="submit">Registrar</button>
+=======
+                            <a class="btn btn-danger w-100 py-2 fs-5 text-white fw-medium rounded-3" href="${pageContext.request.contextPath}/servlet-estudiantes-admin">Cancelar</a>
+                        </div>
+                        <div class="col-5">
+                            <form method="get" action="servlet-estudiantes-admin">
+                                <button class="btn w-100 py-2 fs-5 text-white fw-medium rounded-3" style="background-color: #429983;" type="submit">Registrar</button>
+                            </form>
+>>>>>>> 67f14d35925100cfeb86833b4f77989b397c1287
                         </div>
                     </div>
 
@@ -108,6 +156,11 @@
         </div>
     </div>
 </div>
+<<<<<<< HEAD
+=======
+
+<!-- Bootstrap JS -->
+>>>>>>> 67f14d35925100cfeb86833b4f77989b397c1287
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

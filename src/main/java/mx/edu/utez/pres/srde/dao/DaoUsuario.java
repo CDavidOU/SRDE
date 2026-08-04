@@ -11,11 +11,10 @@ import java.sql.SQLException;
 
 
 public class DaoUsuario {
-
     public BeanUsuario verificarUsuario(String correo, String password) {
         BeanUsuario usuarioLogueado = null;
-
-        String sql = "select correo,contrasena,rol,id_usuario from usuario where correo=? and contrasena=STANDARD_HASH(?, 'SHA256') ";
+        //upper para detectar minusculas o mayusculas, raw por el tipo de formato que se vuelve la contra con el standar/hash
+        String sql = "select correo,contrasena,rol,id_usuario from usuario WHERE UPPER(TRIM(correo)) = UPPER(TRIM(?)) AND UPPER(contrasena) = RAWTOHEX(STANDARD_HASH(?, 'SHA256'))";
 
         try (Connection conexion = Conexion.getConexion();
              PreparedStatement prs = conexion.prepareStatement(sql)) {
@@ -34,20 +33,15 @@ public class DaoUsuario {
                     usuarioLogueado.setDatosPersona(persona);
                 }
 
-            } catch (Exception e) {
-                e.printStackTrace();
             }
-
-            return usuarioLogueado;
-
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+        }  catch (Exception e) {
+            e.printStackTrace();
         }
+        return usuarioLogueado;
     }
-
     public boolean cambiarContrasena(int idUsuario, String nuevaContrasena) {
         boolean actualizado = false;
-        String sql = "UPDATE USUARIO SET contrasena = STANDARD_HASH(?, 'SHA256') where id_Usuario=?";
+        String sql = "UPDATE USUARIO SET contrasena = RAWTOHEX(STANDARD_HASH(?, 'SHA256')) where id_Usuario=?";
         try (Connection conexion = Conexion.getConexion();
              PreparedStatement prs = conexion.prepareStatement(sql)) {
 

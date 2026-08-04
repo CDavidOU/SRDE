@@ -1,6 +1,7 @@
 package mx.edu.utez.pres.srde.controller;
 
 import jakarta.servlet.ServletException;
+import jakarta.servlet.ServletOutputStream;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -38,25 +39,25 @@ public class ServletInicio extends HttpServlet {
     }
 
     @Override
-    public void doPost(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
-        BeanUsuario usuario = new BeanUsuario();
-        BeanPersona persona = new BeanPersona();
-
-        persona.setCorreo(req.getParameter("correoUsuario"));
-        usuario.setDatosPersona(persona);
-        usuario.setPassword(req.getParameter("password"));
+    protected void doPost(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
+        // Asegurar codificación de caracteres para que no se corrompan las contraseñas
+        req.setCharacterEncoding("UTF-8");
+        String correoStr = req.getParameter("correoUsuario");
+        String passwordStr = req.getParameter("password");
 
         ServiceUsuario servicioUsuario = new ServiceUsuario();
-        BeanUsuario usuarioLogueado = servicioUsuario.verificarUsuario(usuario);
+        BeanUsuario usuarioLogueado = servicioUsuario.verificarUsuario(correoStr, passwordStr);
 
         if (usuarioLogueado != null) {
             HttpSession sesion = req.getSession();
+
             if ("Administrador".equals(usuarioLogueado.getRol())) {
                 ServicioAdmin servicioAdmin = new ServicioAdmin();
                 BeanAdmin admin = servicioAdmin.datosAdmin(usuarioLogueado.getId());
                 sesion.setAttribute("adminLogueado", admin);
 
                 int idAdmin = admin.getId();
+                System.out.println(idAdmin);
                 req.getRequestDispatcher("/WEB-INF/Admin/perfil.jsp").forward(req, res);
 
             } else {

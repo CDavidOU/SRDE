@@ -9,7 +9,7 @@ import java.util.Properties;
 
 public class Conexion {
     public static Connection getConexion() {
-        Connection con = null;
+        Connection conexion = null;
         Properties props = new Properties();
         try {
             // 1. Leer las credenciales del archivo properties
@@ -36,11 +36,11 @@ public class Conexion {
             jdbcProps.setProperty("oracle.net.tns_admin", absoluteWalletPath); // Configura la Wallet
             // 5. Conectar mediante el alias del servicio
             String url = "jdbc:oracle:thin:@" + props.getProperty("db.service");
-            con = DriverManager.getConnection(url, jdbcProps);
+            conexion = DriverManager.getConnection(url, jdbcProps);
             System.out.println("¡Conexión segura y portable establecida con éxito!");
         } catch (Exception e) {
             System.out.println("Error crítico en la conexión: " + e.getMessage());
         }
-        return con;
+        return conexion;
     }
 }

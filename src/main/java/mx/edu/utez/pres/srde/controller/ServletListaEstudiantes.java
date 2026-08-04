@@ -9,11 +9,10 @@ import jakarta.servlet.http.HttpSession;
 import mx.edu.utez.pres.srde.model.BeanAsignacionEstadias;
 import mx.edu.utez.pres.srde.model.BeanDocente;
 import mx.edu.utez.pres.srde.model.BeanPeriodo;
-import mx.edu.utez.pres.srde.service.ServicioListaEstudiantes;
+import mx.edu.utez.pres.srde.service.ServicioListaEstudiante;
 import mx.edu.utez.pres.srde.service.ServicioPeriodos;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 @WebServlet(name = "servletlistaestudiantes", value = "/servlet-lista-estudiantes")
@@ -21,26 +20,61 @@ public class ServletListaEstudiantes extends HttpServlet {
 
     @Override
     public void doGet(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
-        ServicioListaEstudiantes listaServicio=new ServicioListaEstudiantes();
-        HttpSession sesion=req.getSession();
-        BeanDocente docenteLogueado = (BeanDocente)sesion.getAttribute("docenteLogueado");
-        int id_docente=docenteLogueado.getId();
-        ServicioPeriodos periodoActual=new ServicioPeriodos();
-        BeanPeriodo periodoEncontrado= periodoActual.automatizacionPeriodos();
-        int id_periodo=periodoEncontrado.getId_periodo();
-        List<BeanAsignacionEstadias> listaEstudiantesActivos=listaServicio.listaEstudiantes(id_docente,id_periodo);
+        HttpSession sesion = req.getSession(false);
 
-
-        if(listaEstudiantesActivos !=null && !listaEstudiantesActivos.isEmpty()){
-            req.setAttribute("listaEstudiantesActivos",listaEstudiantesActivos);
-        } else{
-            req.setAttribute("mensajeVacio","No tiene ningun Estudiante Registrado");
+        if (sesion == null || sesion.getAttribute("docenteLogueado") == null) {
+            res.sendRedirect(req.getContextPath() + "/index.jsp");
+            return;
         }
-        req.getRequestDispatcher("WEB-INF/Docente/vista-estudiantes.jsp").forward(req,res);
 
+        BeanDocente docenteLogueado = (BeanDocente) sesion.getAttribute("docenteLogueado");
+        int id_docente = docenteLogueado.getId();
+
+        ServicioPeriodos periodoActual = new ServicioPeriodos();
+        BeanPeriodo periodoEncontrado = periodoActual.automatizacionPeriodos();
+        int id_periodo = periodoEncontrado.getId_periodo();
+
+        ServicioListaEstudiante listaServicio = new ServicioListaEstudiante();
+
+        List<BeanAsignacionEstadias> listaEstudiantesActivos = listaServicio.listaEstudiantes(id_docente, id_periodo);
+
+        if (listaEstudiantesActivos != null && !listaEstudiantesActivos.isEmpty()) {
+            req.setAttribute("listaEstudiantesActivos", listaEstudiantesActivos);
+        } else {
+            req.setAttribute("mensajeVacio", "No tiene ningún Estudiante Registrado.");
+        }
+
+        req.getRequestDispatcher("WEB-INF/Docente/vista-estudiantes.jsp").forward(req, res);
     }
+
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
-        doGet(req, res);
+        HttpSession sesion = req.getSession(false);
+
+        if (sesion == null || sesion.getAttribute("docenteLogueado") == null) {
+            res.sendRedirect(req.getContextPath() + "/index.jsp");
+            return;
+        }
+
+        BeanDocente docenteLogueado = (BeanDocente) sesion.getAttribute("docenteLogueado");
+        int id_docente = docenteLogueado.getId();
+
+        ServicioPeriodos periodoActual = new ServicioPeriodos();
+        BeanPeriodo periodoEncontrado = periodoActual.automatizacionPeriodos();
+        int id_periodo = periodoEncontrado.getId_periodo();
+
+        String buscador = req.getParameter("buscador");
+
+        ServicioListaEstudiante listaServicio = new ServicioListaEstudiante();
+
+        List<BeanAsignacionEstadias> listaBuscada = listaServicio.listaBuscoEstudiantes(id_docente, id_periodo, buscador);
+
+        if (listaBuscada != null && !listaBuscada.isEmpty()) {
+            req.setAttribute("listaEstudiantesActivos", listaBuscada);
+        } else {
+            req.setAttribute("mensajeVacio", "No hay ninguna coincidencia.");
+        }
+
+        req.getRequestDispatcher("WEB-INF/Docente/vista-estudiantes.jsp").forward(req, res);
     }
 }
