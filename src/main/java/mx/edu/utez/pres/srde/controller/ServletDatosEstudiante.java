@@ -18,13 +18,8 @@ public class ServletDatosEstudiante extends HttpServlet {
     @Override
     public void doGet(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
         HttpSession sesion = req.getSession(false);
-        if (sesion == null) {
-            res.sendRedirect(req.getContextPath() + "/index.jsp");
-            return;
-        }
-        BeanAdmin adminLogueado = (BeanAdmin) sesion.getAttribute("adminLogueado");
-        BeanDocente docenteLogueado = (BeanDocente) sesion.getAttribute("docenteLogueado");
-        if (adminLogueado == null && docenteLogueado == null) {
+
+        if (sesion == null || (sesion.getAttribute("docenteLogueado") == null && sesion.getAttribute("adminLogueado") == null)) {
             res.sendRedirect(req.getContextPath() + "/index.jsp");
             return;
         }

@@ -1,4 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <!doctype html>
 <html lang="es">
@@ -8,7 +9,7 @@
     <title>Datos Docente</title>
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Bootstrap Icons (Agregado para la flecha de regresar) -->
+    <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 </head>
 <body>
@@ -45,23 +46,23 @@
 
                 <form action="servlet-modificar-docente" method="POST">
                     <input type="hidden" name="idDocente" value="${datoDocente.id}">
-
-                    <!-- Fila 1: Nombres, Apellido -->
+                    
+                    <!-- Fila 1: Nombre(s) y Apellidos -->
                     <div id="nombre-completo" class="row g-3 mb-3">
                         <div class="col-md-6">
                             <label class="fw-bold mb-1 fs-5 text-secondary" for="nombre">Nombre(s):</label>
-                            <input class="form-control p-2" type="text" id="nombre" name="nombre" value="${datoDocente.nombre}" readonly disabled>
+                            <input class="form-control p-2" type="text" id="nombre" name="nombre" value="${datoDocente.nombre}" disabled>
                         </div>
                         <div class="col-md-6">
-                            <label class="fw-bold mb-1 fs-5 text-secondary" for="apellidoPaterno">Apellidos:</label>
-                            <input class="form-control p-2" type="text" id="apellidoPaterno" name="apellidoPaterno" value="${datoDocente.apellido}" readonly disabled>
+                            <label class="fw-bold mb-1 fs-5 text-secondary" for="apellido">Apellidos:</label>
+                            <input class="form-control p-2" type="text" id="apellido" name="apellido" value="${datoDocente.apellido}" disabled>
                         </div>
                     </div>
 
                     <!-- Fila 2: Área y carrera-->
                     <div id="academico-area" class="row g-3 mb-4">
                         <div class="col-md-6">
-                            <label class="fw-bold mb-1 fs-5 text-secondary" for="area">Carrera:</label>
+                            <label class="fw-bold mb-1 fs-5 text-secondary" for="carrera">Carrera:</label>
                             <input class="form-control p-2" type="text" id="carrera" name="carrera" value="${datoDocente.carrera}" disabled>
                         </div>
                         <div class="col-md-6">
@@ -69,6 +70,7 @@
                             <input class="form-control p-2" type="text" id="area" name="area" value="${datoDocente.academia}" disabled>
                         </div>
                     </div>
+                    
                     <!-- Fila 3: Correo electrónico y Teléfono -->
                     <div id="contacto-docente" class="row g-3 mb-3">
                         <div class="col-md-6">
@@ -80,6 +82,7 @@
                             <input class="form-control p-2" type="tel" id="telefono" name="telefono" value="${datoDocente.telefono}" disabled>
                         </div>
                     </div>
+                    
                     <!-- Fila 4: Estado-->
                     <div id="estado-columna" class="row g-3 mb-4">
                         <div id="estado" class="col-md-6">

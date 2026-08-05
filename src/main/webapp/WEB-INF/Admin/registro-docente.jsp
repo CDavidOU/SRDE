@@ -9,6 +9,8 @@
   <title>Registro Docente</title>
   <!-- Bootstrap CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Bootstrap Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 </head>
 <body>
 
@@ -52,16 +54,15 @@
               <input class="form-control p-2" type="text" id="apellido" name="apellido" required minlength="2" placeholder="Ej: Escalona" required>
             </div>
           </div>
-
-          <!-- Fila 2: Carrera y Área (2 Columnas) -->
+          <!-- Fila 2: Área y Carrera (2 Columnas) -->
           <div id="academico-docente" class="row g-3 mb-3">
-            <div class="col-6">
-              <label class="fw-bold mb-1 fs-5 text-secondary" for="periodo">Carrera:</label>
-              <input type="text" name="carrera" id="carrera" class="form-control" placeholder="Ej: DSM" required>
-            </div>
             <div class="col-6">
               <label class="fw-bold mb-1 fs-5 text-secondary" for="area">Área:</label>
               <input type="text" name="academia" id="academia" class="form-control" placeholder="Ej: DATID" required>
+            </div>
+            <div class="col-6">
+              <label class="fw-bold mb-1 fs-5 text-secondary" for="carrera">Carrera:</label>
+              <input class="form-control p-2" type="text" id="carrera" name="carrera" required minlength="2" placeholder="Ej: DSM">
             </div>
           </div>
 
