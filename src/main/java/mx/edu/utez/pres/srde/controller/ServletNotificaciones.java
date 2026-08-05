@@ -30,7 +30,7 @@ public class ServletNotificaciones extends HttpServlet {
         List<BeanTipoDocumento> listaTiposDocs = servicioTiposDocumento.consultarTiposDocumento();
         req.setAttribute("listaTiposDocs", listaTiposDocs);
         req.setAttribute("docentesDisponibles", listaDocentes);
-        req.getRequestDispatcher("/WEB-INF/Admin/programar-notificacion.jsp").forward(req, res);
+        req.getRequestDispatcher("WEB-INF/Admin/programar-notificacion.jsp").forward(req, res);
     }
 
     @Override

@@ -17,7 +17,7 @@
 <div id="contenido" class="d-flex min-vh-100">
 
     <!-- Menú Lateral -->
-    <div id="menu" class="flex-shrink-0">
+    <div id="menu" class="flex-shrink-0" style="width: 180px; flex-shrink: 0;">
         <jsp:include page="../Plantillas/menu.jsp" />
     </div>
 

@@ -83,19 +83,6 @@
                         </div>
                     </div>
 
-                    <!--Fila 4 Asignar profesor-->
-                    <div id="asignacion-tutor" class="row g-3 mb-4">
-                        <div class="col-12">
-                            <label class="fw-bold mb-1 fs-5 text-secondary" for="idDocenteAsignado">Profesor a Cargo:</label>
-                            <select class="form-select p-2" name="idDocenteAsignado" id="idDocenteAsignado" required>
-                                <option value="">-- Selecciona un Docente --</option>
-                                <c:forEach var="docente" items="${listaDocente}">
-                                    <option value="${docente.id}">${docente.nombre} ${docente.apellido}</option>
-                                </c:forEach>
-                            </select>
-                        </div>
-                    </div>
-
                     <!-- Botones de Acción -->
                     <div id="botones" class="row justify-content-between mt-4">
                         <div class="col-5">

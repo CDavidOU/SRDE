@@ -86,8 +86,11 @@
                                         <td class="py-3 fs-5 w-20">
                                             <c:out value="${asignacionEstadias.estudiante.matricula}" />
                                         </td>
-                                        <td class="py-3 fs-5 w-80">
+                                        <td class="py-3 fs-5 w-40">
                                             <c:out value="${asignacionEstadias.estudiante.nombre}" />
+                                        </td>
+                                        <td class="py-3 fs-5 w-40">
+                                            <c:out value="${asignacionEstadias.estudiante.apellido}" />
                                         </td>
                                         <td class="py-3 text-end text-nowrap">
                                             <!-- Botón de Detalles -->
