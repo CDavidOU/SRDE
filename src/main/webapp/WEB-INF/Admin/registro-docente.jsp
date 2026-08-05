@@ -1,10 +1,3 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: car15
-  Date: 29/07/2026
-  Time: 07:01 p.m.
-  To change this template use File | Settings | File Templates.
---%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
@@ -50,32 +43,22 @@
 
         <form action="servlet-registro-docente" method="POST">
 
-          <!-- Fila 1: Nombre, Apellido Paterno, Apellido Materno (3 Columnas) -->
+          <!-- Fila 1: Nombre, Apellido -->
           <div id="nombre-completo" class="row g-3 mb-3">
-            <div class="col-4">
+            <div class="col-6">
               <label class="fw-bold mb-1 fs-5 text-secondary" for="nombre">Nombre:</label>
-              <input class="form-control p-2" type="text" id="nombre" name="nombre" required minlength="2" placeholder="Ej: Nathaly">
+              <input class="form-control p-2" type="text" id="nombre" name="nombre" required minlength="2" placeholder="Ej: Nathaly" required>
             </div>
-            <div class="col-4">
-              <label class="fw-bold mb-1 fs-5 text-secondary" for="apellidoPaterno">Apellido Paterno:</label>
-              <input class="form-control p-2" type="text" id="apellidoPaterno" name="apellidoPaterno" required minlength="2" placeholder="Ej: Escalona">
-            </div>
-            <div class="col-4">
-              <label class="fw-bold mb-1 fs-5 text-secondary" for="apellidoMaterno">Apellido Materno:</label>
-              <input class="form-control p-2" type="text" id="apellidoMaterno" name="apellidoMaterno" required minlength="2" placeholder="Ej: Ruiz">
+            <div class="col-6">
+              <label class="fw-bold mb-1 fs-5 text-secondary" for="apellido">Apellidos:</label>
+              <input class="form-control p-2" type="text" id="apellido" name="apellido" required minlength="2" placeholder="Ej: Escalona" required>
             </div>
           </div>
-
           <!-- Fila 2: Área y Carrera (2 Columnas) -->
           <div id="academico-docente" class="row g-3 mb-3">
             <div class="col-6">
               <label class="fw-bold mb-1 fs-5 text-secondary" for="area">Área:</label>
-              <select class="form-select p-2" id="area" name="area" required>
-                <option value="" selected disabled>Seleccione Academia</option>
-                <option value="DATIC">DATIC</option>
-                <option value="DAMI">DAMI</option>
-                <option value="DCEA">DCEA</option>
-              </select>
+              <input type="text" name="academia" id="academia" class="form-control" placeholder="Ej: DATID" required>
             </div>
             <div class="col-6">
               <label class="fw-bold mb-1 fs-5 text-secondary" for="carrera">Carrera:</label>
@@ -87,7 +70,7 @@
           <div id="contacto-docente" class="row g-3 mb-4">
             <div class="col-6">
               <label class="fw-bold mb-1 fs-5 text-secondary" for="telefono">Teléfono:</label>
-              <input class="form-control p-2" type="tel" id="telefono" name="telefono" required pattern="[0-9]{10}" placeholder="Ej: 7773712397">
+              <input class="form-control p-2" type="tel" id="telefono" name="telefono" required pattern="[0-9]{10}" placeholder="Ej: 7773712397" required>
             </div>
             <div class="col-6">
               <label class="fw-bold mb-1 fs-5 text-secondary" for="correo">Correo Electrónico:</label>
@@ -98,7 +81,7 @@
           <!-- Botones de Acción -->
           <div id="botones" class="row justify-content-between mt-4">
             <div class="col-5">
-              <a class="btn btn-danger w-100 py-2 fs-5 text-white fw-medium rounded-3" href="${pageContext.request.contextPath}/servlet-lista-docentes">Cancelar</a>
+              <a class="btn btn-danger w-100 py-2 fs-5 text-white fw-medium rounded-3" href="${pageContext.request.contextPath}/servlet-lista-docente">Cancelar</a>
             </div>
             <div class="col-5">
               <button class="btn w-100 py-2 fs-5 text-white fw-medium rounded-3" style="background-color: #429983;" type="submit">Registrar</button>

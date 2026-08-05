@@ -6,42 +6,62 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+
 import mx.edu.utez.pres.srde.model.BeanDocente;
-import mx.edu.utez.pres.srde.service.ServicioDocente;
+import mx.edu.utez.pres.srde.model.BeanUsuario;
+import mx.edu.utez.pres.srde.service.ServicioRegistroDocente;
 
 import java.io.IOException;
 
-@WebServlet(name = "servletregistrodocente", value = "/servlet-registro-docente")
+@WebServlet(name = "servletRegistroDocente", value = "/servlet-registro-docente")
 public class ServletRegistroDocente extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
+        // Validación de sesión de la rama union (Seguridad)
         HttpSession sesion = req.getSession(false);
         if (sesion == null || sesion.getAttribute("adminLogueado") == null) {
             res.sendRedirect(req.getContextPath() + "/index.jsp");
             return;
         }
+        
         req.getRequestDispatcher("WEB-INF/Admin/registro-docente.jsp").forward(req, res);
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
+        // Validación de sesión de la rama union (Seguridad)
         HttpSession sesion = req.getSession(false);
         if (sesion == null || sesion.getAttribute("adminLogueado") == null) {
             res.sendRedirect(req.getContextPath() + "/index.jsp");
             return;
         }
 
+        req.setCharacterEncoding("UTF-8");
+
         String nombre = req.getParameter("nombre");
-        String apellidoPaterno = req.getParameter("apellidoPaterno");
-        String apellidoMaterno = req.getParameter("apellidoMaterno");
-        String telefono = req.getParameter("telefono");
+        
+        // Compatibilidad de parámetros entre la rama Carlos y union
+        String apellido = req.getParameter("apellido");
+        if (apellido == null) {
+            String pat = req.getParameter("apellidoPaterno");
+            String mat = req.getParameter("apellidoMaterno");
+            apellido = (pat != null ? pat.trim() : "") + (mat != null && !mat.trim().isEmpty() ? " " + mat.trim() : "");
+        }
+
         String correo = req.getParameter("correo");
-        String academia = req.getParameter("area");
+        String telefono = req.getParameter("telefono");
+        
+        String academia = req.getParameter("academia");
+        if (academia == null) {
+            academia = req.getParameter("area");
+        }
+        
         String carrera = req.getParameter("carrera");
 
+        // Validación de campos vacíos de la rama union
         if (nombre == null || nombre.trim().isEmpty()
-                || apellidoPaterno == null || apellidoPaterno.trim().isEmpty()
+                || apellido == null || apellido.trim().isEmpty()
                 || telefono == null || telefono.trim().isEmpty()
                 || correo == null || correo.trim().isEmpty()
                 || academia == null || academia.trim().isEmpty()
@@ -51,28 +71,34 @@ public class ServletRegistroDocente extends HttpServlet {
             return;
         }
 
-        String apellido = apellidoPaterno.trim();
-        if (apellidoMaterno != null && !apellidoMaterno.trim().isEmpty()) {
-            apellido += " " + apellidoMaterno.trim();
-        }
-
+        // Lógica de registro de la rama Carlos
         BeanDocente nuevoDocente = new BeanDocente();
         nuevoDocente.setNombre(nombre.trim());
-        nuevoDocente.setApellido(apellido);
+        nuevoDocente.setApellido(apellido.trim());
         nuevoDocente.setTelefono(telefono.trim());
-        nuevoDocente.setCorreo(correo.trim());
         nuevoDocente.setAcademia(academia.trim());
         nuevoDocente.setCarrera(carrera.trim());
+        nuevoDocente.setCorreo(correo.trim());
 
-        ServicioDocente servicioDocente = new ServicioDocente();
-        BeanDocente docenteRegistrado = servicioDocente.registrarDocente(nuevoDocente);
+        BeanUsuario usuarioDocente = new BeanUsuario();
+        usuarioDocente.setRol("Docente");
+        usuarioDocente.setDatosPersona(nuevoDocente);
+        
+        // Generación de contraseña de la rama Carlos
+        String contrasenaAutomatica = (nombre.trim() + apellido.trim()).toLowerCase().replace(" ", "");
+        usuarioDocente.setPassword(contrasenaAutomatica);
 
-        if (docenteRegistrado != null) {
-            sesion.setAttribute("mensajeOk", "Docente registrado correctamente. Contraseña temporal: "
-                    + mx.edu.utez.pres.srde.service.ServicioDocente.PASSWORD_TEMPORAL_DEFAULT);
-            res.sendRedirect(req.getContextPath() + "/servlet-lista-docentes");
+        ServicioRegistroDocente servicioRegistroDocente = new ServicioRegistroDocente();
+        String resultado = servicioRegistroDocente.registrarTodoElDocente(nuevoDocente, usuarioDocente);
+
+        if ("EXISTE".equals(resultado)) {
+            req.setAttribute("mensajeError", "El correo ya se encuentra registrado por otro docente.");
+            req.getRequestDispatcher("WEB-INF/Admin/registro-docente.jsp").forward(req, res);
+        } else if ("EXITO".equals(resultado)) {
+            req.setAttribute("mensajeExito", "¡Docente registrado con éxito! Contraseña: " + contrasenaAutomatica);
+            req.getRequestDispatcher("WEB-INF/Admin/registro-docente.jsp").forward(req, res);
         } else {
-            req.setAttribute("mensajeError", "Error: El correo ya existe o faltan campos obligatorios.");
+            req.setAttribute("mensajeError", "Ocurrió un error interno en la base de datos.");
             req.getRequestDispatcher("WEB-INF/Admin/registro-docente.jsp").forward(req, res);
         }
     }

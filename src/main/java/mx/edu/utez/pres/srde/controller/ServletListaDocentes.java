@@ -1,43 +1,83 @@
 package mx.edu.utez.pres.srde.controller;
 
 import jakarta.servlet.ServletException;
+import jakarta.servlet.ServletOutputStream;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import mx.edu.utez.pres.srde.model.BeanAdmin;
 import mx.edu.utez.pres.srde.model.BeanDocente;
-import mx.edu.utez.pres.srde.model.BeanPeriodo;
+import mx.edu.utez.pres.srde.model.BeanPersona;
+import mx.edu.utez.pres.srde.model.BeanUsuario;
+import mx.edu.utez.pres.srde.service.ServiceUsuario;
+import mx.edu.utez.pres.srde.service.ServicioAdmin;
 import mx.edu.utez.pres.srde.service.ServicioDocente;
-import mx.edu.utez.pres.srde.service.ServicioPeriodos;
 
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet(name = "servletlistadocentes", value = "/servlet-lista-docentes")
-public class ServletListaDocentes extends HttpServlet {
+@WebServlet(name = "servletinicio", value = "/servlet-inicio")
+public class ServletInicio extends HttpServlet {
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
+    public void doGet(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
         HttpSession sesion = req.getSession(false);
 
-        if (sesion == null || sesion.getAttribute("adminLogueado") == null) {
-            res.sendRedirect(req.getContextPath() + "/index.jsp");
-            return;
+        if (sesion != null) {
+            if (sesion.getAttribute("docenteLogueado") != null) {
+                req.getRequestDispatcher("/WEB-INF/Docente/perfilDocente.jsp").forward(req, res);
+                return;
+            } else if (sesion.getAttribute("adminLogueado") != null) {
+                req.getRequestDispatcher("/WEB-INF/Admin/perfil.jsp").forward(req, res);
+                return;
+            }
         }
 
-        ServicioPeriodos servicioPeriodos = new ServicioPeriodos();
-        BeanPeriodo periodoActual = servicioPeriodos.automatizacionPeriodos();
+        res.sendRedirect(req.getContextPath() + "/index.jsp");
+    }
 
-        ServicioDocente servicioDocente = new ServicioDocente();
-        List<BeanDocente> listaDocentes = servicioDocente.listaDocentes(periodoActual.getId_periodo());
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
+        // Asegurar codificación de caracteres para que no se corrompan las contraseñas
+        req.setCharacterEncoding("UTF-8");
+        String correoStr = req.getParameter("correoUsuario");
+        String passwordStr = req.getParameter("password");
 
-        if (listaDocentes != null && !listaDocentes.isEmpty()) {
-            req.setAttribute("listaDocentes", listaDocentes);
+        ServiceUsuario servicioUsuario = new ServiceUsuario();
+        BeanUsuario usuarioLogueado = servicioUsuario.verificarUsuario(correoStr, passwordStr);
+
+        if (usuarioLogueado != null) {
+            // Invalidamos cualquier sesión previa para no arrastrar el rol de un login anterior
+            HttpSession sesionPrevia = req.getSession(false);
+            if (sesionPrevia != null) {
+                sesionPrevia.invalidate();
+            }
+            
+            // Creamos la nueva sesión limpia
+            HttpSession sesion = req.getSession(true);
+
+            if ("Administrador".equals(usuarioLogueado.getRol())) {
+                ServicioAdmin servicioAdmin = new ServicioAdmin();
+                BeanAdmin admin = servicioAdmin.datosAdmin(usuarioLogueado.getId());
+                sesion.setAttribute("adminLogueado", admin);
+
+                int idAdmin = admin.getId();
+                System.out.println(idAdmin);
+                req.getRequestDispatcher("/WEB-INF/Admin/perfil.jsp").forward(req, res);
+
+            } else {
+                ServicioDocente serviceDocente = new ServicioDocente();
+                BeanDocente datosDocente = serviceDocente.datosDocente(usuarioLogueado.getId());
+                sesion.setAttribute("docenteLogueado", datosDocente);
+
+                int idDocente = datosDocente.getId();
+                req.getRequestDispatcher("/WEB-INF/Docente/perfilDocente.jsp").forward(req, res);
+            }
         } else {
-            req.setAttribute("mensajeVacio", "No hay docentes registrados.");
+            req.setAttribute("mensajeError", "Usuario o Contraseña incorrectos");
+            req.getRequestDispatcher("/index.jsp").forward(req, res);
         }
-
-        req.getRequestDispatcher("WEB-INF/Admin/vista-docentes.jsp").forward(req, res);
     }
 }

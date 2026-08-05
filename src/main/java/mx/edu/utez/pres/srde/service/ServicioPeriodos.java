@@ -8,8 +8,15 @@ import java.sql.Date;
 import java.util.List;
 
 public class ServicioPeriodos {
+        //Servicios Admin
+    private DaoPeriodo nuevoPeriodo = new DaoPeriodo();
+    public List<BeanPeriodo> obtenerTodosPeriodos() {
+        return nuevoPeriodo.consultarTodosLosPeriodos();
+    }
 
-    DaoPeriodo nuevoPeriodo = new DaoPeriodo();
+    public List<BeanEstudiante> consultarTodosLosEstudiantesPorPeriodo(int idPeriodo) {
+        return nuevoPeriodo.consultarTodosLosEstudiantesPorPeriodo(idPeriodo);
+    }
 
     // Método para obtener la lista de periodos asociados al docente (para el acordeón)
     public List<BeanPeriodo> obtenerPeriodosPorDocente(int idDocente) {

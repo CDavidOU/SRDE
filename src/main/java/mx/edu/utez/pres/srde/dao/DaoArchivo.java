@@ -1,6 +1,7 @@
 package mx.edu.utez.pres.srde.dao;
 
 import mx.edu.utez.pres.srde.model.BeanArchivo;
+import mx.edu.utez.pres.srde.model.BeanTipoDocumento;
 import mx.edu.utez.pres.srde.util.Conexion;
 
 import java.sql.Connection;
