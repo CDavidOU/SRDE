@@ -11,6 +11,15 @@ public class BeanPeriodo {
 
     // NUEVA VARIABLE: Aquí guardaremos a los alumnos que pertenecen a este periodo
     private List<BeanEstudiante> listaEstudiantes;
+    private int totalEstudiantes;
+
+    public int getTotalEstudiantes() {
+        return totalEstudiantes;
+    }
+
+    public void setTotalEstudiantes(int totalEstudiantes) {
+        this.totalEstudiantes = totalEstudiantes;
+    }
 
     public String getNombre_periodo() {
         return nombre_periodo;

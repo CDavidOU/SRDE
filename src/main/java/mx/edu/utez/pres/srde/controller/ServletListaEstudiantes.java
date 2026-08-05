@@ -67,7 +67,7 @@ public class ServletListaEstudiantes extends HttpServlet {
 
         ServicioListaEstudiante listaServicio = new ServicioListaEstudiante();
 
-        List<BeanAsignacionEstadias> listaBuscada = listaServicio.listaBuscoEstudiantes(id_docente,id_periodo, buscador);
+        List<BeanAsignacionEstadias> listaBuscada = listaServicio.listaBuscoEstudiantes(id_docente, id_periodo, buscador);
 
         if (listaBuscada != null && !listaBuscada.isEmpty()) {
             req.setAttribute("listaEstudiantesActivos", listaBuscada);

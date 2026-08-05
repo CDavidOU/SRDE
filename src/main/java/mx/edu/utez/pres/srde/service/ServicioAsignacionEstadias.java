@@ -21,4 +21,10 @@ public class ServicioAsignacionEstadias {
         // Esto ahora devolverá el entero del ID generado directamente
         return daoAsignacion.registroAsignacionEstadias(asignacionNueva);
     }
+
+    public int contarEstudiantes (int docente,int periodo,String matricula){
+        DaoAsignacionEstadias daoAsignacion = new DaoAsignacionEstadias();
+        int totalEstudiantesAsignados = daoAsignacion.contarEstudiantesAsignados(docente, periodo);
+        return totalEstudiantesAsignados;
+    }
 }
