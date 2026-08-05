@@ -7,15 +7,12 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import mx.edu.utez.pres.srde.model.BeanDocente;
-import mx.edu.utez.pres.srde.model.BeanPeriodo;
 import mx.edu.utez.pres.srde.service.ServicioDocente;
-import mx.edu.utez.pres.srde.service.ServicioPeriodos;
 
 import java.io.IOException;
-import java.util.List;
 
-@WebServlet(name = "servletlistadocentes", value = "/servlet-lista-docentes")
-public class ServletListaDocentes extends HttpServlet {
+@WebServlet(name = "servletdatosdocente", value = "/servlet-datos-docente")
+public class ServletDatosDocente extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
@@ -26,18 +23,24 @@ public class ServletListaDocentes extends HttpServlet {
             return;
         }
 
-        ServicioPeriodos servicioPeriodos = new ServicioPeriodos();
-        BeanPeriodo periodoActual = servicioPeriodos.automatizacionPeriodos();
-
-        ServicioDocente servicioDocente = new ServicioDocente();
-        List<BeanDocente> listaDocentes = servicioDocente.listaDocentes(periodoActual.getId_periodo());
-
-        if (listaDocentes != null && !listaDocentes.isEmpty()) {
-            req.setAttribute("listaDocentes", listaDocentes);
-        } else {
-            req.setAttribute("mensajeVacio", "No hay docentes registrados.");
+        String strId = req.getParameter("id");
+        int idDocente;
+        try {
+            idDocente = Integer.parseInt(strId);
+        } catch (NumberFormatException e) {
+            res.sendRedirect(req.getContextPath() + "/servlet-lista-docentes");
+            return;
         }
 
-        req.getRequestDispatcher("WEB-INF/Admin/vista-docentes.jsp").forward(req, res);
+        ServicioDocente servicioDocente = new ServicioDocente();
+        BeanDocente docente = servicioDocente.datosDocente(idDocente);
+
+        if (docente == null) {
+            res.sendRedirect(req.getContextPath() + "/servlet-lista-docentes");
+            return;
+        }
+
+        req.setAttribute("docente", docente);
+        req.getRequestDispatcher("WEB-INF/Admin/datos-docente.jsp").forward(req, res);
     }
 }

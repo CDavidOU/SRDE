@@ -43,7 +43,6 @@
                 <div class="card border-0 shadow-sm p-4 bg-white rounded-3 w-100" style="max-width: 850px;">
 
                     <!-- Barra de Búsqueda -->
-
                     <form action="${pageContext.request.contextPath}/servlet-lista-estudiantes" method="post">
                         <div id="busqueda" class="row g-2 mb-4">
                             <div class="col-9">
@@ -119,7 +118,6 @@
             </div>
         </div>
     </div>
-
 
 </div>
 

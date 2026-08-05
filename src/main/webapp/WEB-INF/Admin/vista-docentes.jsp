@@ -34,43 +34,68 @@
             <!-- Contenedor principal alineado con la maqueta -->
             <div class="w-100" style="max-width: 850px;">
 
+                <!-- Alerta de éxito al registrar -->
+                <c:if test="${not empty sessionScope.mensajeOk}">
+                    <div class="alert alert-success text-center py-2 mb-3 shadow-sm" role="alert">
+                        <c:out value="${sessionScope.mensajeOk}" />
+                    </div>
+                    <c:remove var="mensajeOk" scope="session" />
+                </c:if>
+
                 <!-- Lista de Docentes -->
                 <div class="d-flex flex-column gap-2 mb-4">
 
-                    <!-- Docentes -->
-                    <c:forEach items="${listaDocentes}" var="docente">
-                        <div class="card border border-secondary border-opacity-25 rounded-3 shadow-sm">
-                            <div class="card-body py-2 px-3 d-flex align-items-center justify-content-between">
+                    <c:choose>
+                        <c:when test="${not empty listaDocentes}">
+                            <c:forEach var="docente" items="${listaDocentes}">
+                                <div class="card border border-secondary border-opacity-25 rounded-3 shadow-sm">
+                                    <div class="card-body py-2 px-3 d-flex align-items-center justify-content-between">
 
-                                <!-- LADO IZQUIERDO: Icono, Nombre y Estado -->
-                                <div class="d-flex align-items-center gap-3">
-                                    <div class="rounded-circle bg-dark text-white d-flex align-items-center justify-content-center flex-shrink-0" style="width: 38px; height: 38px;">
-                                        <i class="bi bi-person-fill fs-5"></i>
+                                        <!-- LADO IZQUIERDO: Icono, Nombre y Estado -->
+                                        <div class="d-flex align-items-center gap-3">
+                                            <div class="rounded-circle bg-dark text-white d-flex align-items-center justify-content-center flex-shrink-0" style="width: 38px; height: 38px;">
+                                                <i class="bi bi-person-fill fs-5"></i>
+                                            </div>
+                                            <div class="d-flex flex-column">
+                                                <span class="fw-semibold text-secondary fs-5 m-0 lh-1">
+                                                    <c:out value="${docente.nombre} ${docente.apellido}" />
+                                                </span>
+                                                <span class="text-secondary small mt-1">Estado: <c:out value="${docente.estado}" default="Activo"/></span>
+                                            </div>
+                                        </div>
+
+                                        <!-- LADO DERECHO: Alumnos y Botón Detalles -->
+                                        <div class="d-flex align-items-center gap-4">
+                                            <span class="fw-bold text-secondary fs-5 m-0">Alumnos: <c:out value="${docente.numAlumnos}" default="0"/></span>
+                                            
+                                            <!-- Botón Detalles combinando el diseño de Carlos con el enlace de union -->
+                                            <a href="${pageContext.request.contextPath}/servlet-datos-docente?id=${docente.id}" 
+                                               class="btn btn-outline-dark btn-sm px-3 border border-dark d-flex align-items-center gap-2">
+                                                <i class="bi bi-file-earmark-text-fill"></i> Detalles
+                                            </a>
+                                        </div>
+
                                     </div>
-
-                                    <p class="m-0 fw-medium">${docente.nombre} ${docente.apellido}</p>
-                                    <span class="text-secondary small ms-2">${docente.estado}</span>
                                 </div>
-
-                                <!-- LADO DERECHO: Formulario y Botón "Detalles" a la extrema derecha -->
-                                <form action="servlet-lista-docente" method="post" class="m-0">
-                                    <input type="hidden" name="idDocente" value="${docente.id}">
-                                    <button type="submit" class="btn btn-outline-dark btn-sm px-3 border border-dark">Detalles</button>
-                                </form>
-
+                            </c:forEach>
+                        </c:when>
+                        
+                        <c:otherwise>
+                            <!-- Estado vacío -->
+                            <div class="text-center text-secondary fs-5 py-4">
+                                <c:out value="${mensajeVacio}" default="No hay docentes registrados." />
                             </div>
-                        </div>
-                    </c:forEach>
-
-                    <!-- Botón 'Registrar docente' -->
-                    <div class="d-flex justify-content-end align-items-center gap-2 mt-4">
-                        <span class="fw-bold text-secondary fs-5">Registrar docente</span>
-                        <a href="${pageContext.request.contextPath}/servlet-registro-docente" class="btn border border-secondary border-opacity-50 bg-white fs-4 fw-bold px-3 py-0 shadow-sm text-dark">
-                            +
-                        </a>
-                    </div>
+                        </c:otherwise>
+                    </c:choose>
 
                 </div>
+
+                <!-- Botón 'Registrar docente' -->
+                <div class="d-flex justify-content-end align-items-center gap-2 mt-4">
+                    <span class="fw-bold text-secondary fs-5">Registrar docente</span>
+                    <a href="${pageContext.request.contextPath}/servlet-registro-docente" class="btn border border-secondary border-opacity-50 bg-white fs-4 fw-bold px-3 py-0 shadow-sm text-dark">
+                        +
+                    </a>
                 </div>
 
             </div>

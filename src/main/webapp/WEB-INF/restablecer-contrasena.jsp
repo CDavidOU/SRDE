@@ -1,23 +1,75 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: jaca8
-  Date: 7/24/2026
-  Time: 5:51 PM
-  To change this template use File | Settings | File Templates.
---%>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<!doctype html>
-<html lang="en">
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<!DOCTYPE html>
+<html lang="es">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Bootstrap demo</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Restablecer Contraseña</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
-<body>
+<body class="bg-light">
 
+<form action="${pageContext.request.contextPath}/servlet-restablecer" method="POST">
+    <div class="container min-vh-100 d-flex align-items-center justify-content-center py-4">
 
+        <div class="col-12 col-md-8 col-lg-6">
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+            <div class="text-center mb-3">
+                <img src="${pageContext.request.contextPath}/imagenes/UtezLogo.png"
+                     class="img-fluid"
+                     alt="Logo UTEZ"
+                     style="width: 55%; max-width: 260px;">
+            </div>
+
+            <div class="bg-white shadow-sm border rounded overflow-hidden">
+
+                <div class="p-3 text-white text-center" style="background-color: #002E60;">
+                    <h2 class="h3 m-0 fw-bold">Restablecer Contraseña</h2>
+                </div>
+
+                <div class="p-4">
+
+                    <c:if test="${not empty mensajeError}">
+                        <div class="alert alert-danger text-center py-2 mb-3" role="alert">
+                            <c:out value="${mensajeError}" />
+                        </div>
+                    </c:if>
+
+                    <p class="text-secondary text-center mb-4">
+                        Ingresa tu correo institucional y la nueva contraseña que quieres usar.
+                    </p>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Correo</label>
+                        <input class="form-control" type="email" name="correo" placeholder="Ingresa tu correo" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Nueva contraseña</label>
+                        <input class="form-control" type="password" name="nuevaContrasena" placeholder="Ingresa la nueva contraseña" minlength="8" required>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label fw-bold">Confirmar contraseña</label>
+                        <input class="form-control" type="password" name="confirmarContrasena" placeholder="Confirma la nueva contraseña" minlength="8" required>
+                    </div>
+
+                    <div class="text-center mb-3">
+                        <button class="btn text-white fw-bold w-100" style="background-color: #429983;" type="submit">Restablecer</button>
+                    </div>
+
+                    <div class="text-center">
+                        <a href="${pageContext.request.contextPath}/index.jsp" class="text-decoration-none">Volver a iniciar sesión</a>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</form>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
