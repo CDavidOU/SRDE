@@ -26,6 +26,13 @@
         <!-- Encabezado -->
         <div class="w-100 text-center mb-4">
             <h1 class="text-white m-0 py-3 fs-2 fw-semibold" style="background-color: #002E60;">Estudiantes</h1>
+            <!-- Botón de registrar (Usando clases de posición y tamaño de Bootstrap) -->
+            <a href="${pageContext.request.contextPath}/servlet-registro-estudiante"
+               class="btn btn-success position-absolute end-0 me-4 d-flex align-items-center justify-content-center p-0 rounded"
+               style="width: 38px; height: 38px;"
+               title="Registrar Nuevo Estudiante">
+                <i class="bi bi-person-plus-fill fs-5"></i>
+            </a>
         </div>
 
         <!-- Área de Datos -->

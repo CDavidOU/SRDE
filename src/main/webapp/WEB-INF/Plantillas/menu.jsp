@@ -11,10 +11,10 @@
     <!-- Parte Superior: Logo y Opciones del Menú -->
     <div>
         <!-- Logo UTEZ (Sin márgenes inferiores para eliminar la línea blanca) -->
+
         <div class="bg-white p-3 text-center mb-0">
             <img src="${pageContext.request.contextPath}/imagenes/UtezLogo.png" class="img-fluid" alt="Logo UTEZ" style="height: 110px; width: 100%;">
         </div>
-
         <!-- DOCENTE -->
         <c:if test="${not empty sessionScope.docenteLogueado}">
             <div class="list-group list-group-flush rounded-0 m-0 p-0">
@@ -48,7 +48,6 @@
         <!-- ADMIN -->
         <c:if test="${not empty sessionScope.adminLogueado}">
             <div class="list-group list-group-flush rounded-0 m-0 p-0">
-
                 <!-- Perfil Admin (Pega directo al logo sin separación) -->
                 <a href="${pageContext.request.contextPath}/servlet-inicio"
                    class="list-group-item list-group-item-action text-white d-flex align-items-center border-0 px-3 py-2"
