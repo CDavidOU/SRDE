@@ -50,6 +50,7 @@
                                     <span class="input-group-text bg-white border-end-0">
                                         <i class="bi bi-search text-muted"></i>
                                     </span>
+
                                     <!-- Mantener el texto buscado en el input -->
                                     <input id="buscador"
                                            name="buscador"
@@ -64,6 +65,8 @@
                             </div>
                         </div>
                     </form>
+
+                    <!-- En la vista de la Lista de Estudiantes (JSP) -->
 
                     <!-- Muestra si se agrego correctamente al estudiante -->
                     <c:if test="${not empty sessionScope.mensajeOk}">
@@ -82,21 +85,21 @@
                                 <tbody>
                                 <c:forEach var="asignacionEstadias" items="${listaEstudiantesActivos}">
                                     <tr class="border-bottom">
-                                        <td class="py-3 fs-5 w-20">
+                                        <td class="py-3 fs-5">
                                             <c:out value="${asignacionEstadias.estudiante.matricula}" />
                                         </td>
-                                        <td class="py-3 fs-5 w-40">
+                                        <td class="py-3 fs-5">
                                             <c:out value="${asignacionEstadias.estudiante.nombre}" />
                                         </td>
-                                        <td class="py-3 fs-5 w-40">
+                                        <td class="py-3 fs-5">
                                             <c:out value="${asignacionEstadias.estudiante.apellido}" />
                                         </td>
                                         <td class="py-3 text-end text-nowrap">
                                             <!-- Botón de Detalles -->
-                                            <a href="servlet-datos-estudiante?matricula=${asignacionEstadias.estudiante.matricula}">
-                                                <button class="btn px-3 py-1 me-2 text-white" style="background-color: #002E60" type="button">
-                                                    Detalles <i class="bi bi-journal-text ms-1"></i>
-                                                </button>
+                                            <a href="servlet-datos-estudiante?matricula=${asignacionEstadias.estudiante.matricula}"
+                                               class="btn px-3 py-1 me-2 text-white"
+                                               style="background-color: #002E60">
+                                                Detalles <i class="bi bi-journal-text ms-1"></i>
                                             </a>
 
                                             <!-- Formulario para Desasignar -->
@@ -114,6 +117,7 @@
                             </table>
                         </div>
                     </div>
+
                 </div>
             </div>
         </div>

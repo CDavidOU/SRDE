@@ -83,6 +83,14 @@
                                                 <td class="py-3 fs-6"><c:out value="${estudiante.nombre} ${estudiante.apellido}" /></td>
                                                 <td class="py-3 fs-6"><c:out value="${estudiante.carrera}" /></td>
                                                 <td class="py-3 fs-6"><c:out value="${estudiante.docenteAsignado}" /></td>
+                                                <td class="py-3 text-end text-nowrap">
+                                                    <!-- Botón de Detalles -->
+                                                    <a href="servlet-datos-estudiante?matricula=${asignacionEstadias.estudiante.matricula}"
+                                                       class="btn px-3 py-1 me-2 text-white"
+                                                       style="background-color: #002E60">
+                                                        Detalles <i class="bi bi-journal-text ms-1"></i>
+                                                    </a>
+                                                </td>
                                             </tr>
                                         </c:forEach>
                                         </tbody>

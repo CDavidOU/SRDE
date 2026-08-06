@@ -6,6 +6,7 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!doctype html>
 <html lang="es">
 <head>
@@ -18,7 +19,7 @@
 <div id="contenido" class="d-flex">
 
     <div id="menu" class="bg-white border-end min-vh-100" style="width: 180px;">
-        <jsp:include page="../Plantillas/menu.jsp" />
+        <jsp:include page="../Plantillas/menu.jsp"/>
     </div>
 
     <div id="cambiantes" class="flex-grow-1 d-flex flex-column">

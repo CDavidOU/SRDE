@@ -40,7 +40,7 @@ public class ServletNotificaciones extends HttpServlet {
 
             req.setAttribute("listaTiposDocs", listaTiposDocs);
             req.setAttribute("docentesDisponibles", listaDocentes);
-            req.getRequestDispatcher("/WEB-INF/Admin/programar-notificacion.jsp").forward(req, res);
+            req.getRequestDispatcher("/WEB-INF/Admin/programar-documentacion.jsp").forward(req, res);
         }
         // LOGICA DE LA RAMA UNION (Listar notificaciones pendientes)
         else if ("/servlet-notificaciones".equals(path)) {
@@ -120,7 +120,7 @@ public class ServletNotificaciones extends HttpServlet {
             req.getRequestDispatcher("/WEB-INF/Admin/perfil.jsp").forward(req, res);
         } else {
             System.out.println("faltan datos o falla algo en la notificacion");
-            req.getRequestDispatcher("/WEB-INF/Admin/programar-notificacion.jsp").forward(req, res);
+            req.getRequestDispatcher("/WEB-INF/Admin/programar-documentacion.jsp").forward(req, res);
         }
     }
 }

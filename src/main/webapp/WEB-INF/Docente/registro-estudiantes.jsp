@@ -1,3 +1,15 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: jaca8
+  Date: 7/24/2026
+  Time: 10:05 PM
+  To change this template use File | Settings | File Templates.
+--%>
+<%--
+  Created by IntelliJ IDEA.
+  User: jaca8
+  Date: 7/24/2026
+--%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %> <%-- O "http://java.sun.com/jsp/jstl/core" si usas una versión anterior a Jakarta --%>
 <!doctype html>
@@ -83,7 +95,7 @@
                         </div>
                     </div>
 
-                    <!--Fila 4 Asignar profesor-->
+                    <!-- Fila 4: Asignar profesor -->
                     <div id="asignacion-tutor" class="row g-3 mb-4">
                         <div class="col-12">
                             <label class="fw-bold mb-1 fs-5 text-secondary" for="idDocenteAsignado">Profesor a Cargo:</label>
@@ -99,12 +111,10 @@
                     <!-- Botones de Acción -->
                     <div id="botones" class="row justify-content-between mt-4">
                         <div class="col-5">
-                            <a class="btn btn-danger w-100 py-2 fs-5 text-white fw-medium rounded-3" href="${pageContext.request.contextPath}/servlet-estudiantes-admin">Cancelar</a>
+                            <a class="btn btn-danger w-100 py-2 fs-5 text-white fw-medium rounded-3" href="${pageContext.request.contextPath}/servlet-lista-estudiantes">Cancelar</a>
                         </div>
                         <div class="col-5">
-                            <form method="get" action="servlet-estudiantes-admin">
-                                <button class="btn w-100 py-2 fs-5 text-white fw-medium rounded-3" style="background-color: #429983;" type="submit">Registrar</button>
-                            </form>
+                            <button class="btn w-100 py-2 fs-5 text-white fw-medium rounded-3" style="background-color: #429983;" type="submit">Registrar</button>
                         </div>
                     </div>
 
@@ -114,7 +124,6 @@
         </div>
     </div>
 </div>
-
 <!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
