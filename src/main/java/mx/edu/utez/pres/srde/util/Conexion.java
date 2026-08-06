@@ -21,7 +21,7 @@ public class Conexion {
                 props.load(input);
             }
             // 2. Resolver la ruta absoluta de la carpeta wallet en el ClassPath
-            URL walletFolderUrl = Conexion.class.getClassLoader().getResource("Wallet_SRDE");
+            URL walletFolderUrl = Conexion.class.getClassLoader().getResource("wallet");
             if (walletFolderUrl == null) {
                 System.out.println("Error: Carpeta 'wallet' no encontrada en resources");
                 return null;

@@ -21,7 +21,7 @@
     <!-- BLOQUE SUPERIOR: LOGO Y OPCIONES DE MENÚ   -->
     <!-- ========================================== -->
     <div>
-        <!-- Logo UTEZ -->
+        <!-- Logo UTEZ sin margen inferior -->
         <div class="bg-white p-3 text-center mb-0">
             <img src="${pageContext.request.contextPath}/imagenes/UtezLogo.png" class="img-fluid" alt="Logo UTEZ" style="height: 110px; width: 100%;">
         </div>
@@ -29,9 +29,9 @@
         <c:choose>
             <c:when test="${not empty sessionScope.docenteLogueado}">
                 <!-- Menú Docente -->
-                <div class="list-group list-group-flush rounded-0 mt-2">
+                <div class="list-group list-group-flush rounded-0 m-0">
                     <a href="${pageContext.request.contextPath}/servlet-inicio"
-                       class="list-group-item list-group-item-action text-white d-flex align-items-center border-0 px-3 py-2"
+                       class="list-group-item list-group-item-action text-white d-flex align-items-center border-0 px-3 py-3"
                        style="background-color: #429983;">
                         <img src="${pageContext.request.contextPath}/imagenes/user.png" class="rounded-circle me-3" alt="Icono usuario" style="width: 35px; height: 35px; background: white; padding: 2px;">
                         <div class="d-flex flex-column text-start w-100">
@@ -47,9 +47,9 @@
 
             <c:when test="${not empty sessionScope.adminLogueado}">
                 <!-- Menú Admin -->
-                <div class="list-group list-group-flush rounded-0 mt-2">
+                <div class="list-group list-group-flush rounded-0 m-0">
                     <a href="${pageContext.request.contextPath}/servlet-inicio"
-                       class="list-group-item list-group-item-action text-white d-flex align-items-center border-0 px-3 py-2"
+                       class="list-group-item list-group-item-action text-white d-flex align-items-center border-0 px-3 py-3"
                        style="background-color: #429983;">
                         <img src="${pageContext.request.contextPath}/imagenes/user.png" class="rounded-circle me-3" alt="Icono usuario" style="width: 35px; height: 35px; background: white; padding: 2px;">
                         <div class="d-flex flex-column text-start w-100">
