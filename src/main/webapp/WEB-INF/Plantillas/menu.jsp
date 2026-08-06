@@ -32,20 +32,6 @@
                     </div>
                 </a>
 
-<<<<<<< HEAD
-            <!-- Resto de enlaces con texto blanco y fondo transparente -->
-            <a href="#" class="list-group-item list-group-item-action text-white bg-transparent border-0 px-3 py-2">
-                Periodos
-            </a>
-            <a href="${pageContext.request.contextPath}/servlet-lista-estudiantes" class="list-group-item list-group-item-action text-white bg-transparent border-0 px-3 py-2">
-            Estudiantes
-            </a>
-            <a href="${pageContext.request.contextPath}/servlet-logout" class="list-group-item list-group-item-action text-white bg-transparent border-0 px-3 py-2">
-                Salir
-            </a>
-
-        </div>
-=======
                 <!-- Resto de enlaces con texto blanco y fondo transparente -->
                 <a href="${pageContext.request.contextPath}/servlet-periodos" class="list-group-item list-group-item-action text-white bg-transparent border-0 px-3 py-2">
                     Periodos
@@ -57,7 +43,6 @@
                     Salir
                 </a>
             </div>
->>>>>>> 67f14d35925100cfeb86833b4f77989b397c1287
         </c:if>
 
         <!-- ADMIN -->
@@ -117,5 +102,4 @@
             </div>
         </c:if>
     </div>
-
 </div>

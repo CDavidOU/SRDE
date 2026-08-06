@@ -95,6 +95,9 @@
                                         <td class="py-3 fs-5 w-80">
                                             <c:out value="${asignacionEstadias.estudiante.nombre}" />
                                         </td>
+                                        <td class="py-3 fs-5 w-80">
+                                            <c:out value="${asignacionEstadias.estudiante.apellido}" />
+                                        </td>
                                         <td class="py-3 text-end text-nowrap">
                                             <!-- Botón de Detalles -->
                                             <a href="servlet-datos-estudiante?matricula=${asignacionEstadias.estudiante.matricula}">
