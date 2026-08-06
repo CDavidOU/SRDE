@@ -136,8 +136,10 @@ public class ServletRegistroEstudiante extends HttpServlet {
             sesion.setAttribute("mensajeOk", "Se ha ingresado el estudiante correctamente.");
 
             if (adminLogueado != null) {
-                res.sendRedirect(req.getContextPath() + "/servlet-estudiantes-admin");
+                // Ruta corregida:
+                res.sendRedirect(req.getContextPath() + "/servlet-admin-estudiantes");
             } else {
+                // Verifica que esta ruta también sea correcta para el docente
                 res.sendRedirect(req.getContextPath() + "/servlet-lista-estudiantes");
             }
 

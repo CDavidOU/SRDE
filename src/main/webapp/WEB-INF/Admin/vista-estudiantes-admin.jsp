@@ -23,10 +23,9 @@
     <!-- Contenido Principal -->
     <div id="cambiantes" class="flex-grow-1 d-flex flex-column bg-light">
 
-        <!-- Encabezado -->
-        <div class="w-100 text-center mb-4">
-            <h1 class="text-white m-0 py-3 fs-2 fw-semibold" style="background-color: #002E60;">Estudiantes</h1>
-            <!-- Botón de registrar (Usando clases de posición y tamaño de Bootstrap) -->
+
+        <div class="w-100 position-relative d-flex align-items-center justify-content-center py-3 text-white" style="background-color: #002E60">
+            <h1 class="m-0 fs-2 fw-normal">Estudiantes</h1>
             <a href="${pageContext.request.contextPath}/servlet-registro-estudiante"
                class="btn btn-success position-absolute end-0 me-4 d-flex align-items-center justify-content-center p-0 rounded"
                style="width: 38px; height: 38px;"
@@ -85,7 +84,7 @@
                                                 <td class="py-3 fs-6"><c:out value="${estudiante.docenteAsignado}" /></td>
                                                 <td class="py-3 text-end text-nowrap">
                                                     <!-- Botón de Detalles -->
-                                                    <a href="servlet-datos-estudiante?matricula=${asignacionEstadias.estudiante.matricula}"
+                                                    <a href="servlet-datos-estudiante?matricula=${estudiante.matricula}"
                                                        class="btn px-3 py-1 me-2 text-white"
                                                        style="background-color: #002E60">
                                                         Detalles <i class="bi bi-journal-text ms-1"></i>

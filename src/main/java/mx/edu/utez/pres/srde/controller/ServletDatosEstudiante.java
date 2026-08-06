@@ -15,15 +15,18 @@ import java.util.List;
 
 @WebServlet(name = "servletDatosEstudiante",value = "/servlet-datos-estudiante")
 public class ServletDatosEstudiante extends HttpServlet {
+
     @Override
     public void doGet(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
         HttpSession sesion = req.getSession(false);
-        // 2. Declarar la variable intentando obtenerla de la sesión
+
+        // 1. Declarar la variable intentando obtenerla de la sesión
         Object adminLogueado = null;
         if (sesion != null) {
             adminLogueado = sesion.getAttribute("adminLogueado");
         }
 
+        // 2. Validar que exista una sesión activa
         if (sesion == null || (sesion.getAttribute("docenteLogueado") == null && sesion.getAttribute("adminLogueado") == null)) {
             res.sendRedirect(req.getContextPath() + "/index.jsp");
             return;
@@ -31,6 +34,8 @@ public class ServletDatosEstudiante extends HttpServlet {
 
         ServicioDatosEstudiantes servicioDatosEstudiante = new ServicioDatosEstudiantes();
         String matricula = req.getParameter("matricula");
+
+        // 3. Buscar los datos del estudiante
         if (matricula != null && !matricula.trim().isEmpty()) {
             BeanEstudiante estudiante = servicioDatosEstudiante.datosEstudiante(matricula);
 
@@ -41,19 +46,32 @@ public class ServletDatosEstudiante extends HttpServlet {
                 List<BeanArchivo> listaDocumentos = servicioDoc.obtenerDocumentosPorMatricula(matricula);
                 req.setAttribute("listaDocumentos", listaDocumentos);
 
+                // ==========================================
+                // AQUÍ ESTÁ LA CORRECCIÓN DE LAS RUTAS
+                // ==========================================
                 if (adminLogueado != null) {
+                    // Si es Admin, va a la carpeta Admin
                     req.getRequestDispatcher("WEB-INF/Admin/vista-datos-estudiante-admin.jsp").forward(req, res);
                 } else {
+                    // Si es Docente, va a la carpeta Docente
                     req.getRequestDispatcher("WEB-INF/Docente/vista-datos-estudiante.jsp").forward(req, res);
                 }
                 return;
             }
         }
+
+        // ==========================================
+        // CORRECCIÓN SI LA MATRÍCULA NO SE ENCUENTRA
+        // ==========================================
         System.out.println("Matrícula inválida o no encontrada");
+
         if (adminLogueado != null) {
-           req.getRequestDispatcher("WEB-INF/Admin/lista-estudiante.jsp").forward(req, res);
+            // Lo regresamos a la tabla de estudiantes del administrador
+            res.sendRedirect(req.getContextPath() + "/servlet-admin-estudiantes");
         } else {
-            req.getRequestDispatcher("WEB-INF/Admin/lista-estudiante.jsp").forward(req, res);
+            // Lo regresamos a la tabla de estudiantes del docente
+            // (Verifica que este sea el nombre correcto de tu Servlet de lista para el docente)
+            res.sendRedirect(req.getContextPath() + "/servlet-lista-estudiantes-docente");
         }
     }
 
