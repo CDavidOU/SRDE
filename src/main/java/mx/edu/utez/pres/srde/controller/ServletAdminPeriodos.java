@@ -6,16 +6,16 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import mx.edu.utez.pres.srde.model.BeanDocente;
 import mx.edu.utez.pres.srde.model.BeanPeriodo;
-import mx.edu.utez.pres.srde.service.ServicioDocente;
 import mx.edu.utez.pres.srde.service.ServicioPeriodos;
 
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet(name = "servletlistadocentes", value = "/servlet-lista-docentes")
-public class ServletListaDocentes extends HttpServlet {
+@WebServlet(name = "servletadminperiodos", value = "/servlet-admin-periodos")
+public class ServletAdminPeriodos extends HttpServlet {
+
+    private final ServicioPeriodos servicioPeriodos = new ServicioPeriodos();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
@@ -26,18 +26,20 @@ public class ServletListaDocentes extends HttpServlet {
             return;
         }
 
-        ServicioPeriodos servicioPeriodos = new ServicioPeriodos();
-        BeanPeriodo periodoActual = servicioPeriodos.automatizacionPeriodos();
+        List<BeanPeriodo> listaPeriodos = servicioPeriodos.listarTodosPeriodos();
 
-        ServicioDocente servicioDocente = new ServicioDocente();
-        List<BeanDocente> listaDocentes = servicioDocente.listaDocentes(periodoActual.getId_periodo());
-
-        if (listaDocentes != null && !listaDocentes.isEmpty()) {
-            req.setAttribute("listaDocentes", listaDocentes);
-        } else {
-            req.setAttribute("mensajeVacio", "No hay docentes registrados.");
+        if (listaPeriodos != null) {
+            for (BeanPeriodo periodo : listaPeriodos) {
+                periodo.setTotalEstudiantes(servicioPeriodos.contarEstudiantesPorPeriodo(periodo.getId_periodo()));
+            }
         }
 
-        req.getRequestDispatcher("WEB-INF/Admin/vista-docentes.jsp").forward(req, res);
+        if (listaPeriodos != null && !listaPeriodos.isEmpty()) {
+            req.setAttribute("listaPeriodos", listaPeriodos);
+        } else {
+            req.setAttribute("mensajeVacio", "No hay periodos registrados.");
+        }
+
+        req.getRequestDispatcher("WEB-INF/Admin/vista-periodos-admin.jsp").forward(req, res);
     }
 }

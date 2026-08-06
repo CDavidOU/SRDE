@@ -18,20 +18,19 @@ public class ServletDatosEstudiante extends HttpServlet {
     @Override
     public void doGet(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
         HttpSession sesion = req.getSession(false);
-        if (sesion == null) {
-            res.sendRedirect(req.getContextPath() + "/index.jsp");
-            return;
+        // 2. Declarar la variable intentando obtenerla de la sesión
+        Object adminLogueado = null;
+        if (sesion != null) {
+            adminLogueado = sesion.getAttribute("adminLogueado");
         }
-        BeanAdmin adminLogueado = (BeanAdmin) sesion.getAttribute("adminLogueado");
-        BeanDocente docenteLogueado = (BeanDocente) sesion.getAttribute("docenteLogueado");
-        if (adminLogueado == null && docenteLogueado == null) {
+
+        if (sesion == null || (sesion.getAttribute("docenteLogueado") == null && sesion.getAttribute("adminLogueado") == null)) {
             res.sendRedirect(req.getContextPath() + "/index.jsp");
             return;
         }
 
         ServicioDatosEstudiantes servicioDatosEstudiante = new ServicioDatosEstudiantes();
         String matricula = req.getParameter("matricula");
-
         if (matricula != null && !matricula.trim().isEmpty()) {
             BeanEstudiante estudiante = servicioDatosEstudiante.datosEstudiante(matricula);
 
