@@ -21,7 +21,7 @@ public class Conexion {
                 props.load(input);
             }
             // 2. Resolver la ruta absoluta de la carpeta wallet en el ClassPath
-            URL walletFolderUrl = Conexion.class.getClassLoader().getResource("Wallet_SRDE");
+            URL walletFolderUrl = Conexion.class.getClassLoader().getResource("wallet");
             if (walletFolderUrl == null) {
                 System.out.println("Error: Carpeta 'wallet' no encontrada en resources");
                 return null;
@@ -37,7 +37,7 @@ public class Conexion {
             // 5. Conectar mediante el alias del servicio
             String url = "jdbc:oracle:thin:@" + props.getProperty("db.service");
             conexion = DriverManager.getConnection(url, jdbcProps);
-            System.out.println("¡Conexión segura y portable establecida con éxito!");
+           // System.out.println("¡Conexión segura y portable establecida con éxito!");
         } catch (Exception e) {
             System.out.println("Error crítico en la conexión: " + e.getMessage());
         }

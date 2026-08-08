@@ -46,7 +46,13 @@
 
           <!-- Encabezado -->
           <div class="w-100 text-center mb-4">
-              <h1 class="text-white m-0 py-3 fs-2 fw-semibold" style="background-color: #002E60;">Periodo</h1>
+              <h1 class="w-100  position-relative d-flex align-items-center justify-content-center py-3 text-white" style="background-color: #002E60">Periodo</h1>
+              <!-- Botón de calendarios -->
+              <a href="${pageContext.request.contextPath}/servlet-crear-calendario"
+                 class="btn btn-success d-flex align-items-center justify-content-center shadow-sm"
+                 style="height: 38px; z-index: 40;"
+                 title="Calendario De Documentos">+ Programar Limites Documentos
+              </a>
           </div>
 
           <div id="datos" class="p-4 flex-grow-1 d-flex justify-content-center">

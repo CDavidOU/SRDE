@@ -25,29 +25,48 @@
     <div id="cambiantes" class="flex-grow-1 d-flex flex-column bg-light">
 
         <!-- Encabezado -->
-        <div class="w-100 text-center mb-4">
+        <div class="w-100  position-relative d-flex align-items-center justify-content-center py-3 text-white" style="background-color: #002E60" >
             <h1 class="text-white m-0 py-3 fs-2 fw-semibold" style="background-color: #002E60;">Programar Calendario de Documentos</h1>
+            <!-- Botón de calendarios -->
+            <a href="${pageContext.request.contextPath}/listaCalendariosServlet"
+               class="btn btn-success d-flex align-items-center justify-content-center shadow-sm"
+               style="height: 38px; z-index: 40;"
+               title="Calendario De Documentos Programados">
+                <span class="d-none d-md-inline small fw-bold">Calendarios Programados</span>
+            </a>
         </div>
 
         <div id="datos" class="p-4 flex-grow-1 d-flex justify-content-center">
 
             <div class="card border-0 shadow-sm p-4 bg-white rounded-3 w-100" style="max-width: 900px; height: fit-content;">
 
-                <form method="POST" action="servlet-crear-notificacion">
+                <form method="POST" action="servlet-crear-calendario">
 
-                    <!-- Campos Notificación -->
-                    <div id="campos-notificacion" class="row g-3 mb-4">
 
-                        <!-- FILA 1: 3 Campos en 4 columnas cada uno (4 + 4 + 4 = 12) -->
+                    <c:if test="${not empty mensajeCorrecto}">
+                        <div class="alert alert-success" role="alert">
+                            <p>${mensajeCorrecto}</p>
+                        </div>
+                    </c:if>
+                    <c:if test="${not empty mensajeError}">
+                        <div class="alert alert-danger" role="alert">
+                        <p>${mensajeError}</p>
+                        </div>
+                    </c:if>
+                    <input type="hidden" name="idPeriodo" value="${periodoActivo.id_periodo}">
 
+                    <!-- Campos Documentos -->
+                    <div id="campos-docs" class="row g-3 mb-4">
+
+                        <!-- 1. Fecha inicio -->
+                        <div class="col-md-4">
+                            <label class="fw-bold mb-1 fs-6 text-secondary" for="fechaInicio">Fecha Inicio:</label>
+                            <input class="form-control p-2" type="date" id="fechaInicio" name="fechaInicio" value="2026-07-29">
+                        </div>
                         <!-- 1. Fecha Límite -->
                         <div class="col-md-4">
                             <label class="fw-bold mb-1 fs-6 text-secondary" for="fechaLimite">Fecha límite:</label>
                             <input class="form-control p-2" type="date" id="fechaLimite" name="fechaLimite" value="2026-07-29">
-                        </div>
-                        <div class="col-md-4">
-                            <label class="fw-bold mb-1 fs-6 text-secondary" for="fechaInicio">Fecha Inicio:</label>
-                            <input class="form-control p-2" type="date" id="fechaInicio" name="fechaInicio" value="2026-07-29">
                         </div>
 
                         <!-- 2. Documento -->
@@ -60,6 +79,11 @@
                                 </c:forEach>
                             </select>
                         </div>
+                    </div>
+                    <!-- 2. Comentario -->
+                    <div class="col-md-12">
+                        <label class="fw-bold mb-1 fs-6 text-secondary" for="txtComentario">Comentario:</label>
+                        <textarea class="form-control" id="txtComentario" name="txtComentario" style="resize: none;" placeholder="Escriba un comentario"></textarea>
                     </div>
 
                     <!-- Fila 3: Botones Cancelar y Programar -->
