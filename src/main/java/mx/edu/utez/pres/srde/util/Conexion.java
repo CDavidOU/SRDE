@@ -12,18 +12,18 @@ public class Conexion {
         Connection conexion = null;
         Properties props = new Properties();
         try {
-            // 1. Leer las credenciales del archivo properties (Classpath dinámico)
-            try (InputStream input = Thread.currentThread().getContextClassLoader().getResourceAsStream("application.properties")) {
+            // 1. Leer las credenciales del archivo properties
+            try (InputStream input = Conexion.class.getClassLoader().getResourceAsStream("application.properties")) {
                 if (input == null) {
-                    System.out.println("Error: No se encontró application.properties en el Classpath (src/main/resources)");
+                    System.out.println("Error: No se encontró application.properties");
                     return null;
                 }
                 props.load(input);
             }
             // 2. Resolver la ruta absoluta de la carpeta wallet en el ClassPath
-            URL walletFolderUrl = Thread.currentThread().getContextClassLoader().getResource("wallet");
+            URL walletFolderUrl = Conexion.class.getClassLoader().getResource("Wallet_SRDE");
             if (walletFolderUrl == null) {
-                System.out.println("Error: Carpeta 'wallet' no encontrada en src/main/resources/wallet");
+                System.out.println("Error: Carpeta 'wallet' no encontrada en resources");
                 return null;
             }
             String absoluteWalletPath = Paths.get(walletFolderUrl.toURI()).toAbsolutePath().toString();
@@ -34,14 +34,12 @@ public class Conexion {
             jdbcProps.setProperty("user", props.getProperty("db.user"));
             jdbcProps.setProperty("password", props.getProperty("db.password"));
             jdbcProps.setProperty("oracle.net.tns_admin", absoluteWalletPath); // Configura la Wallet
-            jdbcProps.setProperty("oracle.net.wallet_location", "(SOURCE=(METHOD=file)(METHOD_DATA=(DIRECTORY=" + absoluteWalletPath + ")))");
-            // 5. Conectar mediante el alias del servicio (TNS definido en wallet/tnsnames.ora)
+            // 5. Conectar mediante el alias del servicio
             String url = "jdbc:oracle:thin:@" + props.getProperty("db.service");
             conexion = DriverManager.getConnection(url, jdbcProps);
             System.out.println("¡Conexión segura y portable establecida con éxito!");
         } catch (Exception e) {
             System.out.println("Error crítico en la conexión: " + e.getMessage());
-            e.printStackTrace();
         }
         return conexion;
     }

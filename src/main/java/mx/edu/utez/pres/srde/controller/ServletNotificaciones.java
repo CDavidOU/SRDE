@@ -37,11 +37,11 @@ public class ServletNotificaciones extends HttpServlet {
             List<BeanDocente> listaDocentes = datosDocente.listaDocente();
             ServicioTiposDocumento servicioTiposDocumento = new ServicioTiposDocumento();
             List<BeanTipoDocumento> listaTiposDocs = servicioTiposDocumento.consultarTiposDocumento();
-            
+
             req.setAttribute("listaTiposDocs", listaTiposDocs);
             req.setAttribute("docentesDisponibles", listaDocentes);
-            req.getRequestDispatcher("/WEB-INF/Admin/programar-notificacion.jsp").forward(req, res);
-        } 
+            req.getRequestDispatcher("/WEB-INF/Admin/programar-documentacion.jsp").forward(req, res);
+        }
         // LOGICA DE LA RAMA UNION (Listar notificaciones pendientes)
         else if ("/servlet-notificaciones".equals(path)) {
             HttpSession sesion = req.getSession(false);
@@ -75,22 +75,22 @@ public class ServletNotificaciones extends HttpServlet {
         ServicioPeriodos servicioPeriodos = new ServicioPeriodos();
         BeanPeriodo periodoActivo = servicioPeriodos.automatizacionPeriodos();
         req.setAttribute("periodoActivo", periodoActivo);
-        
+
         String tipoDocParam = req.getParameter("tipoDoc");
         int tipoDocId = (tipoDocParam != null && !tipoDocParam.isEmpty()) ? Integer.parseInt(tipoDocParam) : 0;
-        
+
         int docenteId = 0;
         if (req.getParameter("idDocenteSelect") != null && !req.getParameter("idDocenteSelect").isEmpty()) {
             docenteId = Integer.parseInt(req.getParameter("idDocenteSelect"));
         }
-        
+
         String comentario = req.getParameter("comentario");
         String fechaLimite = req.getParameter("fechaLimite");
-        
+
         BeanNotificacion creandoNotificacion = new BeanNotificacion();
         ServicioNotificacion servicioNotificacion = new ServicioNotificacion();
         creandoNotificacion.setDescripcion(comentario);
-        
+
         if (tipoDocId != 0) {
             creandoNotificacion.setTipo_doc(tipoDocId);
         }
@@ -98,12 +98,12 @@ public class ServletNotificaciones extends HttpServlet {
             creandoNotificacion.setFechaLimite(Date.valueOf(LocalDate.parse(fechaLimite)));
         }
         if (periodoActivo != null) {
-            creandoNotificacion.setId_periodo(periodoActivo.getId_periodo()); 
+            creandoNotificacion.setId_periodo(periodoActivo.getId_periodo());
         }
         if (docenteId != 0) {
             creandoNotificacion.setId_usuario_docente(docenteId);
         }
-        
+
         // Prueba de datos notificaciones
         System.out.println("====== PROBANDO DATOS ENTRANTES ======");
         System.out.println("Docente ID: " + creandoNotificacion.getId_usuario_docente());
@@ -112,15 +112,15 @@ public class ServletNotificaciones extends HttpServlet {
         System.out.println("tipoDocumento: " + creandoNotificacion.getTipo_doc());
         System.out.println("Periodo ID: " + creandoNotificacion.getId_periodo());
         System.out.println("======================================");
-        
+
         BeanNotificacion nuevaNoti = servicioNotificacion.crearNotificacion(creandoNotificacion);
-        
+
         if (nuevaNoti != null) {
             // Se agregó .forward(req, res) que faltaba en el código original
             req.getRequestDispatcher("/WEB-INF/Admin/perfil.jsp").forward(req, res);
         } else {
             System.out.println("faltan datos o falla algo en la notificacion");
-            req.getRequestDispatcher("/WEB-INF/Admin/programar-notificacion.jsp").forward(req, res);
+            req.getRequestDispatcher("/WEB-INF/Admin/programar-documentacion.jsp").forward(req, res);
         }
     }
 }

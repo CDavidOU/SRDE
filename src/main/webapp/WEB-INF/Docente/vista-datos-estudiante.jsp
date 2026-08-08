@@ -120,6 +120,7 @@
                                                                 <form action="<%=request.getContextPath()%>/servlet-modificar-observacion" method="POST" id="formModificar_${doc.id_tipo_doc}">
                                                                         <!-- CORRECCIÓN: Usar idAsignacion en lugar de matricula -->
                                                                         <input type="hidden" name="idAsignacion" value="${datosEstudiante.idAsignacion}">
+                                                                        <input type="hidden" name="matricula" value="${datosEstudiante.matricula}">
                                                                         <input type="hidden" name="idTipoDoc" value="${doc.id_tipo_doc}">
 
                                                                         <div>
@@ -134,7 +135,7 @@
                                                                         <div class="col-4">
                                                                                 <!-- CORRECCIÓN: Botón enlazado al form de arriba mediante el ID -->
                                                                                 <button type="submit" form="formModificar_${doc.id_tipo_doc}" class="btn w-100 fw-bold text-white shadow-sm" style="background-color: #D4AC0D;">
-                                                                                        Modificar
+                                                                                        Cambiar comentario
                                                                                 </button>
                                                                         </div>
 
@@ -143,6 +144,7 @@
                                                                                 <form action="<%=request.getContextPath()%>/servlet-eliminar-documento" method="POST">
                                                                                         <input type="hidden" name="idAsignacion" value="${datosEstudiante.idAsignacion}">
                                                                                         <input type="hidden" name="idTipoDoc" value="${doc.id_tipo_doc}">
+                                                                                        <input type="hidden" name="matricula" value="${datosEstudiante.matricula}">
                                                                                         <button type="submit" class="btn btn-danger w-100 fw-bold shadow-sm">
                                                                                                 Eliminar
                                                                                         </button>

@@ -120,6 +120,7 @@
                                                                 <form action="<%=request.getContextPath()%>/servlet-modificar-observacion" method="POST" id="formModificar_${doc.id_tipo_doc}">
                                                                         <!-- CORRECCIÓN: Usar idAsignacion en lugar de matricula -->
                                                                         <input type="hidden" name="idAsignacion" value="${datosEstudiante.idAsignacion}">
+                                                                        <input type="hidden" name="matricula" value="${datosEstudiante.matricula}">
                                                                         <input type="hidden" name="idTipoDoc" value="${doc.id_tipo_doc}">
 
                                                                         <div>
@@ -142,6 +143,7 @@
                                                                                 <!-- FORMULARIO PARA ELIMINAR -->
                                                                                 <form action="<%=request.getContextPath()%>/servlet-eliminar-documento" method="POST">
                                                                                         <input type="hidden" name="idAsignacion" value="${datosEstudiante.idAsignacion}">
+                                                                                        <input type="hidden" name="matricula" value="${datosEstudiante.matricula}">
                                                                                         <input type="hidden" name="idTipoDoc" value="${doc.id_tipo_doc}">
                                                                                         <button type="submit" class="btn btn-danger w-100 fw-bold shadow-sm">
                                                                                                 Eliminar

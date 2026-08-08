@@ -22,6 +22,7 @@ public class ServletModificarObservacion extends HttpServlet {
         try {
             // 1. Recibir datos del formulario (JSP)
             int idAsignacion = Integer.parseInt(request.getParameter("idAsignacion"));
+            String matricula = request.getParameter("matricula");
             int idTipoDoc = Integer.parseInt(request.getParameter("idTipoDoc"));
             String observaciones = request.getParameter("observaciones");
 
@@ -48,12 +49,12 @@ public class ServletModificarObservacion extends HttpServlet {
 
             // 4. Redirigir al controlador (SOLUCIÓN AL ERROR 404)
             // CAMBIA "ServletQueCargaAlEstudiante" POR EL NOMBRE REAL DE TU SERVLET
-            response.sendRedirect(request.getContextPath() + "/servlet-datos-estudiante?id=" + idAsignacion + "&modificado=" + exito);
+            response.sendRedirect(request.getContextPath() + "/servlet-datos-estudiante?matricula=" + matricula);
 
         } catch (Exception e) {
             System.err.println("Error en ServletModificarObservacion: " + e.getMessage());
             // También cambia aquí la redirección al Servlet controlador
-            response.sendRedirect(request.getContextPath() + "/ServletQueCargaAlEstudiante?error=true");
+            response.sendRedirect(request.getContextPath() + "/servlet-lista-estudiantes?error=true");
         }
     }
 }

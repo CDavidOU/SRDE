@@ -37,7 +37,7 @@ public class ServletEstudiantesAdmin extends HttpServlet {
         }
         List<BeanAsignacionEstadias> listaTodosLosEstudiantes=servicio.listaTodosLosEstudiantes(idPeriodo);
         req.setAttribute("listaTodosLosEstudiantes", listaTodosLosEstudiantes);
-        req.getRequestDispatcher("WEB-INF/Admin/lista-estudiantes.jsp").forward(req, res);
+        req.getRequestDispatcher("WEB-INF/Admin/vista-estudiantes-admin.jsp").forward(req, res);
     }
     @Override
     public void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
@@ -69,6 +69,6 @@ public class ServletEstudiantesAdmin extends HttpServlet {
         if (estudiantesEncontrado == null || estudiantesEncontrado.isEmpty()) {
             req.setAttribute("mensajeVacio", "No se encontraron coincidencias para: " + buscador);
         }
-        req.getRequestDispatcher("WEB-INF/Admin/lista-estudiantes.jsp").forward(req, res);
+        req.getRequestDispatcher("WEB-INF/Admin/vista-estudiantes-admin.jsp").forward(req, res);
     }
 }

@@ -40,7 +40,7 @@ public class ServletDatosDocente extends HttpServlet {
             return;
         }
 
-        req.setAttribute("docente", docente);
+        req.setAttribute("datoDocente", docente);
         req.getRequestDispatcher("WEB-INF/Admin/datos-docente.jsp").forward(req, res);
     }
 }

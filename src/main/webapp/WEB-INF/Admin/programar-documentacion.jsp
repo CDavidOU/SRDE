@@ -17,7 +17,7 @@
 <div id="contenido" class="d-flex min-vh-100">
 
     <!-- Menú Lateral -->
-    <div id="menu" class="flex-shrink-0">
+    <div id="menu" class="flex-shrink-0" style="width: 180px; flex-shrink: 0;">
         <jsp:include page="../Plantillas/menu.jsp" />
     </div>
 
@@ -26,7 +26,7 @@
 
         <!-- Encabezado -->
         <div class="w-100 text-center mb-4">
-            <h1 class="text-white m-0 py-3 fs-2 fw-semibold" style="background-color: #002E60;">Programar notificación</h1>
+            <h1 class="text-white m-0 py-3 fs-2 fw-semibold" style="background-color: #002E60;">Programar Calendario de Documentos</h1>
         </div>
 
         <div id="datos" class="p-4 flex-grow-1 d-flex justify-content-center">
@@ -45,6 +45,10 @@
                             <label class="fw-bold mb-1 fs-6 text-secondary" for="fechaLimite">Fecha límite:</label>
                             <input class="form-control p-2" type="date" id="fechaLimite" name="fechaLimite" value="2026-07-29">
                         </div>
+                        <div class="col-md-4">
+                            <label class="fw-bold mb-1 fs-6 text-secondary" for="fechaInicio">Fecha Inicio:</label>
+                            <input class="form-control p-2" type="date" id="fechaInicio" name="fechaInicio" value="2026-07-29">
+                        </div>
 
                         <!-- 2. Documento -->
                         <div class="col-md-4">
@@ -56,24 +60,6 @@
                                 </c:forEach>
                             </select>
                         </div>
-
-                        <!-- 3. Selecciona al Docente -->
-                        <div class="col-md-4">
-                            <label class="fw-bold mb-1 fs-6 text-secondary" for="idDocenteSelect">Docente:</label>
-                            <select class="form-select p-2" id="idDocenteSelect" name="idDocenteSelect">
-                                <option value="" selected disabled>Selecciona docente...</option>
-                                <c:forEach items="${docentesDisponibles}" var="docente">
-                                    <option value="${docente.id}">${docente.nombre} ${docente.apellido}</option>
-                                </c:forEach>
-                            </select>
-                        </div>
-
-                        <!-- FILA 2: Comentario ocupando las 12 columnas abajo de las tres superiores -->
-                        <div class="col-12 mt-3">
-                            <label class="fw-bold mb-1 fs-6 text-secondary" for="comentario">Comentario:</label>
-                            <input class="form-control p-2" type="text" id="comentario" name="comentario" placeholder="Escribe un comentario u observación (El documento deberá ser formato PDF)">
-                        </div>
-
                     </div>
 
                     <!-- Fila 3: Botones Cancelar y Programar -->
@@ -85,13 +71,6 @@
                             <button class="btn w-100 py-2 fs-5 text-white fw-medium rounded-3" style="background-color: #429983;" type="submit">Programar</button>
                         </div>
                     </div>
-
-                    <!-- Fila 4: Sección Programadas recientes -->
-                    <div id="seccion-recientes" class="border border-secondary border-opacity-25 rounded-3 p-3 d-flex align-items-center gap-3 bg-white">
-                        <i class="bi bi-bell-fill fs-3 text-dark"></i>
-                        <span class="fw-normal fs-4 text-dark">Programadas recientes</span>
-                    </div>
-
                 </form>
             </div>
 

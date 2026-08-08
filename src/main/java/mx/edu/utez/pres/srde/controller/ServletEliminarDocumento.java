@@ -22,6 +22,7 @@ public class ServletEliminarDocumento extends HttpServlet {
             // 1. Recibir IDs desde el JSP
             int idAsignacion = Integer.parseInt(request.getParameter("idAsignacion"));
             int idTipoDoc = Integer.parseInt(request.getParameter("idTipoDoc"));
+            String matricula = request.getParameter("matricula");
 
             // 2. Sacar el ID del docente o admin logueado desde el OBJETO de la sesión
             HttpSession session = request.getSession();
@@ -46,12 +47,12 @@ public class ServletEliminarDocumento extends HttpServlet {
 
             // 4. Redirigir al controlador (SOLUCIÓN AL ERROR 404)
             // CAMBIA "ServletQueCargaAlEstudiante" POR EL NOMBRE REAL DE TU SERVLET
-            response.sendRedirect(request.getContextPath() + "//servlet-datos-estudiante?id=" + idAsignacion + "&eliminado=" + exito);
+            response.sendRedirect(request.getContextPath() + "/servlet-datos-estudiante?matricula=" + matricula);
 
         } catch (Exception e) {
-            System.err.println("Error en ServletEliminarDocumento: " + e.getMessage());
+            System.err.println("Error en ServletModificarObservacion: " + e.getMessage());
             // También cambia aquí la redirección al Servlet controlador
-            response.sendRedirect(request.getContextPath() + "/ServletQueCargaAlEstudiante?error=true");
+            response.sendRedirect(request.getContextPath() + "/servlet-lista-estudiantes?error=true");
         }
     }
 }

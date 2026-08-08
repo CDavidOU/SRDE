@@ -88,12 +88,12 @@
                         </div>
                     </div>
 
-                    <!--Fila 4 Asignar profesor-->
+                    <!-- Fila 4: Asignar profesor (Obligatorio) -->
                     <div id="asignacion-tutor" class="row g-3 mb-4">
                         <div class="col-12">
                             <label class="fw-bold mb-1 fs-5 text-secondary" for="idDocenteAsignado">Profesor a Cargo:</label>
                             <select class="form-select p-2" name="idDocenteAsignado" id="idDocenteAsignado" required>
-                                <option value="">-- Selecciona un Docente --</option>
+                                <option value="" disabled selected> Selecciona un Docente Obligatoriamente </option>
                                 <c:forEach var="docente" items="${listaDocente}">
                                     <option value="${docente.id}">${docente.nombre} ${docente.apellido}</option>
                                 </c:forEach>
@@ -107,9 +107,7 @@
                             <a class="btn btn-danger w-100 py-2 fs-5 text-white fw-medium rounded-3" href="${pageContext.request.contextPath}/servlet-estudiantes-admin">Cancelar</a>
                         </div>
                         <div class="col-5">
-                            <form method="get" action="servlet-estudiantes-admin">
                             <button class="btn w-100 py-2 fs-5 text-white fw-medium rounded-3" style="background-color: #429983;" type="submit">Registrar</button>
-                            </form>
                         </div>
                     </div>
 
