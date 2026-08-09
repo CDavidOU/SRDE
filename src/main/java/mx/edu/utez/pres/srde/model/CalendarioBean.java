@@ -10,7 +10,7 @@ public class CalendarioBean {
     private Date fechaLimite;
     private Date fechaInicio;
     private String nombreDoc;
-    private String visibilidad;
+    private int visibilidad;
 
     public String getNombreDoc() {
         return nombreDoc;
@@ -68,11 +68,11 @@ public class CalendarioBean {
         this.fechaInicio = fechaInicio;
     }
 
-    public String getVisibilidad() {
+    public int getVisibilidad() {
         return visibilidad;
     }
 
-    public void setVisibilidad(String visibilidad) {
+    public void setVisibilidad(int visibilidad) {
         this.visibilidad = visibilidad;
     }
 }
