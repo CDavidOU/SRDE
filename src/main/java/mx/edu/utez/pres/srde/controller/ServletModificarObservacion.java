@@ -1,5 +1,6 @@
 package mx.edu.utez.pres.srde.controller;
 
+import jakarta.servlet.annotation.MultipartConfig;
 import mx.edu.utez.pres.srde.model.BeanAdmin;
 import mx.edu.utez.pres.srde.model.BeanDocente;
 import jakarta.servlet.ServletException;
@@ -13,6 +14,11 @@ import mx.edu.utez.pres.srde.service.ServicioDocumento;
 import java.io.IOException;
 
 @WebServlet(name = "servletModificarObservacion", value = "/servlet-modificar-observacion")
+@MultipartConfig( // ¡ESTO ES NUEVO Y OBLIGATORIO!
+        fileSizeThreshold = 1024 * 1024 * 2,
+        maxFileSize = 1024 * 1024 * 10,
+        maxRequestSize = 1024 * 1024 * 50
+)
 public class ServletModificarObservacion extends HttpServlet {
 
     @Override
@@ -20,7 +26,7 @@ public class ServletModificarObservacion extends HttpServlet {
         request.setCharacterEncoding("UTF-8"); // Para que los acentos en las observaciones se guarden bien
 
         try {
-            // 1. Recibir datos del formulario (JSP)
+            // 1. Recibir datos de texto del formulario
             int idAsignacion = Integer.parseInt(request.getParameter("idAsignacion"));
             String matricula = request.getParameter("matricula");
             int idTipoDoc = Integer.parseInt(request.getParameter("idTipoDoc"));
@@ -34,27 +40,47 @@ public class ServletModificarObservacion extends HttpServlet {
             BeanAdmin adminLogueado = (BeanAdmin) session.getAttribute("adminLogueado");
 
             if (docenteLogueado != null) {
-                idUsuarioModificador = docenteLogueado.getId(); // Sacamos el ID del objeto docente
+                idUsuarioModificador = docenteLogueado.getId();
             } else if (adminLogueado != null) {
-                idUsuarioModificador = adminLogueado.getId(); // Sacamos el ID del objeto admin
+                idUsuarioModificador = adminLogueado.getId();
             } else {
                 System.err.println("Error: No se encontró sesión activa de Admin ni Docente.");
                 response.sendRedirect(request.getContextPath() + "/index.jsp");
-                return; // Detiene la ejecución aquí si no hay nadie logueado
+                return;
             }
 
-            // 3. Llamar al servicio
-            ServicioDocumento servicio = new ServicioDocumento();
-            boolean exito = servicio.procesoModificarObservaciones(idAsignacion, idTipoDoc, observaciones, idUsuarioModificador);
+            // 3. RECIBIR EL POSIBLE ARCHIVO NUEVO
+            jakarta.servlet.http.Part nuevoArchivoPart = request.getPart("nuevoArchivoPDF");
 
-            // 4. Redirigir al controlador (SOLUCIÓN AL ERROR 404)
-            // CAMBIA "ServletQueCargaAlEstudiante" POR EL NOMBRE REAL DE TU SERVLET
+            ServicioDocumento servicio = new ServicioDocumento();
+            boolean exito = false;
+
+            // 4. LÓGICA DE DECISIÓN (Textos vs. Archivo Nuevo)
+            if (nuevoArchivoPart != null && nuevoArchivoPart.getSize() > 0) {
+
+                // CASO A: El usuario seleccionó un archivo nuevo para reemplazar el anterior
+                mx.edu.utez.pres.srde.model.BeanArchivo beanArchivo = new mx.edu.utez.pres.srde.model.BeanArchivo();
+                beanArchivo.setNombre_archivo(nuevoArchivoPart.getSubmittedFileName());
+                beanArchivo.setTamano((int) nuevoArchivoPart.getSize());
+                // Usamos el InputStream para optimizar la memoria al subir
+                beanArchivo.setContenido_archivo(nuevoArchivoPart.getInputStream());
+
+                // Reutilizamos tu método de subida original.
+                // Esto insertará el nuevo archivo en la BD y actualizará las observaciones.
+                exito = servicio.procesoSubirDocumento(beanArchivo, idAsignacion, idTipoDoc, "Completado", observaciones, idUsuarioModificador);
+
+            } else {
+                // CASO B: El usuario SOLO modificó el texto (La caja del archivo está vacía)
+                exito = servicio.procesoModificarObservaciones(idAsignacion, idTipoDoc, observaciones, idUsuarioModificador);
+            }
+
+            // 5. Redirigir siempre de vuelta al perfil del estudiante
             response.sendRedirect(request.getContextPath() + "/servlet-datos-estudiante?matricula=" + matricula);
 
         } catch (Exception e) {
             System.err.println("Error en ServletModificarObservacion: " + e.getMessage());
-            // También cambia aquí la redirección al Servlet controlador
-            response.sendRedirect(request.getContextPath() + "/servlet-lista-estudiantes?error=true");
+            // Si algo falla, lo regresamos a la lista general
+            response.sendRedirect(request.getContextPath() + "/servlet-admin-estudiantes");
         }
     }
 }

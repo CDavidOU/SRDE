@@ -98,66 +98,89 @@
                         <c:forEach var="doc" items="${listaDocumentos}">
 
                                 <!-- ==========================================
-                                ESTADO 1: DOCUMENTO YA SUBIDO (VERDE)
+                                ESTADO 1: DOCUMENTO YA SUBIDO (VERDE) - MODO EDICIÓN
                                 ========================================== -->
                                 <c:if test="${doc.estado == 'Completado'}">
                                         <div class="card shadow-sm mb-4 border-0" style="background-color: #f8f9fa;">
                                                 <div class="card-body row g-0">
-                                                        <!-- Izquierda: Icono y Nombre -->
-                                                        <div class="col-3 d-flex flex-column align-items-center justify-content-center pe-3 border-end">
-                                                                <div class="w-100 text-center rounded p-3 mb-2 text-white shadow-sm" style="background-color: #429983;">
-                                                                        <i class="bi bi-file-earmark-text-fill" style="font-size: 4rem;"></i>
+
+                                                        <!-- FORMULARIO ÚNICO: Le agregamos enctype por si reemplazan el PDF -->
+                                                        <form action="<%=request.getContextPath()%>/servlet-modificar-observacion" method="POST" id="formModificar_${doc.id_tipo_doc}" enctype="multipart/form-data" class="col-12 d-flex m-0">
+
+                                                                <input type="hidden" name="idAsignacion" value="${datosEstudiante.idAsignacion}">
+                                                                <input type="hidden" name="matricula" value="${datosEstudiante.matricula}">
+                                                                <input type="hidden" name="idTipoDoc" value="${doc.id_tipo_doc}">
+
+                                                                <!-- LADO IZQUIERDO: Logo o Input de Archivo -->
+                                                                <div class="col-3 d-flex flex-column align-items-center justify-content-center pe-3 border-end">
+
+                                                                        <!-- VISTA NORMAL (Logo Verde) -->
+                                                                        <div id="vista_icono_${doc.id_tipo_doc}" class="w-100">
+                                                                                <div class="w-100 text-center rounded p-3 mb-2 text-white shadow-sm" style="background-color: #429983;">
+                                                                                        <i class="bi bi-file-earmark-text-fill" style="font-size: 4rem;"></i>
+                                                                                </div>
+                                                                                <div class="w-100 text-center py-2 rounded text-white fw-bold shadow-sm" style="background-color: #429983;">
+                                                                                                ${doc.nombre_archivo}
+                                                                                </div>
+                                                                        </div>
+
+                                                                        <!-- VISTA EDICIÓN (Input para reemplazar - Oculto por defecto) -->
+                                                                        <div id="vista_subir_${doc.id_tipo_doc}" class="w-100 d-none text-center">
+                                                                                <div class="w-100 text-center rounded p-3 mb-2 text-white shadow-sm" style="background-color: #D4AC0D;">
+                                                                                        <i class="bi bi-upload" style="font-size: 3rem;"></i>
+                                                                                </div>
+                                                                                <label class="fw-bold text-secondary small mb-1">Reemplazar archivo:</label>
+                                                                                <input type="file" class="form-control form-control-sm border-warning" name="nuevoArchivoPDF" accept=".pdf">
+                                                                        </div>
                                                                 </div>
-                                                                <div class="w-100 text-center py-2 rounded text-white fw-bold shadow-sm" style="background-color: #429983;">
-                                                                                ${doc.nombre_archivo}
-                                                                </div>
-                                                        </div>
 
-                                                        <!-- Derecha: Observaciones y Botones -->
-                                                        <div class="col-9 ps-4 d-flex flex-column justify-content-between">
-
-                                                                <!-- FORMULARIO PARA MODIFICAR (Solo envuelve el textarea) -->
-                                                                <form action="<%=request.getContextPath()%>/servlet-modificar-observacion" method="POST" id="formModificar_${doc.id_tipo_doc}">
-                                                                        <!-- CORRECCIÓN: Usar idAsignacion en lugar de matricula -->
-                                                                        <input type="hidden" name="idAsignacion" value="${datosEstudiante.idAsignacion}">
-                                                                        <input type="hidden" name="matricula" value="${datosEstudiante.matricula}">
-                                                                        <input type="hidden" name="idTipoDoc" value="${doc.id_tipo_doc}">
-
+                                                                <!-- LADO DERECHO: Observaciones y Botones -->
+                                                                <div class="col-9 ps-4 d-flex flex-column justify-content-between">
                                                                         <div>
                                                                                 <label class="fw-bold fs-5 mb-1">Observaciones</label>
-                                                                                <!-- CORRECCIÓN: Quitamos disabled/readonly y agregamos name="observaciones" -->
-                                                                                <textarea class="form-control mb-2 bg-light" name="observaciones" rows="2">${doc.observaciones}</textarea>
-                                                                                <span class="text-muted small fw-bold">Fecha de entrega: 10/04/26</span>
-                                                                        </div>
-                                                                </form>
-
-                                                                <div class="row g-2 mt-3">
-                                                                        <div class="col-4">
-                                                                                <!-- CORRECCIÓN: Botón enlazado al form de arriba mediante el ID -->
-                                                                                <button type="submit" form="formModificar_${doc.id_tipo_doc}" class="btn w-100 fw-bold text-white shadow-sm" style="background-color: #D4AC0D;">
-                                                                                        Modificar
-                                                                                </button>
+                                                                                <!-- Textarea bloqueado por defecto (readonly) -->
+                                                                                <textarea id="obs_${doc.id_tipo_doc}" class="form-control mb-2 bg-white" style="resize: none;" name="observaciones" rows="2" readonly>${doc.observaciones}</textarea>
+                                                                                <span class="text-muted small fw-bold">
+                                                                                    Fecha de entrega: <c:out value="${doc.fecha_limite}" default="Sin asignar" />
+                                                                                </span>
                                                                         </div>
 
-                                                                        <div class="col-4">
-                                                                                <!-- FORMULARIO PARA ELIMINAR -->
-                                                                                <form action="<%=request.getContextPath()%>/servlet-eliminar-documento" method="POST">
-                                                                                        <input type="hidden" name="idAsignacion" value="${datosEstudiante.idAsignacion}">
-                                                                                        <input type="hidden" name="matricula" value="${datosEstudiante.matricula}">
-                                                                                        <input type="hidden" name="idTipoDoc" value="${doc.id_tipo_doc}">
-                                                                                        <button type="submit" class="btn btn-danger w-100 fw-bold shadow-sm">
+                                                                        <div class="row g-2 mt-3">
+
+                                                                                <!-- BOTONES: MODO VISTA -->
+                                                                                <div id="botones_vista_${doc.id_tipo_doc}" class="col-12 d-flex gap-2">
+                                                                                        <button type="button" class="btn fw-bold text-white shadow-sm flex-grow-1" style="background-color: #D4AC0D;" onclick="activarEdicion(${doc.id_tipo_doc})">
+                                                                                                <i class="bi bi-pencil-square me-1"></i> Editar
+                                                                                        </button>
+                                                                                        <button type="submit" form="formEliminar_${doc.id_tipo_doc}" class="btn btn-danger fw-bold shadow-sm flex-grow-1">
                                                                                                 Eliminar
                                                                                         </button>
-                                                                                </form>
-                                                                        </div>
+                                                                                        <a href="servlet-ver-documento?idArchivo=${doc.id_archivo}" target="_blank" class="btn fw-bold text-white shadow-sm flex-grow-1" style="background-color: #002E60;">
+                                                                                                Abrir archivo
+                                                                                        </a>
+                                                                                </div>
 
-                                                                        <div class="col-4">
-                                                                                <a href="servlet-ver-documento?idArchivo=${doc.id_archivo}" target="_blank" class="btn w-100 fw-bold text-white shadow-sm" style="background-color: #002E60;">
-                                                                                        Abrir archivo
-                                                                                </a>
+                                                                                <!-- BOTONES: MODO EDICIÓN (Ocultos por defecto) -->
+                                                                                <div id="botones_edicion_${doc.id_tipo_doc}" class="col-12 d-flex gap-2 d-none">
+                                                                                        <button type="submit" class="btn fw-bold text-white shadow-sm flex-grow-1" style="background-color: #429983;">
+                                                                                                <i class="bi bi-check-circle me-1"></i> Guardar Cambios
+                                                                                        </button>
+                                                                                        <button type="button" class="btn btn-secondary fw-bold shadow-sm flex-grow-1" onclick="cancelarEdicion(${doc.id_tipo_doc})">
+                                                                                                Cancelar
+                                                                                        </button>
+                                                                                </div>
+
                                                                         </div>
                                                                 </div>
-                                                        </div>
+                                                        </form>
+
+                                                        <!-- Formulario oculto independiente para el botón Eliminar -->
+                                                        <form action="<%=request.getContextPath()%>/servlet-eliminar-documento" method="POST" id="formEliminar_${doc.id_tipo_doc}" class="d-none">
+                                                                <input type="hidden" name="idAsignacion" value="${datosEstudiante.idAsignacion}">
+                                                                <input type="hidden" name="idTipoDoc" value="${doc.id_tipo_doc}">
+                                                                <input type="hidden" name="matricula" value="${datosEstudiante.matricula}">
+                                                        </form>
+
                                                 </div>
                                         </div>
                                 </c:if>
@@ -182,7 +205,6 @@
                                                         <div class="col-9 ps-4 d-flex flex-column justify-content-between">
                                                                 <form action="${pageContext.request.contextPath}/servlet-subir-documentos" method="POST" enctype="multipart/form-data" class="d-flex flex-column h-100">
 
-                                                                        <!-- CORRECCIÓN: Borré el input de "idUsuarioModificador" que daba error de EL. El Servlet lo leerá de la sesión. -->
                                                                         <input type="hidden" name="matricula" value="${datosEstudiante.matricula}">
                                                                         <input type="hidden" name="idAsignacion" value="${datosEstudiante.idAsignacion}">
                                                                         <input type="hidden" name="idTipoDoc" value="${doc.id_tipo_doc}">
@@ -190,8 +212,10 @@
 
                                                                         <div>
                                                                                 <label class="fw-bold fs-5 mb-1">Observaciones</label>
-                                                                                <textarea class="form-control mb-2" name="observaciones" rows="2" placeholder="Agrega un comentario..."></textarea>
-                                                                                <span class="text-muted small fw-bold">Fecha de entrega: Pendiente</span>
+                                                                                <textarea class="form-control mb-2" style="resize: none;" name="observaciones" rows="2" placeholder="Agrega un comentario..."></textarea>
+                                                                                <span class="text-muted small fw-bold">
+                                                                                    Fecha de entrega: <c:out value="${doc.fecha_limite}" default="Pendiente" />
+                                                                                </span>
                                                                         </div>
 
                                                                         <div class="row mt-3">
@@ -214,6 +238,35 @@
                 </div>
         </div>
 </div>
+
+<!-- Scripts al final del body -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+        function activarEdicion(id) {
+                // 1. Desbloquear la caja de texto
+                document.getElementById('obs_' + id).removeAttribute('readonly');
+
+                // 2. Intercambiar el logo verde por el input de subir archivo
+                document.getElementById('vista_icono_' + id).classList.add('d-none');
+                document.getElementById('vista_subir_' + id).classList.remove('d-none');
+
+                // 3. Ocultar botones de vista y mostrar los de guardar/cancelar
+                document.getElementById('botones_vista_' + id).classList.add('d-none');
+                document.getElementById('botones_edicion_' + id).classList.remove('d-none');
+        }
+
+        function cancelarEdicion(id) {
+                // 1. Volver a bloquear la caja de texto
+                document.getElementById('obs_' + id).setAttribute('readonly', true);
+
+                // 2. Regresar el logo verde y ocultar el input
+                document.getElementById('vista_icono_' + id).classList.remove('d-none');
+                document.getElementById('vista_subir_' + id).classList.add('d-none');
+
+                // 3. Restaurar los botones originales
+                document.getElementById('botones_vista_' + id).classList.remove('d-none');
+                document.getElementById('botones_edicion_' + id).classList.add('d-none');
+        }
+</script>
 </body>
 </html>
