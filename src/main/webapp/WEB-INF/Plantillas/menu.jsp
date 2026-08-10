@@ -72,7 +72,7 @@
                     Docente
                 </a>
                 <a href="${pageContext.request.contextPath}/servlet-admin-grafica" class="list-group-item list-group-item-action text-white bg-transparent border-0 px-3 py-2">
-                    Grafica
+                    Gráfica
                 </a>
                 <a href="${pageContext.request.contextPath}/servlet-logout" class="list-group-item list-group-item-action text-white bg-transparent border-0 px-3 py-2">
                     Salir
@@ -102,3 +102,27 @@
         </c:if>
     </div>
 </div>
+
+<!-- Script de lógica para detectar e iluminar el botón activo -->
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // Obtiene la ruta actual de la ventana (ej. /MiApp/servlet-periodos)
+        const rutaActual = window.location.pathname;
+
+        // Selecciona todos los enlaces (<a>) dentro del menú
+        const enlacesMenu = document.querySelectorAll('.list-group-item[href]');
+
+        enlacesMenu.forEach(enlace => {
+            // Extrae solo la ruta (pathname) de cada enlace del menú
+            const rutaEnlace = new URL(enlace.href, window.location.origin).pathname;
+
+            // Si la ruta del navegador coincide con la del enlace, aplicamos la clase de resaltado
+            if (rutaActual === rutaEnlace) {
+                // Quitamos el color de texto blanco y el fondo transparente
+                enlace.classList.remove('bg-transparent', 'text-white');
+                // Añadimos la nueva clase que lo colorea
+                enlace.classList.add('menu-activo');
+            }
+        });
+    });
+</script>

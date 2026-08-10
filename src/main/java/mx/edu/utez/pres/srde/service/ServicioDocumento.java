@@ -61,4 +61,9 @@ public class ServicioDocumento {
         }
         return dao.modificarObservaciones(idAsignacion, idTipoDoc, observaciones, idUsuarioModificador);
     }
+
+    public BeanArchivo obtenerArchivo(int idArchivo) {
+        DaoArchivo dao = new DaoArchivo();
+        return dao.obtenerArchivoPorId(idArchivo);
+    }
 }

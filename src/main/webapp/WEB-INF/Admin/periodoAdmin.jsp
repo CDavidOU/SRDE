@@ -64,9 +64,6 @@
                   <form action="${pageContext.request.contextPath}/servlet-periodo-admin" method="POST" class="row g-2 mb-4 justify-content-center">
                       <div class="col-9">
                           <div class="input-group">
-                                <span class="input-group-text bg-white border-end-0">
-                                    <i class="bi bi-search"></i>
-                                </span>
                               <select class="form-select border-start-0 p-2" name="filtroPeriodo" id="filtroPeriodo" required>
                                   <option value="" disabled>Periodo:</option>
                                   <c:forEach var="p" items="${listaPeriodos}">

@@ -12,6 +12,15 @@ public class BeanArchivo {
     private String fecha_limite;
     private InputStream contenido_archivo; //Aqui se guardan los bytes del pdf
     private String matricula;
+    private byte[] archivoBytes;
+
+    public byte[] getArchivoBytes() {
+        return archivoBytes;
+    }
+
+    public void setArchivoBytes(byte[] archivoBytes) {
+        this.archivoBytes = archivoBytes;
+    }
 
     public int getId_archivo() {
         return id_archivo;

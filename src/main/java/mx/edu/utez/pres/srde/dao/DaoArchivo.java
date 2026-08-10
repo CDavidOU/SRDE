@@ -201,4 +201,32 @@ public class DaoArchivo {
 
         return idsTiposDocumento;
     }
+
+    public BeanArchivo obtenerArchivoPorId(int idArchivo) {
+        BeanArchivo archivo = null;
+        String sql = "SELECT NOMBRE_ORIGINAL_ARCHIVO, ARCHIVO FROM ARCHIVO WHERE ID_ARCHIVO = ?";
+
+        try (Connection conexion = Conexion.getConexion();
+             PreparedStatement prs = conexion.prepareStatement(sql)) {
+
+            prs.setInt(1, idArchivo);
+
+            try (ResultSet rs = prs.executeQuery()) {
+                if (rs.next()) {
+                    archivo = new BeanArchivo();
+                    archivo.setId_archivo(idArchivo);
+                    archivo.setNombre_archivo(rs.getString("NOMBRE_ORIGINAL_ARCHIVO"));
+
+                    // CORRECCIÓN: Extraer los bytes antes de que se cierre la conexión
+                    archivo.setArchivoBytes(rs.getBytes("ARCHIVO"));
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("Error al extraer el archivo en DaoArchivo: " + e.getMessage());
+            e.printStackTrace();
+        }
+
+        return archivo;
+    }
+
 }

@@ -69,7 +69,7 @@
                                             <span class="fw-bold text-secondary fs-5 m-0">Alumnos: <c:out value="${docente.numAlumnos}" default="0"/></span>
                                             
                                             <!-- Botón Detalles combinando el diseño de Carlos con el enlace de union -->
-                                            <a href="${pageContext.request.contextPath}/servlet-datos-docente?matricula=${docente.matricula}"
+                                            <a href="${pageContext.request.contextPath}/servlet-datos-docente?id=${docente.id}"
                                                class="btn btn-outline-dark btn-sm px-3 border border-dark d-flex align-items-center gap-2">
                                                 <i class="bi bi-file-earmark-text-fill"></i> Detalles
                                             </a>
