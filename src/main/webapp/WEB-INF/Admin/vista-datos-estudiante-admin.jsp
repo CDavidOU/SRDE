@@ -7,6 +7,9 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
+<fmt:parseDate value="${documento.fechaSubida}" pattern="yyyy-MM-dd'T'HH:mm" var="parsedDateTime" type="both" />
+<fmt:formatDate pattern="dd/MM/yyyy HH:mm" value="${parsedDateTime}" />
 <!doctype html>
 <html lang="es">
 <head>
@@ -139,9 +142,20 @@
                                                                         <div>
                                                                                 <label class="fw-bold fs-5 mb-1">Observaciones</label>
                                                                                 <!-- Textarea bloqueado por defecto (readonly) -->
-                                                                                <textarea id="obs_${doc.id_tipo_doc}" class="form-control mb-2 bg-white" style="resize: none;" name="observaciones" rows="2" readonly>${doc.observaciones}</textarea>
+                                                                                <textarea id="obs_${doc.id_tipo_doc}" class="form-control mb-2 bg-white" name="observaciones" rows="2" readonly>${doc.observaciones}</textarea>.
+
                                                                                 <span class="text-muted small fw-bold">
-                                                                                    Fecha de entrega: <c:out value="${doc.fecha_limite}" default="Sin asignar" />
+                                                                                        Fecha de entrega:
+                                                                                        <c:choose>
+                                                                                                <c:when test="${not empty doc.fechaSubida}">
+                                                                                                        <%-- Aquí usamos doc.fechaSubida porque estamos dentro del c:forEach --%>
+                                                                                                        <fmt:parseDate value="${doc.fechaSubida}" pattern="yyyy-MM-dd'T'HH:mm" var="parsedDateTime" type="both" />
+                                                                                                        <fmt:formatDate pattern="dd/MM/yyyy" value="${parsedDateTime}" />
+                                                                                                </c:when>
+                                                                                                <c:otherwise>
+                                                                                                        No disponible
+                                                                                                </c:otherwise>
+                                                                                        </c:choose>
                                                                                 </span>
                                                                         </div>
 

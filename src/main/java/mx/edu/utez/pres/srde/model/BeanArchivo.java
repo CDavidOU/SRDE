@@ -1,6 +1,7 @@
 package mx.edu.utez.pres.srde.model;
 
 import java.io.InputStream;
+import java.time.LocalDateTime;
 
 public class BeanArchivo {
     private int id_archivo;
@@ -13,6 +14,16 @@ public class BeanArchivo {
     private InputStream contenido_archivo; //Aqui se guardan los bytes del pdf
     private String matricula;
     private byte[] archivoBytes;
+    private LocalDateTime fechaSubida;
+
+    // 2. Agrega sus Getters y Setters
+    public LocalDateTime getFechaSubida() {
+        return fechaSubida;
+    }
+
+    public void setFechaSubida(LocalDateTime fechaSubida) {
+        this.fechaSubida = fechaSubida;
+    }
 
     public byte[] getArchivoBytes() {
         return archivoBytes;

@@ -115,7 +115,7 @@ public class DaoArchivo {
         List<BeanArchivo> listaDocumentos = new ArrayList<>();
 
         // La consulta SQL que une las 4 tablas
-        String sql = "SELECT td.ID_TIPO_DOC, td.NOMBRE_DOC, cd.ESTADO, cd.OBSERVACIONES, ar.ID_ARCHIVO " +
+        String sql = "SELECT td.ID_TIPO_DOC, td.NOMBRE_DOC, cd.ESTADO, cd.OBSERVACIONES, ar.ID_ARCHIVO, ar.FECHA_SUBIDA " +
                 "FROM ASIGNACION_ESTADIAS ae " +
                 "INNER JOIN CONTROL_DOC cd ON ae.ID_ASIGNACION = cd.ID_ASIGNACION " +
                 "INNER JOIN TIPO_DOC td ON cd.ID_TIPO_DOC = td.ID_TIPO_DOC " +
@@ -143,6 +143,11 @@ public class DaoArchivo {
                     doc.setId_tipo_doc(rs.getInt("ID_TIPO_DOC"));
                     doc.setNombre_archivo(rs.getString("NOMBRE_DOC")); // o setNombre_archivo
                     doc.setEstado(rs.getString("ESTADO"));
+                    java.sql.Timestamp fechaBD = rs.getTimestamp("FECHA_SUBIDA");
+                    if (fechaBD != null) {
+                        // Si la base de datos nos devolvió una fecha, la convertimos y la guardamos en el objeto
+                        doc.setFechaSubida(fechaBD.toLocalDateTime());
+                    }
 
                     // Manejo de valores nulos para las observaciones
                     String obs = rs.getString("OBSERVACIONES");
