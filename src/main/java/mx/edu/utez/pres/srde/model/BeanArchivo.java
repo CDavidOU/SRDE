@@ -13,6 +13,33 @@ public class BeanArchivo {
     private InputStream contenido_archivo; //Aqui se guardan los bytes del pdf
     private String matricula;
     private byte[] archivoBytes;
+    private boolean puedeSubir;
+    private boolean revisado;
+    private boolean tieneCalendario;
+
+    public boolean isRevisado() {
+        return revisado;
+    }
+
+    public void setRevisado(boolean revisado) {
+        this.revisado = revisado;
+    }
+
+    public boolean isTieneCalendario() {
+        return tieneCalendario;
+    }
+
+    public void setTieneCalendario(boolean tieneCalendario) {
+        this.tieneCalendario = tieneCalendario;
+    }
+
+    public boolean isPuedeSubir() {
+        return puedeSubir;
+    }
+
+    public void setPuedeSubir(boolean puedeSubir) {
+        this.puedeSubir = puedeSubir;
+    }
 
     public byte[] getArchivoBytes() {
         return archivoBytes;

@@ -98,7 +98,7 @@
                         <c:forEach var="doc" items="${listaDocumentos}">
 
                                 <!-- ==========================================
-                                ESTADO 1: DOCUMENTO YA SUBIDO (VERDE) - MODO EDICIÓN
+                                ESTADO 1: DOCUMENTO YA SUBIDO (VERDE)
                                 ========================================== -->
                                 <c:if test="${doc.estado == 'Completado'}">
                                         <div class="card shadow-sm mb-4 border-0" style="background-color: #f8f9fa;">
@@ -137,24 +137,40 @@
                                                                 <!-- LADO DERECHO: Observaciones y Botones -->
                                                                 <div class="col-9 ps-4 d-flex flex-column justify-content-between">
                                                                         <div>
-                                                                                <label class="fw-bold fs-5 mb-1">Observaciones</label>
+                                                                                <div class="d-flex justify-content-between align-items-center mb-1">
+                                                                                        <label class="fw-bold fs-5 mb-0">Observaciones</label>
+                                                                                        <c:choose>
+                                                                                                <c:when test="${doc.revisado}">
+                                                                                                        <span class="badge bg-success"><i class="bi bi-check-circle-fill me-1"></i> Revisado</span>
+                                                                                                </c:when>
+                                                                                                <c:otherwise>
+                                                                                                        <span class="badge bg-warning text-dark"><i class="bi bi-hourglass-split me-1"></i> Pendiente</span>
+                                                                                                </c:otherwise>
+                                                                                        </c:choose>
+                                                                                </div>
+
                                                                                 <!-- Textarea bloqueado por defecto (readonly) -->
-                                                                                <textarea id="obs_${doc.id_tipo_doc}" class="form-control mb-2 bg-white" style="resize: none;" name="observaciones" rows="2" readonly>${doc.observaciones}</textarea>
-                                                                                <span class="text-muted small fw-bold">
-                                                                                    Fecha de entrega: <c:out value="${doc.fecha_limite}" default="Sin asignar" />
-                                                                                </span>
+                                                                                <textarea id="obs_${doc.id_tipo_doc}" class="form-control mb-1 bg-white" style="resize: none;" name="observaciones" rows="2" readonly>${doc.observaciones}</textarea>
+                                                                                <span class="text-muted small fw-bold">Fecha de entrega: <c:out value="${doc.fecha_limite}" default="Sin asignar" /></span>
                                                                         </div>
 
-                                                                        <div class="row g-2 mt-3">
+                                                                        <div class="row g-2 mt-2">
 
                                                                                 <!-- BOTONES: MODO VISTA -->
                                                                                 <div id="botones_vista_${doc.id_tipo_doc}" class="col-12 d-flex gap-2">
+                                                                                        <c:if test="${!doc.revisado}">
+                                                                                                <button type="submit" form="formRevisar_${doc.id_tipo_doc}" class="btn btn-success fw-bold shadow-sm flex-grow-1">
+                                                                                                        <i class="bi bi-check2-circle me-1"></i> Marcar Revisado
+                                                                                                </button>
+                                                                                        </c:if>
+
                                                                                         <button type="button" class="btn fw-bold text-white shadow-sm flex-grow-1" style="background-color: #D4AC0D;" onclick="activarEdicion(${doc.id_tipo_doc})">
                                                                                                 <i class="bi bi-pencil-square me-1"></i> Editar
                                                                                         </button>
                                                                                         <button type="submit" form="formEliminar_${doc.id_tipo_doc}" class="btn btn-danger fw-bold shadow-sm flex-grow-1">
                                                                                                 Eliminar
                                                                                         </button>
+
                                                                                         <a href="servlet-ver-documento?idArchivo=${doc.id_archivo}" target="_blank" class="btn fw-bold text-white shadow-sm flex-grow-1" style="background-color: #002E60;">
                                                                                                 Abrir archivo
                                                                                         </a>
@@ -176,6 +192,13 @@
 
                                                         <!-- Formulario oculto independiente para el botón Eliminar -->
                                                         <form action="<%=request.getContextPath()%>/servlet-eliminar-documento" method="POST" id="formEliminar_${doc.id_tipo_doc}" class="d-none">
+                                                                <input type="hidden" name="idAsignacion" value="${datosEstudiante.idAsignacion}">
+                                                                <input type="hidden" name="idTipoDoc" value="${doc.id_tipo_doc}">
+                                                                <input type="hidden" name="matricula" value="${datosEstudiante.matricula}">
+                                                        </form>
+
+                                                        <!-- Formulario oculto independiente para Marcar como Revisado -->
+                                                        <form action="<%=request.getContextPath()%>/servlet-revisar-documento" method="POST" id="formRevisar_${doc.id_tipo_doc}" class="d-none">
                                                                 <input type="hidden" name="idAsignacion" value="${datosEstudiante.idAsignacion}">
                                                                 <input type="hidden" name="idTipoDoc" value="${doc.id_tipo_doc}">
                                                                 <input type="hidden" name="matricula" value="${datosEstudiante.matricula}">
@@ -203,7 +226,7 @@
 
                                                         <!-- Derecha: Observaciones y Formulario -->
                                                         <div class="col-9 ps-4 d-flex flex-column justify-content-between">
-                                                                <form action="${pageContext.request.contextPath}/servlet-subir-documentos" method="POST" enctype="multipart/form-data" class="d-flex flex-column h-100">
+                                                                <form action="${pageContext.request.contextPath}/servlet-subir-documentos" method="POST" enctype="multipart/form-data" class="d-flex flex-column h-100 justify-content-between m-0">
 
                                                                         <input type="hidden" name="matricula" value="${datosEstudiante.matricula}">
                                                                         <input type="hidden" name="idAsignacion" value="${datosEstudiante.idAsignacion}">
@@ -212,13 +235,11 @@
 
                                                                         <div>
                                                                                 <label class="fw-bold fs-5 mb-1">Observaciones</label>
-                                                                                <textarea class="form-control mb-2" style="resize: none;" name="observaciones" rows="2" placeholder="Agrega un comentario..."></textarea>
-                                                                                <span class="text-muted small fw-bold">
-                                                                                    Fecha de entrega: <c:out value="${doc.fecha_limite}" default="Pendiente" />
-                                                                                </span>
+                                                                                <textarea class="form-control mb-1" style="resize: none;" name="observaciones" rows="2" placeholder="Agrega un comentario..."></textarea>
+                                                                                <span class="text-muted small fw-bold">Fecha de entrega: <c:out value="${doc.fecha_limite}" default="Pendiente" /></span>
                                                                         </div>
 
-                                                                        <div class="row mt-3">
+                                                                        <div class="row mt-2">
                                                                                 <div class="col-12">
                                                                                         <div class="input-group shadow-sm">
                                                                                                 <input type="file" class="form-control" name="archivoPDF" accept=".pdf" required>
@@ -238,32 +259,20 @@
                 </div>
         </div>
 </div>
-
-<!-- Scripts al final del body -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script>
         function activarEdicion(id) {
-                // 1. Desbloquear la caja de texto
                 document.getElementById('obs_' + id).removeAttribute('readonly');
-
-                // 2. Intercambiar el logo verde por el input de subir archivo
                 document.getElementById('vista_icono_' + id).classList.add('d-none');
                 document.getElementById('vista_subir_' + id).classList.remove('d-none');
-
-                // 3. Ocultar botones de vista y mostrar los de guardar/cancelar
                 document.getElementById('botones_vista_' + id).classList.add('d-none');
                 document.getElementById('botones_edicion_' + id).classList.remove('d-none');
         }
 
         function cancelarEdicion(id) {
-                // 1. Volver a bloquear la caja de texto
                 document.getElementById('obs_' + id).setAttribute('readonly', true);
-
-                // 2. Regresar el logo verde y ocultar el input
                 document.getElementById('vista_icono_' + id).classList.remove('d-none');
                 document.getElementById('vista_subir_' + id).classList.add('d-none');
-
-                // 3. Restaurar los botones originales
                 document.getElementById('botones_vista_' + id).classList.remove('d-none');
                 document.getElementById('botones_edicion_' + id).classList.add('d-none');
         }
