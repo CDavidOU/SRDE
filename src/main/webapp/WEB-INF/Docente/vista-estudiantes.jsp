@@ -42,16 +42,16 @@
             <div class="container" style="max-width: 800px;">
                 <div class="card border-0 shadow-sm p-4 bg-white rounded-3 w-100" style="max-width: 850px;">
 
-                    <!-- Barra de Búsqueda -->
-                    <form action="${pageContext.request.contextPath}/servlet-lista-estudiantes" method="post">
-                        <div id="busqueda" class="row g-2 mb-4">
-                            <div class="col-9">
-                                <div class="input-group">
+                    <!-- Barra de Búsqueda con botón de Limpiar -->
+                    <form action="${pageContext.request.contextPath}/servlet-lista-estudiantes" method="post" class="mb-4">
+                        <div id="busqueda" class="row g-2">
+
+                            <!-- Caja de texto (reducida a 8 columnas) -->
+                            <div class="col-8">
+                                <div class="input-group h-100">
                                     <span class="input-group-text bg-white border-end-0">
                                         <i class="bi bi-search text-muted"></i>
                                     </span>
-
-                                    <!-- Mantener el texto buscado en el input -->
                                     <input id="buscador"
                                            name="buscador"
                                            type="text"
@@ -60,13 +60,23 @@
                                            class="form-control border-start-0 p-2">
                                 </div>
                             </div>
-                            <div class="col-3">
-                                <button class="btn btn-success w-100 h-100 fw-medium" type="submit">Buscar</button>
+
+                            <!-- Contenedor de botones (4 columnas) usando Flexbox -->
+                            <div class="col-4 d-flex gap-2">
+                                <button class="btn btn-success flex-grow-1 fw-medium" type="submit">Buscar</button>
+
+                                <!-- Este botón de Limpiar solo se mostrará si 'terminoBuscado' tiene texto -->
+                                <c:if test="${not empty terminoBuscado}">
+                                    <a href="${pageContext.request.contextPath}/servlet-lista-estudiantes"
+                                       class="btn btn-outline-secondary flex-grow-1 fw-medium d-flex align-items-center justify-content-center"
+                                       title="Borrar búsqueda y ver todos">
+                                        <i class="bi bi-x-circle me-1"></i> Limpiar
+                                    </a>
+                                </c:if>
                             </div>
+
                         </div>
                     </form>
-
-                    <!-- En la vista de la Lista de Estudiantes (JSP) -->
 
                     <!-- Muestra si se agrego correctamente al estudiante -->
                     <c:if test="${not empty sessionScope.mensajeOk}">

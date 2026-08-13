@@ -62,7 +62,7 @@ public class ServletAdminEstudiantes extends HttpServlet {
             req.setAttribute("listaEstudiantes", listaBuscada);
         } else {
             req.setAttribute("mensajeVacio", "No hay ninguna coincidencia.");
-        }
+        }// Asegúrate de tener esta línea en el doPost de tu ServletAdminEstudiantes
         req.setAttribute("terminoBuscado", buscador);
 
         req.getRequestDispatcher("WEB-INF/Admin/vista-estudiantes-admin.jsp").forward(req, res);

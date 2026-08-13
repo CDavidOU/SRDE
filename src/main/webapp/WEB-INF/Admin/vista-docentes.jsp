@@ -23,86 +23,124 @@
 
     <!-- Contenido Principal -->
     <div id="cambiantes" class="flex-grow-1 d-flex flex-column bg-light">
+        <!-- Contenido Principal -->
+        <div id="cambiantes" class="flex-grow-1 d-flex flex-column bg-light">
 
-        <!-- Encabezado -->
-        <div class="w-100 text-center mb-4">
-            <h1 class="text-white m-0 py-3 fs-2 fw-semibold" style="background-color: #002E60;">Docentes</h1>
-        </div>
+            <!-- Encabezado -->
+            <div class="w-100 position-relative d-flex align-items-center justify-content-center py-3 text-white" style="background-color: #002E60">
+                <h1 class="m-0 fs-2 fw-normal">Docentes</h1>
 
-        <div id="datos" class="p-4 flex-grow-1 d-flex justify-content-center">
+                <!-- Botón de registrar (Ruta corregida) -->
+                <a href="${pageContext.request.contextPath}/servlet-registro-docente"
+                   class="btn btn-success position-absolute end-0 me-4 d-flex align-items-center justify-content-center p-0 rounded"
+                   style="width: 38px; height: 38px;"
+                   title="Registrar Nuevo Docente">
+                    <i class="bi bi-person-plus-fill fs-5"></i>
+                </a>
+            </div>
 
-            <!-- Contenedor principal alineado con la maqueta -->
-            <div class="w-100" style="max-width: 850px;">
+            <div id="datos" class="p-4 flex-grow-1 d-flex justify-content-center">
 
-                <!-- Alerta de éxito al registrar -->
-                <c:if test="${not empty sessionScope.mensajeOk}">
-                    <div class="alert alert-success text-center py-2 mb-3 shadow-sm" role="alert">
-                        <c:out value="${sessionScope.mensajeOk}" />
-                    </div>
-                    <c:remove var="mensajeOk" scope="session" />
-                </c:if>
+                <!-- Contenedor principal alineado con la maqueta -->
+                <div class="w-100" style="max-width: 850px;">
 
-                <!-- Lista de Docentes -->
-                <div class="d-flex flex-column gap-2 mb-4">
+                    <!-- Buscador con botón de Limpiar -->
+                    <form action="${pageContext.request.contextPath}/servlet-lista-docentes" method="post" class="mb-4">
+                        <div id="busqueda" class="row g-2">
 
-                    <c:choose>
-                        <c:when test="${not empty listaDocentes}">
-                            <c:forEach var="docente" items="${listaDocentes}">
-                                <div class="card border border-secondary border-opacity-25 rounded-3 shadow-sm">
-                                    <div class="card-body py-2 px-3 d-flex align-items-center justify-content-between">
+                            <!-- Caja de texto (reducida a 8 columnas para dar espacio a los botones) -->
+                            <div class="col-8">
+                                <div class="input-group h-100">
+                                <span class="input-group-text bg-white border-end-0">
+                                    <i class="bi bi-search text-muted"></i>
+                                </span>
+                                    <input id="buscador"
+                                           name="buscador"
+                                           type="text"
+                                           value="${terminoBuscado}"
+                                           placeholder="Buscar por nombre, apellido o estado"
+                                           class="form-control border-start-0 p-2">
+                                </div>
+                            </div>
 
-                                        <!-- LADO IZQUIERDO: Icono, Nombre y Estado -->
-                                        <div class="d-flex align-items-center gap-3">
-                                            <div class="rounded-circle bg-dark text-white d-flex align-items-center justify-content-center flex-shrink-0" style="width: 38px; height: 38px;">
-                                                <i class="bi bi-person-fill fs-5"></i>
-                                            </div>
-                                            <div class="d-flex flex-column">
+                            <!-- Contenedor de botones (4 columnas) usando Flexbox para que se acomoden solos -->
+                            <div class="col-4 d-flex gap-2">
+                                <button class="btn btn-success flex-grow-1 fw-medium" type="submit">Buscar</button>
+
+                                <!-- Este botón de Limpiar solo se mostrará si 'terminoBuscado' tiene texto -->
+                                <c:if test="${not empty terminoBuscado}">
+                                    <a href="${pageContext.request.contextPath}/servlet-lista-docentes"
+                                       class="btn btn-outline-secondary flex-grow-1 fw-medium d-flex align-items-center justify-content-center"
+                                       title="Borrar búsqueda y ver todos">
+                                        <i class="bi bi-x-circle me-1"></i> Limpiar
+                                    </a>
+                                </c:if>
+                            </div>
+
+                        </div>
+                    </form>
+
+                    <!-- Alerta de éxito al registrar -->
+                    <c:if test="${not empty sessionScope.mensajeOk}">
+                        <div class="alert alert-success text-center py-2 mb-3 shadow-sm" role="alert">
+                            <c:out value="${sessionScope.mensajeOk}" />
+                        </div>
+                        <c:remove var="mensajeOk" scope="session" />
+                    </c:if>
+
+                    <!-- Lista de Docentes -->
+                    <div class="d-flex flex-column gap-2 mb-4">
+
+                        <c:choose>
+                            <c:when test="${not empty listaDocentes}">
+                                <c:forEach var="docente" items="${listaDocentes}">
+                                    <div class="card border border-secondary border-opacity-25 rounded-3 shadow-sm">
+                                        <div class="card-body py-2 px-3 d-flex align-items-center justify-content-between">
+
+                                            <!-- LADO IZQUIERDO: Icono, Nombre y Estado -->
+                                            <div class="d-flex align-items-center gap-3">
+                                                <div class="rounded-circle bg-dark text-white d-flex align-items-center justify-content-center flex-shrink-0" style="width: 38px; height: 38px;">
+                                                    <i class="bi bi-person-fill fs-5"></i>
+                                                </div>
+                                                <div class="d-flex flex-column">
                                                 <span class="fw-semibold text-secondary fs-5 m-0 lh-1">
                                                     <c:out value="${docente.nombre} ${docente.apellido}" />
                                                 </span>
-                                                <span class="text-secondary small mt-1">Estado: <c:out value="${docente.estado}" default="Activo"/></span>
+                                                    <span class="text-secondary small mt-1">Estado: <c:out value="${docente.estado}" default="Activo"/></span>
+                                                </div>
                                             </div>
-                                        </div>
 
-                                        <!-- LADO DERECHO: Alumnos y Botón Detalles -->
-                                        <div class="d-flex align-items-center gap-4">
-                                            <span class="fw-bold text-secondary fs-5 m-0">Alumnos: <c:out value="${docente.numAlumnos}" default="0"/></span>
-                                            
-                                            <!-- Botón Detalles combinando el diseño de Carlos con el enlace de union -->
-                                            <a href="${pageContext.request.contextPath}/servlet-datos-docente?id=${docente.id}"
-                                               class="btn btn-outline-dark btn-sm px-3 border border-dark d-flex align-items-center gap-2">
-                                                <i class="bi bi-file-earmark-text-fill"></i> Detalles
-                                            </a>
-                                        </div>
+                                            <!-- LADO DERECHO: Alumnos y Botón Detalles -->
+                                            <div class="d-flex align-items-center gap-4">
+                                                <span class="fw-bold text-secondary fs-5 m-0">Alumnos: <c:out value="${docente.numAlumnos}" default="0"/></span>
 
+                                                <a href="${pageContext.request.contextPath}/servlet-datos-docente?id=${docente.id}"
+                                                   class="btn px-3 py-1 me-2 text-white"
+                                                    style="background-color: #002E60">
+                                                    Detalles<i class="bi bi-journal-text ms-1"></i>
+                                                </a>
+                                            </div>
+
+                                        </div>
                                     </div>
+                                </c:forEach>
+                            </c:when>
+
+                            <c:otherwise>
+                                <!-- Estado vacío -->
+                                <div class="text-center text-secondary fs-5 py-4">
+                                    <c:out value="${mensajeVacio}" default="No hay docentes registrados." />
                                 </div>
-                            </c:forEach>
-                        </c:when>
-                        
-                        <c:otherwise>
-                            <!-- Estado vacío -->
-                            <div class="text-center text-secondary fs-5 py-4">
-                                <c:out value="${mensajeVacio}" default="No hay docentes registrados." />
-                            </div>
-                        </c:otherwise>
-                    </c:choose>
+                            </c:otherwise>
+                        </c:choose>
 
+                    </div>
                 </div>
-
-                <!-- Botón 'Registrar docente' -->
-                <div class="d-flex justify-content-end align-items-center gap-2 mt-4">
-                    <span class="fw-bold text-secondary fs-5">Registrar docente</span>
-                    <a href="${pageContext.request.contextPath}/servlet-registro-docente" class="btn border border-secondary border-opacity-50 bg-white fs-4 fw-bold px-3 py-0 shadow-sm text-dark">
-                        +
-                    </a>
-                </div>
-
             </div>
         </div>
     </div>
 </div>
-<!-- Bootstrap JS -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

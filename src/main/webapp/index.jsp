@@ -61,7 +61,7 @@
 
                     <!-- Olvidaste contraseña -->
                     <div class="mb-4">
-                        <a href="servlet-restablecer" class="text-decoration-none">¿Olvidaste tu contraseña?</a>
+                        <a href="${pageContext.request.contextPath}/olvide-password.jsp">Olvidé mi contraseña</a>
                     </div>
 
                     <div class="text-center mb-3">

@@ -1,10 +1,11 @@
-package mx.edu.utez.pres.srde.service;
+package mx.edu.utez.pres.srde.controller;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import mx.edu.utez.pres.srde.service.ServicioDocumento;
 
 import java.io.IOException;
 

@@ -89,7 +89,7 @@ public class DaoListaEstudiantes {
         List<BeanAsignacionEstadias> listaEstudiantes = new ArrayList<>();
 
         //Estructura de la sentencia donde pedimos  el id usuairo, pedido, nombre y matricula
-        String sql = "SELECT aes.id_usuario_docente, aes.id_periodo, es.nombre, es.matricula " +
+        String sql = "SELECT aes.id_usuario_docente, aes.id_periodo, es.nombre, es.apellido, es.matricula " +
                 "FROM asignacion_estadias aes " +
                 "INNER JOIN estudiante es ON aes.matricula = es.matricula " +
                 "WHERE aes.id_usuario_docente = ? " +
@@ -117,6 +117,7 @@ public class DaoListaEstudiantes {
                         BeanEstudiante estudiante = new BeanEstudiante();
                         estudiante.setNombre(rs.getString("nombre"));
                         estudiante.setMatricula(rs.getString("matricula"));
+                        estudiante.setApellido(rs.getString("apellido"));
 
                         asignacion.setMatricula(estudiante.getMatricula());
                         asignacion.setEstudiante(estudiante);
