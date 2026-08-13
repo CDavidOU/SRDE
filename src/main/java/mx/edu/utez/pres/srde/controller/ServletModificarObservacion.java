@@ -1,38 +1,35 @@
 package mx.edu.utez.pres.srde.controller;
 
 import jakarta.servlet.annotation.MultipartConfig;
+import jakarta.servlet.http.*;
 import mx.edu.utez.pres.srde.model.BeanAdmin;
+import mx.edu.utez.pres.srde.model.BeanArchivo;
 import mx.edu.utez.pres.srde.model.BeanDocente;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
 import mx.edu.utez.pres.srde.service.ServicioDocumento;
 
 import java.io.IOException;
-
 @WebServlet(name = "servletModificarObservacion", value = "/servlet-modificar-observacion")
-@MultipartConfig( // ¡ESTO ES NUEVO Y OBLIGATORIO!
-        fileSizeThreshold = 1024 * 1024 * 2,
-        maxFileSize = 1024 * 1024 * 10,
-        maxRequestSize = 1024 * 1024 * 50
+@MultipartConfig(
+        fileSizeThreshold = 1024 * 1024 * 2, // 2MB
+        maxFileSize = 1024 * 1024 * 10,      // 10MB
+        maxRequestSize = 1024 * 1024 * 50    // 50MB
 )
 public class ServletModificarObservacion extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        request.setCharacterEncoding("UTF-8"); // Para que los acentos en las observaciones se guarden bien
+        request.setCharacterEncoding("UTF-8"); // Acentos y caracteres especiales
 
         try {
-            // 1. Recibir datos de texto del formulario
+            // 1. Recibir datos del formulario
             int idAsignacion = Integer.parseInt(request.getParameter("idAsignacion"));
             String matricula = request.getParameter("matricula");
             int idTipoDoc = Integer.parseInt(request.getParameter("idTipoDoc"));
             String observaciones = request.getParameter("observaciones");
 
-            // 2. Sacar el ID del docente o admin logueado desde el OBJETO de la sesión
+            // 2. Identificar el usuario logueado en la sesión
             HttpSession session = request.getSession();
             int idUsuarioModificador = 0;
 
@@ -49,49 +46,44 @@ public class ServletModificarObservacion extends HttpServlet {
                 return;
             }
 
+            // 3. Evaluar acciones de "marcar" o "desmarcar" como revisado
             String accion = request.getParameter("accion");
             ServicioDocumento servicio = new ServicioDocumento();
+
             if ("desmarcar".equals(accion)) {
-                servicio.procesoDesmarcarRevisado(idAsignacion, idTipoDoc);
+                boolean exitoDesmarcar = servicio.procesoDesmarcarRevisado(idAsignacion, idTipoDoc);
                 response.sendRedirect(request.getContextPath() + "/servlet-datos-estudiante?matricula=" + matricula);
                 return;
             } else if ("marcar".equals(accion)) {
-                servicio.procesoMarcarRevisado(idAsignacion, idTipoDoc);
+                boolean exitoMarcar = servicio.procesoMarcarRevisado(idAsignacion, idTipoDoc);
                 response.sendRedirect(request.getContextPath() + "/servlet-datos-estudiante?matricula=" + matricula);
                 return;
             }
 
-            // 3. RECIBIR EL POSIBLE ARCHIVO NUEVO
-            jakarta.servlet.http.Part nuevoArchivoPart = request.getPart("nuevoArchivoPDF");
-
-
+            // 4. Evaluar si subió un nuevo PDF para reemplazar o solo texto
+            Part nuevoArchivoPart = request.getPart("nuevoArchivoPDF");
             boolean exito = false;
 
-            // 4. LÓGICA DE DECISIÓN (Textos vs. Archivo Nuevo)
             if (nuevoArchivoPart != null && nuevoArchivoPart.getSize() > 0) {
-
-                // CASO A: El usuario seleccionó un archivo nuevo para reemplazar el anterior
-                mx.edu.utez.pres.srde.model.BeanArchivo beanArchivo = new mx.edu.utez.pres.srde.model.BeanArchivo();
+                // CASO A: Viene un archivo nuevo -> Armamos el Bean
+                BeanArchivo beanArchivo = new BeanArchivo();
                 beanArchivo.setNombre_archivo(nuevoArchivoPart.getSubmittedFileName());
-                beanArchivo.setTamano((int) nuevoArchivoPart.getSize());
-                // Usamos el InputStream para optimizar la memoria al subir
+                beanArchivo.setTamano(nuevoArchivoPart.getSize());
                 beanArchivo.setContenido_archivo(nuevoArchivoPart.getInputStream());
 
-                // Reutilizamos tu método de subida original.
-                // Esto insertará el nuevo archivo en la BD y actualizará las observaciones.
-                exito = servicio.procesoSubirDocumento(beanArchivo, idAsignacion, idTipoDoc, "Completado", observaciones, idUsuarioModificador);
+                // ¡AQUÍ ESTÁ EL CAMBIO! Se manda llamar al método que guarda el nuevo PDF
+                exito = servicio.procesoModificarObservaciones(idAsignacion, idTipoDoc, observaciones, idUsuarioModificador);
 
             } else {
-                // CASO B: El usuario SOLO modificó el texto (La caja del archivo está vacía)
+                // CASO B: Solo se actualizaron las observaciones en texto
                 exito = servicio.procesoModificarObservaciones(idAsignacion, idTipoDoc, observaciones, idUsuarioModificador);
             }
 
-            // 5. Redirigir siempre de vuelta al perfil del estudiante
+            // 5. Redireccionar devolviendo el control al perfil del alumno
             response.sendRedirect(request.getContextPath() + "/servlet-datos-estudiante?matricula=" + matricula);
 
         } catch (Exception e) {
-            System.err.println("Error en ServletModificarObservacion: " + e.getMessage());
-            // Si algo falla, lo regresamos a la lista general
+            e.printStackTrace(); // Ver el error detallado en la consola del servidor
             response.sendRedirect(request.getContextPath() + "/servlet-admin-estudiantes");
         }
     }

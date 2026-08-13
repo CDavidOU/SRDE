@@ -22,7 +22,7 @@ public class DaoArchivo {
              // Le indicamos a Oracle que queremos recuperar la columna ID_ARCHIVO
              PreparedStatement prs = conexion.prepareStatement(sql, new String[]{"ID_ARCHIVO"})) {
 
-            prs.setBinaryStream(1, archivo.getContenido_achivo(), archivo.getTamano());
+            prs.setBinaryStream(1, archivo.getContenido_archivo(), archivo.getTamano());
             prs.setString(2, archivo.getNombre_archivo());
             prs.setLong(3, archivo.getTamano());
 
@@ -110,11 +110,17 @@ public class DaoArchivo {
         return false;
     }
 
-
     public List<BeanArchivo> consultarDocumentosPorMatricula(String matricula) {
         List<BeanArchivo> listaDocumentos = new ArrayList<>();
 
-        String sql = "SELECT td.ID_TIPO_DOC, td.NOMBRE_DOC, cd.ESTADO, cd.OBSERVACIONES, cd.REVISADO, ar.ID_ARCHIVO, cal.FECHA_LIM FROM ASIGNACION_ESTADIAS ae INNER JOIN CONTROL_DOC cd ON ae.ID_ASIGNACION = cd.ID_ASIGNACION INNER JOIN TIPO_DOC td ON cd.ID_TIPO_DOC = td.ID_TIPO_DOC LEFT JOIN ARCHIVO ar ON cd.ID_ARCHIVO = ar.ID_ARCHIVO LEFT JOIN CALENDARIO_ESTADIAS cal ON cal.ID_TIPO_DOC = cd.ID_TIPO_DOC AND cal.ID_PERIODO = ae.ID_PERIODO WHERE ae.MATRICULA = ?";
+        // Consulta combinada: Trae FECHA_SUBIDA de tu versión y REVISADO/FECHA_LIM de la otra rama
+        String sql = "SELECT td.ID_TIPO_DOC, td.NOMBRE_DOC, cd.ESTADO, cd.OBSERVACIONES, cd.REVISADO, ar.ID_ARCHIVO, ar.FECHA_SUBIDA, cal.FECHA_LIM " +
+                "FROM ASIGNACION_ESTADIAS ae " +
+                "INNER JOIN CONTROL_DOC cd ON ae.ID_ASIGNACION = cd.ID_ASIGNACION " +
+                "INNER JOIN TIPO_DOC td ON cd.ID_TIPO_DOC = td.ID_TIPO_DOC " +
+                "LEFT JOIN ARCHIVO ar ON cd.ID_ARCHIVO = ar.ID_ARCHIVO " +
+                "LEFT JOIN CALENDARIO_ESTADIAS cal ON cal.ID_TIPO_DOC = cd.ID_TIPO_DOC AND cal.ID_PERIODO = ae.ID_PERIODO " +
+                "WHERE ae.MATRICULA = ?";
 
         try (Connection con = Conexion.getConexion();
              PreparedStatement ps = con.prepareStatement(sql)) {
@@ -128,6 +134,12 @@ public class DaoArchivo {
                     doc.setId_tipo_doc(rs.getInt("ID_TIPO_DOC"));
                     doc.setNombre_archivo(rs.getString("NOMBRE_DOC"));
                     doc.setEstado(rs.getString("ESTADO"));
+
+                    java.sql.Timestamp fechaBD = rs.getTimestamp("FECHA_SUBIDA");
+                    if (fechaBD != null) {
+                        // Si la base de datos nos devolvió una fecha, la convertimos y la guardamos en el objeto
+                        doc.setFechaSubida(fechaBD.toLocalDateTime());
+                    }
 
                     String obs = rs.getString("OBSERVACIONES");
                     doc.setObservaciones(obs != null ? obs : "Sin observaciones");

@@ -29,7 +29,6 @@
                         <i class="bi bi-arrow-left fs-5"></i>
                     </a>
                 </div>
-
                 <!-- Título Centrado -->
                 <div class="col text-center">
                     <h1 class="m-0 fs-2 fw-semibold">Perfil del Estudiante</h1>
@@ -37,10 +36,10 @@
             </div>
         </div>
 
-        <!-- Aquie hacemos el contenedor de la informacion -->
+        <!-- Contenedor principal de información -->
         <div class="mx-auto" style="max-width: 950px;">
 
-            <!-- Aquie esta nombre, apellidos, matricula -->
+            <!-- Datos personales: Nombre, Apellidos, Matrícula -->
             <div id="personales" class="row g-3 mb-3">
                 <div class="col-4">
                     <label class="fw-bold fs-5 mb-1">Nombre(s):</label>
@@ -56,7 +55,7 @@
                 </div>
             </div>
 
-            <!--Aqui ira Carrera,Cuatrimestre y grupo -->
+            <!-- Carrera, Cuatrimestre y Grupo -->
             <div class="row g-3 mb-3">
                 <div class="col-4">
                     <label class="fw-bold fs-5 mb-1">Carrera:</label>
@@ -71,7 +70,8 @@
                     <input class="form-control" type="text" disabled readonly value="${datosEstudiante.grupo}">
                 </div>
             </div>
-            <!--Aqui ira Correo y estado-->
+
+            <!-- Correo y Estado -->
             <div class="row g-3 mb-3">
                 <div class="col-6">
                     <label class="fw-bold fs-5 mb-1">Correo:</label>
@@ -82,7 +82,8 @@
                     <input class="form-control" type="text" disabled readonly value="${datosEstudiante.estado}">
                 </div>
             </div>
-            <!-- Título separador para la sección de documentos -->
+
+            <!-- Separador: Documentos -->
             <div class="w-100 mt-5 mb-4 border-bottom pb-2">
                 <h3 class="fw-bold" style="color: #002E60;">Documentos del Estudiante</h3>
             </div>
@@ -97,7 +98,7 @@
                     <div class="card shadow-sm mb-4 border-0" style="background-color: #f8f9fa;">
                         <div class="card-body row g-0">
 
-                            <!-- FORMULARIO ÚNICO: Le agregamos enctype por si reemplazan el PDF -->
+                            <!-- Formulario principal para modificar observaciones/reemplazar -->
                             <form action="<%=request.getContextPath()%>/servlet-modificar-observacion" method="POST" id="formModificar_${doc.id_tipo_doc}" enctype="multipart/form-data" class="col-12 d-flex m-0">
 
                                 <input type="hidden" name="idAsignacion" value="${datosEstudiante.idAsignacion}">
@@ -117,7 +118,7 @@
                                         </div>
                                     </div>
 
-                                    <!-- VISTA EDICIÓN (Input para reemplazar - Oculto por defecto) -->
+                                    <!-- VISTA EDICIÓN (Oculto por defecto) -->
                                     <div id="vista_subir_${doc.id_tipo_doc}" class="w-100 d-none text-center">
                                         <div class="w-100 text-center rounded p-3 mb-2 text-white shadow-sm" style="background-color: #D4AC0D;">
                                             <i class="bi bi-upload" style="font-size: 3rem;"></i>
@@ -142,7 +143,7 @@
                                             </c:choose>
                                         </div>
 
-                                        <!-- Textarea bloqueado por defecto (readonly) -->
+                                        <!-- Textarea bloqueado por defecto -->
                                         <textarea id="obs_${doc.id_tipo_doc}" class="form-control mb-1 bg-white" style="resize: none;" name="observaciones" rows="2" readonly>${doc.observaciones}</textarea>
                                         <span class="text-muted small fw-bold">Fecha de entrega: <c:out value="${doc.fecha_limite}" default="Sin asignar" /></span>
                                     </div>
@@ -154,7 +155,7 @@
                                             <c:choose>
                                                 <c:when test="${doc.tieneCalendario && doc.puedeSubir}">
 
-                                                    <!-- Si está en plazo, puede marcar/desmarcar revisión -->
+                                                    <!-- Marcar / Desmarcar Revisado -->
                                                     <c:choose>
                                                         <c:when test="${!doc.revisado}">
                                                             <button type="submit" name="accion" value="marcar" class="btn btn-success fw-bold shadow-sm flex-grow-1">
@@ -168,7 +169,7 @@
                                                         </c:otherwise>
                                                     </c:choose>
 
-                                                    <!-- Puede editar observaciones y eliminar archivo -->
+                                                    <!-- Editar y Eliminar -->
                                                     <button type="button" class="btn fw-bold text-white shadow-sm flex-grow-1" style="background-color: #D4AC0D;" onclick="activarEdicion(${doc.id_tipo_doc})">
                                                         <i class="bi bi-pencil-square me-1"></i> Editar
                                                     </button>
@@ -178,8 +179,8 @@
                                                 </c:when>
 
                                                 <c:otherwise>
-                                                    <!-- Si la fecha ya venció o no hay calendario, se deshabilita la edición/revisión -->
-                                                    <span class="warning align-self-center flex-grow-1">
+                                                    <!-- Plazo Vencido -->
+                                                    <span class="badge bg-secondary align-self-center py-2 px-3">
                                                         <i class="bi bi-lock-fill me-1"></i> Plazo vencido
                                                     </span>
                                                 </c:otherwise>
@@ -190,7 +191,7 @@
                                             </a>
                                         </div>
 
-                                        <!-- BOTONES: MODO EDICIÓN (Ocultos por defecto) -->
+                                        <!-- BOTONES: MODO EDICIÓN -->
                                         <div id="botones_edicion_${doc.id_tipo_doc}" class="col-12 d-flex gap-2 d-none">
                                             <button type="submit" class="btn fw-bold text-white shadow-sm flex-grow-1" style="background-color: #429983;">
                                                 <i class="bi bi-check-circle me-1"></i> Guardar Cambios
@@ -204,7 +205,7 @@
                                 </div>
                             </form>
 
-                            <!-- Formulario oculto independiente para el botón Eliminar -->
+                            <!-- Formulario independiente para el botón Eliminar -->
                             <form action="<%=request.getContextPath()%>/servlet-eliminar-documento" method="POST" id="formEliminar_${doc.id_tipo_doc}" class="d-none">
                                 <input type="hidden" name="idAsignacion" value="${datosEstudiante.idAsignacion}">
                                 <input type="hidden" name="idTipoDoc" value="${doc.id_tipo_doc}">
@@ -292,6 +293,7 @@
         </div>
     </div>
 </div>
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script>
     function activarEdicion(id) {

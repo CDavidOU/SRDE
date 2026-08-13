@@ -82,6 +82,13 @@
                     <div id="Estudiantes" class="row">
                         <div class="col-12">
                             <table class="table align-middle bg-white border-1">
+                                <thead>
+                                <tr class="border-bottom">
+                                    <th class="fs-6 text-secondary">Matrícula</th>
+                                    <th class="fs-6 text-secondary">Nombre</th>
+                                    <th class="fs-6 text-secondary">Apellido</th>
+                                </tr>
+                                </thead>
                                 <tbody>
                                 <c:forEach var="asignacionEstadias" items="${listaEstudiantesActivos}">
                                     <tr class="border-bottom">

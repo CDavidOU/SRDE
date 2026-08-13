@@ -53,7 +53,9 @@ public class ServletSubirDocumentos extends HttpServlet {
         BeanArchivo beanArchivo = new BeanArchivo();
         beanArchivo.setNombre_archivo(archivoPart.getSubmittedFileName());
         beanArchivo.setTamano((int) archivoPart.getSize());
-        beanArchivo.setContenido_achivo(archivoPart.getInputStream());
+
+        // ¡LA ÚNICA CORRECCIÓN ESTÁ AQUÍ! (setContenido_archivo con 'r')
+        beanArchivo.setContenido_archivo(archivoPart.getInputStream());
 
         // 4. Instanciar el SERVICIO
         ServicioDocumento servicio = new ServicioDocumento();

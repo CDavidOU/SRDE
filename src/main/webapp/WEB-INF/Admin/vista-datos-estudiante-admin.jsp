@@ -1,15 +1,13 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!doctype html>
 <html lang="es">
 <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Detalles de Estudiante</title>
+        <title>Detalles de Estudiante - Administración</title>
         <!-- Bootstrap CSS -->
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-        <!-- Bootstrap Icons -->
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 </head>
 <body>
 <div id="contenido" class="d-flex min-vh-100">
@@ -20,7 +18,7 @@
         </div>
 
         <div id="cambiantes" class="flex-grow-1 d-flex flex-column">
-                <!-- Encabezado corregido -->
+                <!-- Encabezado -->
                 <div class="text-center w-100 mb-4 text-white m-0 py-3 px-4" style="background-color: #002E60;">
                         <div class="row align-items-center justify-content-between">
                                 <!-- Botón Regresar -->
@@ -145,35 +143,63 @@
                                                                                 </div>
 
                                                                                 <!-- Textarea bloqueado por defecto (readonly) -->
-                                                                                <textarea id="obs_${doc.id_tipo_doc}" class="form-control mb-1 bg-white" style="resize: none;" name="observaciones" rows="2" readonly>${doc.observaciones}</textarea>
-                                                                                <span class="text-muted small fw-bold">Fecha de entrega: <c:out value="${doc.fecha_limite}" default="Sin asignar" /></span>
+                                                                                <textarea id="obs_${doc.id_tipo_doc}" class="form-control mb-2 bg-white" style="resize: none;" name="observaciones" rows="2" readonly>${doc.observaciones}</textarea>
+
+                                                                                <div class="d-flex justify-content-between">
+                                                                                        <span class="text-muted small fw-bold">
+                                                                                                Subido el:
+                                                                                                <c:choose>
+                                                                                                        <c:when test="${not empty doc.fechaSubida}">
+                                                                                                                <fmt:parseDate value="${doc.fechaSubida}" pattern="yyyy-MM-dd'T'HH:mm" var="parsedDateTime" type="both" />
+                                                                                                                <fmt:formatDate pattern="dd/MM/yyyy HH:mm" value="${parsedDateTime}" />
+                                                                                                        </c:when>
+                                                                                                        <c:otherwise>
+                                                                                                                No disponible
+                                                                                                        </c:otherwise>
+                                                                                                </c:choose>
+                                                                                        </span>
+                                                                                        <span class="text-muted small fw-bold">
+                                                                                                Límite: <c:out value="${doc.fecha_limite}" default="Sin asignar" />
+                                                                                        </span>
+                                                                                </div>
                                                                         </div>
 
-                                                                        <div class="row g-2 mt-2">
+                                                                        <div class="row g-2 mt-3">
 
                                                                                 <!-- BOTONES: MODO VISTA -->
                                                                                 <div id="botones_vista_${doc.id_tipo_doc}" class="col-12 d-flex gap-2">
 
-                                                                                        <!-- Alternar entre Marcar Revisado o Desmarcar Revisado mediante acción del formulario principal -->
+                                                                                        <!-- PERMISOS ADMINISTRATIVOS: Ignora si venció la fecha o si no hay calendario -->
                                                                                         <c:choose>
-                                                                                                <c:when test="${!doc.revisado}">
-                                                                                                        <button type="submit" name="accion" value="marcar" class="btn btn-submit align-self-center flex-grow-1">
-                                                                                                                <i class="bi bi-check2-circle me-1"></i> Marcar Revisado
+                                                                                                <c:when test="${not empty sessionScope.adminLogueado || not empty sessionScope.docenteLogueado || (doc.tieneCalendario && doc.puedeSubir)}">
+                                                                                                        <c:choose>
+                                                                                                                <c:when test="${!doc.revisado}">
+                                                                                                                        <button type="submit" name="accion" value="marcar" class="btn btn-success fw-bold shadow-sm flex-grow-1">
+                                                                                                                                <i class="bi bi-check2-circle me-1"></i> Marcar Revisado
+                                                                                                                        </button>
+                                                                                                                </c:when>
+                                                                                                                <c:otherwise>
+                                                                                                                        <button type="submit" name="accion" value="desmarcar" class="btn fw-bold text-white shadow-sm flex-grow-1" style="background-color: #D4AC0D;">
+                                                                                                                                <i class="bi bi-arrow-counterclockwise me-1"></i> Quitar Revisado
+                                                                                                                        </button>
+                                                                                                                </c:otherwise>
+                                                                                                        </c:choose>
+
+                                                                                                        <button type="button" class="btn fw-bold text-white shadow-sm flex-grow-1" style="background-color: #D4AC0D;" onclick="activarEdicion(${doc.id_tipo_doc})">
+                                                                                                                <i class="bi bi-pencil-square me-1"></i> Editar
+                                                                                                        </button>
+                                                                                                        <button type="submit" form="formEliminar_${doc.id_tipo_doc}" class="btn btn-danger fw-bold shadow-sm flex-grow-1">
+                                                                                                                Eliminar
                                                                                                         </button>
                                                                                                 </c:when>
+
                                                                                                 <c:otherwise>
-                                                                                                        <button type="submit" name="accion" value="desmarcar" class="btn fw-bold text-white align-self-center flex-grow-1"  style="background-color: #D4AC0D;">
-                                                                                                                <i class="bi bi-arrow-counterclockwise me-1"></i> Quitar Revisado
+                                                                                                        <!-- SOLO APLICA A ESTUDIANTES FUERA DE PLAZO -->
+                                                                                                        <button type="button" class="btn btn-secondary fw-bold shadow-sm flex-grow-1 disabled" style="opacity: 0.8; pointer-events: none;">
+                                                                                                                <i class="bi bi-lock-fill me-1"></i> Plazo vencido
                                                                                                         </button>
                                                                                                 </c:otherwise>
                                                                                         </c:choose>
-
-                                                                                        <button type="button" class="btn fw-bold text-white shadow-sm flex-grow-1" style="background-color: #D4AC0D;" onclick="activarEdicion(${doc.id_tipo_doc})">
-                                                                                                <i class="bi bi-pencil-square me-1"></i> Editar
-                                                                                        </button>
-                                                                                        <button type="submit" form="formEliminar_${doc.id_tipo_doc}" class="btn btn-danger fw-bold shadow-sm flex-grow-1">
-                                                                                                Eliminar
-                                                                                        </button>
 
                                                                                         <a href="servlet-ver-documento?idArchivo=${doc.id_archivo}" target="_blank" class="btn fw-bold text-white shadow-sm flex-grow-1" style="background-color: #002E60;">
                                                                                                 Abrir archivo
@@ -206,7 +232,7 @@
                                 </c:if>
 
                                 <!-- ==========================================
-                                ESTADO 2: DOCUMENTO NO SUBIDO (AMARILLO)
+                                ESTADO 2: DOCUMENTO NO SUBIDO (AMARILLO / PENDIENTE)
                                 ========================================== -->
                                 <c:if test="${doc.estado == 'Pendiente'}">
                                         <div class="card shadow-sm mb-4 border-0" style="background-color: #f8f9fa;">
@@ -223,30 +249,57 @@
 
                                                         <!-- Derecha: Observaciones y Formulario -->
                                                         <div class="col-9 ps-4 d-flex flex-column justify-content-between">
-                                                                <form action="${pageContext.request.contextPath}/servlet-subir-documentos" method="POST" enctype="multipart/form-data" class="d-flex flex-column h-100 justify-content-between m-0">
+                                                                <c:choose>
+                                                                        <%-- Si es Admin o Docente, SIEMPRE puede subir el archivo a nombre del alumno --%>
+                                                                        <c:when test="${not empty sessionScope.adminLogueado || not empty sessionScope.docenteLogueado || (doc.tieneCalendario && doc.puedeSubir)}">
+                                                                                <form action="${pageContext.request.contextPath}/servlet-subir-documentos" method="POST" enctype="multipart/form-data" class="d-flex flex-column h-100 justify-content-between m-0">
 
-                                                                        <input type="hidden" name="matricula" value="${datosEstudiante.matricula}">
-                                                                        <input type="hidden" name="idAsignacion" value="${datosEstudiante.idAsignacion}">
-                                                                        <input type="hidden" name="idTipoDoc" value="${doc.id_tipo_doc}">
-                                                                        <input type="hidden" name="estado" value="Completado">
+                                                                                        <input type="hidden" name="matricula" value="${datosEstudiante.matricula}">
+                                                                                        <input type="hidden" name="idAsignacion" value="${datosEstudiante.idAsignacion}">
+                                                                                        <input type="hidden" name="idTipoDoc" value="${doc.id_tipo_doc}">
+                                                                                        <input type="hidden" name="estado" value="Completado">
 
-                                                                        <div>
-                                                                                <label class="fw-bold fs-5 mb-1">Observaciones</label>
-                                                                                <textarea class="form-control mb-1" style="resize: none;" name="observaciones" rows="2" placeholder="Agrega un comentario..."></textarea>
-                                                                                <span class="text-muted small fw-bold">Fecha de entrega: <c:out value="${doc.fecha_limite}" default="Pendiente" /></span>
-                                                                        </div>
-
-                                                                        <div class="row mt-2">
-                                                                                <div class="col-12">
-                                                                                        <div class="input-group shadow-sm">
-                                                                                                <input type="file" class="form-control" name="archivoPDF" accept=".pdf" required>
-                                                                                                <button type="submit" class="btn text-white fw-bold px-5" style="background-color: #429983;">
-                                                                                                        Subir
-                                                                                                </button>
+                                                                                        <div>
+                                                                                                <label class="fw-bold fs-5 mb-1">Observaciones</label>
+                                                                                                <textarea class="form-control mb-1" style="resize: none;" name="observaciones" rows="2" placeholder="Agrega un comentario..."></textarea>
+                                                                                                <span class="text-muted small fw-bold">Fecha de entrega: <c:out value="${doc.fecha_limite}" default="Pendiente / Vencida" /></span>
                                                                                         </div>
+
+                                                                                        <div class="row mt-2">
+                                                                                                <div class="col-12">
+                                                                                                        <div class="input-group shadow-sm">
+                                                                                                                <input type="file" class="form-control" name="archivoPDF" accept=".pdf" required>
+                                                                                                                <button type="submit" class="btn text-white fw-bold px-5" style="background-color: #429983;">
+                                                                                                                        Subir
+                                                                                                                </button>
+                                                                                                        </div>
+                                                                                                </div>
+                                                                                        </div>
+                                                                                </form>
+                                                                        </c:when>
+
+                                                                        <c:when test="${!doc.tieneCalendario}">
+                                                                                <div>
+                                                                                        <label class="fw-bold fs-5 mb-1">Observaciones</label>
+                                                                                        <textarea class="form-control mb-1 bg-white" rows="2" style="resize: none;" readonly placeholder="Sin observaciones"></textarea>
+                                                                                        <span class="text-muted small fw-bold">Fecha de entrega: Sin asignar</span>
                                                                                 </div>
-                                                                        </div>
-                                                                </form>
+                                                                                <div class="text-warning small fw-bold mt-2">
+                                                                                        <i class="bi bi-exclamation-triangle-fill me-1"></i> Calendario no asignado.
+                                                                                </div>
+                                                                        </c:when>
+
+                                                                        <c:otherwise>
+                                                                                <div>
+                                                                                        <label class="fw-bold fs-5 mb-1">Observaciones</label>
+                                                                                        <textarea class="form-control mb-1 bg-white" rows="2" style="resize: none;" readonly placeholder="Plazo de entrega finalizado"></textarea>
+                                                                                        <span class="text-muted small fw-bold">Fecha límite: <c:out value="${doc.fecha_limite}" /></span>
+                                                                                </div>
+                                                                                <div class="text-danger small fw-bold mt-2">
+                                                                                        <i class="bi bi-clock-history me-1"></i> La fecha límite de entrega ya venció.
+                                                                                </div>
+                                                                        </c:otherwise>
+                                                                </c:choose>
                                                         </div>
                                                 </div>
                                         </div>
@@ -256,20 +309,32 @@
                 </div>
         </div>
 </div>
+
+<!-- Scripts al final del body -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script>
         function activarEdicion(id) {
+                // 1. Desbloquear la caja de texto
                 document.getElementById('obs_' + id).removeAttribute('readonly');
+
+                // 2. Intercambiar el logo verde por el input de subir archivo
                 document.getElementById('vista_icono_' + id).classList.add('d-none');
                 document.getElementById('vista_subir_' + id).classList.remove('d-none');
+
+                // 3. Ocultar botones de vista y mostrar los de guardar/cancelar
                 document.getElementById('botones_vista_' + id).classList.add('d-none');
                 document.getElementById('botones_edicion_' + id).classList.remove('d-none');
         }
 
         function cancelarEdicion(id) {
+                // 1. Volver a bloquear la caja de texto
                 document.getElementById('obs_' + id).setAttribute('readonly', true);
+
+                // 2. Regresar el logo verde y ocultar el input
                 document.getElementById('vista_icono_' + id).classList.remove('d-none');
                 document.getElementById('vista_subir_' + id).classList.add('d-none');
+
+                // 3. Restaurar los botones originales
                 document.getElementById('botones_vista_' + id).classList.remove('d-none');
                 document.getElementById('botones_edicion_' + id).classList.add('d-none');
         }
