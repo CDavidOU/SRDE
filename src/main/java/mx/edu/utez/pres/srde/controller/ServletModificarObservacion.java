@@ -49,10 +49,22 @@ public class ServletModificarObservacion extends HttpServlet {
                 return;
             }
 
+            String accion = request.getParameter("accion");
+            ServicioDocumento servicio = new ServicioDocumento();
+            if ("desmarcar".equals(accion)) {
+                servicio.procesoDesmarcarRevisado(idAsignacion, idTipoDoc);
+                response.sendRedirect(request.getContextPath() + "/servlet-datos-estudiante?matricula=" + matricula);
+                return;
+            } else if ("marcar".equals(accion)) {
+                servicio.procesoMarcarRevisado(idAsignacion, idTipoDoc);
+                response.sendRedirect(request.getContextPath() + "/servlet-datos-estudiante?matricula=" + matricula);
+                return;
+            }
+
             // 3. RECIBIR EL POSIBLE ARCHIVO NUEVO
             jakarta.servlet.http.Part nuevoArchivoPart = request.getPart("nuevoArchivoPDF");
 
-            ServicioDocumento servicio = new ServicioDocumento();
+
             boolean exito = false;
 
             // 4. LÓGICA DE DECISIÓN (Textos vs. Archivo Nuevo)

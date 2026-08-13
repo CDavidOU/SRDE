@@ -61,6 +61,10 @@ public class ServicioDocumento {
         return daoArchivo.modificarObservaciones(idAsignacion, idTipoDoc, observaciones, idUsuarioModificador);
     }
 
+    public boolean procesoDesmarcarRevisado(int idAsignacion, int idTipoDoc) {
+        return daoArchivo.desmarcarRevisado(idAsignacion, idTipoDoc);
+    }
+
     public BeanArchivo obtenerArchivo(int idArchivo) {
         return daoArchivo.obtenerArchivoPorId(idArchivo);
     }

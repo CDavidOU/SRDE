@@ -1,10 +1,3 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: jaca8
-  Date: 7/29/2026
-  Time: 7:57 PM
-  To change this template use File | Settings | File Templates.
---%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!doctype html>
@@ -44,10 +37,10 @@
                         </div>
                 </div>
 
-                <!-- Aqui hacemos el contenedor de la informacion -->
+                <!-- Contenedor de la información -->
                 <div class="mx-auto" style="max-width: 950px;">
 
-                        <!-- Aquie esta nombre, apellidos, matricula -->
+                        <!-- Nombre, apellidos, matrícula -->
                         <div id="personales" class="row g-3 mb-3">
                                 <div class="col-4">
                                         <label class="fw-bold fs-5 mb-1">Nombre(s):</label>
@@ -63,7 +56,7 @@
                                 </div>
                         </div>
 
-                        <!--Aqui ira Carrera,Cuatrimestre y grupo -->
+                        <!-- Carrera, Cuatrimestre y Grupo -->
                         <div class="row g-3 mb-3">
                                 <div class="col-4">
                                         <label class="fw-bold fs-5 mb-1">Carrera:</label>
@@ -78,7 +71,8 @@
                                         <input class="form-control" type="text" disabled readonly value="${datosEstudiante.grupo}">
                                 </div>
                         </div>
-                        <!--Aqui ira Correo y estado-->
+
+                        <!-- Correo y Estado -->
                         <div class="row g-3 mb-3">
                                 <div class="col-6">
                                         <label class="fw-bold fs-5 mb-1">Correo:</label>
@@ -89,6 +83,7 @@
                                         <input class="form-control" type="text" disabled readonly value="${datosEstudiante.estado}">
                                 </div>
                         </div>
+
                         <!-- Título separador para la sección de documentos -->
                         <div class="w-100 mt-5 mb-4 border-bottom pb-2">
                                 <h3 class="fw-bold" style="color: #002E60;">Documentos del Estudiante</h3>
@@ -104,7 +99,7 @@
                                         <div class="card shadow-sm mb-4 border-0" style="background-color: #f8f9fa;">
                                                 <div class="card-body row g-0">
 
-                                                        <!-- FORMULARIO ÚNICO: Le agregamos enctype por si reemplazan el PDF -->
+                                                        <!-- FORMULARIO ÚNICO DE MODIFICACIÓN -->
                                                         <form action="<%=request.getContextPath()%>/servlet-modificar-observacion" method="POST" id="formModificar_${doc.id_tipo_doc}" enctype="multipart/form-data" class="col-12 d-flex m-0">
 
                                                                 <input type="hidden" name="idAsignacion" value="${datosEstudiante.idAsignacion}">
@@ -158,11 +153,20 @@
 
                                                                                 <!-- BOTONES: MODO VISTA -->
                                                                                 <div id="botones_vista_${doc.id_tipo_doc}" class="col-12 d-flex gap-2">
-                                                                                        <c:if test="${!doc.revisado}">
-                                                                                                <button type="submit" form="formRevisar_${doc.id_tipo_doc}" class="btn btn-success fw-bold shadow-sm flex-grow-1">
-                                                                                                        <i class="bi bi-check2-circle me-1"></i> Marcar Revisado
-                                                                                                </button>
-                                                                                        </c:if>
+
+                                                                                        <!-- Alternar entre Marcar Revisado o Desmarcar Revisado mediante acción del formulario principal -->
+                                                                                        <c:choose>
+                                                                                                <c:when test="${!doc.revisado}">
+                                                                                                        <button type="submit" name="accion" value="marcar" class="btn btn-submit align-self-center flex-grow-1">
+                                                                                                                <i class="bi bi-check2-circle me-1"></i> Marcar Revisado
+                                                                                                        </button>
+                                                                                                </c:when>
+                                                                                                <c:otherwise>
+                                                                                                        <button type="submit" name="accion" value="desmarcar" class="btn fw-bold text-white align-self-center flex-grow-1"  style="background-color: #D4AC0D;">
+                                                                                                                <i class="bi bi-arrow-counterclockwise me-1"></i> Quitar Revisado
+                                                                                                        </button>
+                                                                                                </c:otherwise>
+                                                                                        </c:choose>
 
                                                                                         <button type="button" class="btn fw-bold text-white shadow-sm flex-grow-1" style="background-color: #D4AC0D;" onclick="activarEdicion(${doc.id_tipo_doc})">
                                                                                                 <i class="bi bi-pencil-square me-1"></i> Editar
@@ -190,15 +194,8 @@
                                                                 </div>
                                                         </form>
 
-                                                        <!-- Formulario oculto independiente para el botón Eliminar -->
+                                                        <!-- Formulario independiente solo para Eliminar -->
                                                         <form action="<%=request.getContextPath()%>/servlet-eliminar-documento" method="POST" id="formEliminar_${doc.id_tipo_doc}" class="d-none">
-                                                                <input type="hidden" name="idAsignacion" value="${datosEstudiante.idAsignacion}">
-                                                                <input type="hidden" name="idTipoDoc" value="${doc.id_tipo_doc}">
-                                                                <input type="hidden" name="matricula" value="${datosEstudiante.matricula}">
-                                                        </form>
-
-                                                        <!-- Formulario oculto independiente para Marcar como Revisado -->
-                                                        <form action="<%=request.getContextPath()%>/servlet-revisar-documento" method="POST" id="formRevisar_${doc.id_tipo_doc}" class="d-none">
                                                                 <input type="hidden" name="idAsignacion" value="${datosEstudiante.idAsignacion}">
                                                                 <input type="hidden" name="idTipoDoc" value="${doc.id_tipo_doc}">
                                                                 <input type="hidden" name="matricula" value="${datosEstudiante.matricula}">
