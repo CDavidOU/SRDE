@@ -10,7 +10,7 @@ import java.util.List;
 
 public class DaoPeriodo {
     public BeanPeriodo buscarPeriodo(String periodo){
-        String sql ="select * from periodo where nombre_periodo=?";
+        String sql ="SELECT id_periodo, nombre_periodo, fecha_inicio, fecha_fin FROM periodo WHERE UPPER(nombre_periodo) = UPPER(?)";;
         try(Connection conexion= Conexion.getConexion();
             PreparedStatement prs= conexion.prepareStatement(sql)){
             prs.setString(1,periodo);

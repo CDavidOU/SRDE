@@ -95,7 +95,7 @@ public class DaoListaEstudiantes {
                 "WHERE aes.id_usuario_docente = ? " +
                 "AND aes.id_periodo = ? " +
                 "AND es.estado = 'Activo' " +
-                "AND (es.nombre LIKE ? OR es.apellido LIKE ? OR es.matricula LIKE ?)";
+                "AND (LOWER(es.nombre) LIKE LOWER(?) OR LOWER(es.apellido) LIKE LOWER(?) OR LOWER(es.matricula) LIKE LOWER(?))";
 
         try(Connection conexion = Conexion.getConexion();
             PreparedStatement prs = conexion.prepareStatement(sql)) {

@@ -22,7 +22,7 @@ public class DaoArchivo {
              // Le indicamos a Oracle que queremos recuperar la columna ID_ARCHIVO
              PreparedStatement prs = conexion.prepareStatement(sql, new String[]{"ID_ARCHIVO"})) {
 
-            prs.setBinaryStream(1, archivo.getContenido_achivo(), archivo.getTamano());
+            prs.setBinaryStream(1, archivo.getContenido_archivo(), archivo.getTamano());
             prs.setString(2, archivo.getNombre_archivo());
             prs.setLong(3, archivo.getTamano());
 
@@ -110,20 +110,19 @@ public class DaoArchivo {
         return false;
     }
 
-
     public List<BeanArchivo> consultarDocumentosPorMatricula(String matricula) {
         List<BeanArchivo> listaDocumentos = new ArrayList<>();
 
-        // La consulta SQL que une las 4 tablas
-        String sql = "SELECT td.ID_TIPO_DOC, td.NOMBRE_DOC, cd.ESTADO, cd.OBSERVACIONES, ar.ID_ARCHIVO " +
+        // Consulta combinada: Trae FECHA_SUBIDA de tu versión y REVISADO/FECHA_LIM de la otra rama
+        String sql = "SELECT td.ID_TIPO_DOC, td.NOMBRE_DOC, cd.ESTADO, cd.OBSERVACIONES, cd.REVISADO, ar.ID_ARCHIVO, ar.FECHA_SUBIDA, cal.FECHA_LIM " +
                 "FROM ASIGNACION_ESTADIAS ae " +
                 "INNER JOIN CONTROL_DOC cd ON ae.ID_ASIGNACION = cd.ID_ASIGNACION " +
                 "INNER JOIN TIPO_DOC td ON cd.ID_TIPO_DOC = td.ID_TIPO_DOC " +
                 "LEFT JOIN ARCHIVO ar ON cd.ID_ARCHIVO = ar.ID_ARCHIVO " +
+                "LEFT JOIN CALENDARIO_ESTADIAS cal ON cal.ID_TIPO_DOC = cd.ID_TIPO_DOC AND cal.ID_PERIODO = ae.ID_PERIODO " +
                 "WHERE ae.MATRICULA = ?";
 
-        // Conexión a la base de datos (asegúrate de que el método para obtener tu conexión se llame así)
-        try (Connection con = new Conexion().getConexion(); // o Conexion.getConnection(), según tu proyecto
+        try (Connection con = Conexion.getConexion();
              PreparedStatement ps = con.prepareStatement(sql)) {
 
             ps.setString(1, matricula);
@@ -132,34 +131,44 @@ public class DaoArchivo {
                 while (rs.next()) {
                     BeanArchivo doc = new BeanArchivo();
 
-                /* ========================================================
-                   IMPORTANTE:
-                   Es muy probable que algunos de estos métodos .set te
-                   marquen error en rojo. Si es así, significa que debes
-                   abrir tu clase BeanArchivo y agregarle esos atributos
-                   (con sus getters y setters) para que pueda transportar
-                   toda esta información.
-                   ======================================================== */
                     doc.setId_tipo_doc(rs.getInt("ID_TIPO_DOC"));
-                    doc.setNombre_archivo(rs.getString("NOMBRE_DOC")); // o setNombre_archivo
+                    doc.setNombre_archivo(rs.getString("NOMBRE_DOC"));
                     doc.setEstado(rs.getString("ESTADO"));
 
-                    // Manejo de valores nulos para las observaciones
+                    java.sql.Timestamp fechaBD = rs.getTimestamp("FECHA_SUBIDA");
+                    if (fechaBD != null) {
+                        // Si la base de datos nos devolvió una fecha, la convertimos y la guardamos en el objeto
+                        doc.setFechaSubida(fechaBD.toLocalDateTime());
+                    }
+
                     String obs = rs.getString("OBSERVACIONES");
                     doc.setObservaciones(obs != null ? obs : "Sin observaciones");
 
-                    // Manejo de valores nulos por si el archivo aún no se sube (estado Pendiente)
                     int idArchivo = rs.getInt("ID_ARCHIVO");
                     if (!rs.wasNull()) {
-                        doc.setId_archivo(idArchivo); // o setId_archivo
+                        doc.setId_archivo(idArchivo);
                     }
 
-                    // Agregamos el documento a la lista
+                    doc.setRevisado(rs.getInt("REVISADO") == 1);
+
+                    java.sql.Date fechaLim = rs.getDate("FECHA_LIM");
+                    if (fechaLim != null) {
+                        doc.setFecha_limite(fechaLim.toString());
+                        doc.setTieneCalendario(true);
+
+                        java.sql.Date hoy = new java.sql.Date(System.currentTimeMillis());
+                        doc.setPuedeSubir(!hoy.after(fechaLim));
+                    } else {
+                        doc.setFecha_limite("Sin asignar");
+                        doc.setTieneCalendario(false);
+                        doc.setPuedeSubir(false);
+                    }
+
                     listaDocumentos.add(doc);
                 }
             }
         } catch (SQLException e) {
-            System.err.println("Error al consultar documentos: " + e.getMessage());
+            System.err.println("Error al consultar documentos por matrícula: " + e.getMessage());
             e.printStackTrace();
         }
 
@@ -200,5 +209,68 @@ public class DaoArchivo {
         }
 
         return idsTiposDocumento;
+    }
+
+    public BeanArchivo obtenerArchivoPorId(int idArchivo) {
+        BeanArchivo archivo = null;
+        String sql = "SELECT NOMBRE_ORIGINAL_ARCHIVO, ARCHIVO FROM ARCHIVO WHERE ID_ARCHIVO = ?";
+
+        try (Connection conexion = Conexion.getConexion();
+             PreparedStatement prs = conexion.prepareStatement(sql)) {
+
+            prs.setInt(1, idArchivo);
+
+            try (ResultSet rs = prs.executeQuery()) {
+                if (rs.next()) {
+                    archivo = new BeanArchivo();
+                    archivo.setId_archivo(idArchivo);
+                    archivo.setNombre_archivo(rs.getString("NOMBRE_ORIGINAL_ARCHIVO"));
+
+                    // CORRECCIÓN: Extraer los bytes antes de que se cierre la conexión
+                    archivo.setArchivoBytes(rs.getBytes("ARCHIVO"));
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("Error al extraer el archivo en DaoArchivo: " + e.getMessage());
+            e.printStackTrace();
+        }
+
+        return archivo;
+    }
+
+    public boolean marcarComoRevisado(int idAsignacion, int idTipoDoc) {
+        String sql = "UPDATE CONTROL_DOC SET REVISADO = 1 WHERE ID_ASIGNACION = ? AND ID_TIPO_DOC = ?";
+
+        try (Connection con = Conexion.getConexion();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setInt(1, idAsignacion);
+            ps.setInt(2, idTipoDoc);
+
+            return ps.executeUpdate() > 0;
+
+        } catch (SQLException e) {
+            System.err.println("Error al marcar como revisado: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public boolean desmarcarRevisado(int idAsignacion, int idTipoDoc) {
+        String sql = "UPDATE CONTROL_DOC SET REVISADO = 0 WHERE ID_ASIGNACION = ? AND ID_TIPO_DOC = ?";
+
+        try (Connection conexion = Conexion.getConexion();
+             PreparedStatement prs = conexion.prepareStatement(sql)) {
+
+            prs.setInt(1, idAsignacion);
+            prs.setInt(2, idTipoDoc);
+
+            return prs.executeUpdate() > 0;
+
+        } catch (SQLException e) {
+            System.err.println("Error al desmarcar el estado de revisado: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return false;
     }
 }
