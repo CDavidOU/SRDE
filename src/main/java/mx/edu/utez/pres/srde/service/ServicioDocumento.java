@@ -29,7 +29,6 @@ public class ServicioDocumento {
         return false;
     }
 
-    // Método para cambiar la columna REVISADO
     public boolean procesoMarcarRevisado(int idAsignacion, int idTipoDoc) {
         return daoArchivo.marcarComoRevisado(idAsignacion, idTipoDoc);
     }
@@ -59,6 +58,10 @@ public class ServicioDocumento {
             observaciones = "";
         }
         return daoArchivo.modificarObservaciones(idAsignacion, idTipoDoc, observaciones, idUsuarioModificador);
+    }
+
+    public boolean procesoDesmarcarRevisado(int idAsignacion, int idTipoDoc) {
+        return daoArchivo.desmarcarRevisado(idAsignacion, idTipoDoc);
     }
 
     public BeanArchivo obtenerArchivo(int idArchivo) {

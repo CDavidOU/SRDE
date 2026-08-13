@@ -255,4 +255,22 @@ public class DaoArchivo {
         }
         return false;
     }
+
+    public boolean desmarcarRevisado(int idAsignacion, int idTipoDoc) {
+        String sql = "UPDATE CONTROL_DOC SET REVISADO = 0 WHERE ID_ASIGNACION = ? AND ID_TIPO_DOC = ?";
+
+        try (Connection conexion = Conexion.getConexion();
+             PreparedStatement prs = conexion.prepareStatement(sql)) {
+
+            prs.setInt(1, idAsignacion);
+            prs.setInt(2, idTipoDoc);
+
+            return prs.executeUpdate() > 0;
+
+        } catch (SQLException e) {
+            System.err.println("Error al desmarcar el estado de revisado: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return false;
+    }
 }
