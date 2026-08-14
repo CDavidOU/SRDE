@@ -75,6 +75,9 @@ public class ServletListaEstudiantes extends HttpServlet {
             req.setAttribute("mensajeVacio", "No hay ninguna coincidencia.");
         }
 
+        // LÍNEA AGREGADA: Regresamos la variable a la vista para que el botón "Limpiar" aparezca
+        req.setAttribute("terminoBuscado", buscador);
+
         req.getRequestDispatcher("WEB-INF/Docente/vista-estudiantes.jsp").forward(req, res);
     }
 }

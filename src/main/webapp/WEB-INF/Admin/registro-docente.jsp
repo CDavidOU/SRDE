@@ -81,7 +81,7 @@
           <!-- Botones de Acción -->
           <div id="botones" class="row justify-content-between mt-4">
             <div class="col-5">
-              <a class="btn btn-danger w-100 py-2 fs-5 text-white fw-medium rounded-3" href="${pageContext.request.contextPath}/servlet-lista-docente">Cancelar</a>
+              <a class="btn btn-danger w-100 py-2 fs-5 text-white fw-medium rounded-3" href="${pageContext.request.contextPath}/servlet-lista-docentes">Cancelar</a>
             </div>
             <div class="col-5">
               <button class="btn w-100 py-2 fs-5 text-white fw-medium rounded-3" style="background-color: #429983;" type="submit">Registrar</button>

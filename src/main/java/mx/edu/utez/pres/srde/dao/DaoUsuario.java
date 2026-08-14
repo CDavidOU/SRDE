@@ -10,10 +10,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class DaoUsuario {
-    
+
     public BeanUsuario verificarUsuario(String correo, String password) {
         BeanUsuario usuarioLogueado = null;
-        //upper para detectar minusculas o mayusculas, raw por el tipo de formato que se vuelve la contra con el standar/hash
         String sql = "select correo,contrasena,rol,id_usuario from usuario WHERE UPPER(TRIM(correo)) = UPPER(TRIM(?)) AND UPPER(contrasena) = RAWTOHEX(STANDARD_HASH(?, 'SHA256'))";
 
         try (Connection conexion = Conexion.getConexion();
@@ -39,7 +38,6 @@ public class DaoUsuario {
         return usuarioLogueado;
     }
 
-    // Métodos añadidos de la rama feature/union
     public boolean existeCorreo(String correo) {
         String sql = "SELECT COUNT(*) FROM USUARIO WHERE CORREO = ?";
         try (Connection conexion = Conexion.getConexion();
@@ -57,9 +55,46 @@ public class DaoUsuario {
         return false;
     }
 
+    // NUEVO MÉTODO: Guarda el PIN de 4 dígitos en la BD
+    public boolean guardarTokenRecuperacion(String correo, String token) {
+        String sql = "UPDATE USUARIO SET TOKEN_RESTABLECIMIENTO = ? WHERE CORREO = ?";
+        try (Connection conexion = Conexion.getConexion();
+             PreparedStatement prs = conexion.prepareStatement(sql)) {
+
+            prs.setString(1, token);
+            prs.setString(2, correo);
+            return prs.executeUpdate() > 0;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    // NUEVO MÉTODO: Verifica que el PIN introducido sea el correcto
+    public boolean validarToken(String correo, String token) {
+        String sql = "SELECT COUNT(*) FROM USUARIO WHERE CORREO = ? AND TOKEN_RESTABLECIMIENTO = ?";
+        try (Connection conexion = Conexion.getConexion();
+             PreparedStatement prs = conexion.prepareStatement(sql)) {
+
+            prs.setString(1, correo);
+            prs.setString(2, token);
+            try (ResultSet rs = prs.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1) > 0;
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    // MÉTODO MODIFICADO: Ahora limpia el token después de usarlo
     public boolean restablecerContrasena(String correo, String nuevaContrasena) {
         boolean actualizado = false;
-        String sql = "UPDATE USUARIO SET contrasena = STANDARD_HASH(?, 'SHA256') WHERE correo = ?";
+        // Se agregó TOKEN_RESTABLECIMIENTO = NULL para invalidar el PIN viejo
+        String sql = "UPDATE USUARIO SET contrasena = STANDARD_HASH(?, 'SHA256'), TOKEN_RESTABLECIMIENTO = NULL WHERE correo = ?";
         try (Connection conexion = Conexion.getConexion();
              PreparedStatement prs = conexion.prepareStatement(sql)) {
 
@@ -85,7 +120,6 @@ public class DaoUsuario {
             prs.setString(1, nuevaContrasena);
             prs.setInt(2, idUsuario);
 
-            // executeUpdate() devuelve el número de filas afectadas
             int filasAfectadas = prs.executeUpdate();
             if (filasAfectadas > 0) {
                 actualizado = true;

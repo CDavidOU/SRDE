@@ -216,4 +216,54 @@ public class DaoDocente {
             }
         }
     }
+
+    public List<BeanDocente> buscarDocentes(int idPeriodo, String buscador) {
+        List<BeanDocente> lista = new ArrayList<>();
+
+        // Mantenemos tu consulta original (con el INNER JOIN y el conteo de alumnos)
+        // pero agregamos el WHERE con LIKE para buscar coincidencias.
+        // Usamos LOWER para que la búsqueda ignore mayúsculas y minúsculas.
+        String sql = "SELECT u.id_usuario, d.nombre, d.apellido, d.carrera, d.telefono, d.academia, u.correo, d.estado, " +
+                "(SELECT COUNT(*) FROM asignacion_estadias ae WHERE ae.id_usuario_docente = u.id_usuario AND ae.id_periodo = ?) AS num_alumnos " +
+                "FROM docente d INNER JOIN usuario u ON d.id_usuario = u.id_usuario " +
+                "WHERE LOWER(d.nombre) LIKE LOWER(?) OR LOWER(d.apellido) LIKE LOWER(?) OR LOWER(d.estado) LIKE LOWER(?) " +
+                "ORDER BY d.nombre, d.apellido";
+
+        try (Connection con = Conexion.getConexion();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+
+            // 1. Seteamos el periodo para el conteo de alumnos
+            ps.setInt(1, idPeriodo);
+
+            // 2. Preparamos el término de búsqueda con los comodines %
+            String parametroBusqueda = "%" + buscador + "%";
+
+            // 3. Seteamos el parámetro de búsqueda para nombre, apellido y estado
+            ps.setString(2, parametroBusqueda);
+            ps.setString(3, parametroBusqueda);
+            ps.setString(4, parametroBusqueda);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    BeanDocente docente = new BeanDocente();
+                    docente.setId(rs.getInt("id_usuario"));
+                    docente.setNombre(rs.getString("nombre"));
+                    docente.setApellido(rs.getString("apellido"));
+                    docente.setCorreo(rs.getString("correo"));
+                    docente.setCarrera(rs.getString("carrera"));
+                    docente.setTelefono(rs.getString("telefono"));
+                    docente.setAcademia(rs.getString("academia"));
+                    docente.setEstado(rs.getString("estado"));
+                    docente.setNumAlumnos(rs.getInt("num_alumnos"));
+
+                    lista.add(docente);
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("Error al buscar docentes: " + e.getMessage());
+            e.printStackTrace();
+        }
+
+        return lista;
+    }
 }

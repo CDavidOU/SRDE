@@ -40,4 +40,9 @@ public class ServicioDocente {
         DaoDocente daoDocente = new DaoDocente();
         return daoDocente.registrarDocente(nuevoDocente, PASSWORD_TEMPORAL_DEFAULT);
     }
+
+    public List<BeanDocente> buscarDocentes(int idPeriodo, String buscador) {
+        DaoDocente daoDocente = new DaoDocente();
+        return daoDocente.buscarDocentes(idPeriodo, buscador);
+    }
 }
