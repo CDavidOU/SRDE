@@ -218,4 +218,32 @@ public class DaoNotificaciones {
         }
         return 0;
     }
+
+    // ==========================================
+    // MÉTODO PARA INSERTAR NOTIFICACIÓN EN BD
+    // ==========================================
+    public boolean crearNotificacion(BeanNotificacion noti) {
+        boolean registrado = false;
+
+        // IMPORTANTE: Verifica que los nombres de la tabla y las columnas
+        // coincidan exactamente con el script de tu base de datos
+        String sql = "INSERT INTO NOTIFICACION (DESCRIPCION, FECHA_LIMITE, TIPO_DOC, ID_PERIODO, ID_DOCENTE) VALUES (?, ?, ?, ?, ?)";
+
+        try (Connection con = Conexion.getConexion();
+             PreparedStatement pstm = con.prepareStatement(sql)) {
+
+            pstm.setString(1, noti.getDescripcion());
+            pstm.setDate(2, noti.getFechaLimite());
+            pstm.setInt(3, noti.getTipo_doc());
+            pstm.setInt(4, noti.getId_periodo());
+            pstm.setInt(5, noti.getId_usuario_docente());
+
+            registrado = pstm.executeUpdate() > 0;
+
+        } catch (SQLException e) {
+            System.err.println("Error al crear notificación: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return registrado;
+    }
 }

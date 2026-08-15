@@ -3,10 +3,6 @@ package mx.edu.utez.pres.srde.model;
 import java.sql.Date;
 
 public class BeanNotificacion {
-    
-    // ==========================================
-    // Campos de la rama Carlos (Calendario)
-    // ==========================================
     private int idCalendario;
     private int usuario;
     private int id_usuario_docente;
@@ -14,10 +10,6 @@ public class BeanNotificacion {
     private int tipo_doc;
     private String descripcion;
     private Date fechaLimite;
-
-    // ==========================================
-    // Campos de la rama union (Documentos pendientes)
-    // ==========================================
     private String matricula;
     private String estudianteNombre;
     private String estudianteApellido;
@@ -26,9 +18,6 @@ public class BeanNotificacion {
     private int idAsignacion;
     private int idTipoDoc;
 
-    // ==========================================
-    // Getters y Setters - Rama Carlos
-    // ==========================================
     public String getDescripcion() {
         return descripcion;
     }
@@ -85,9 +74,6 @@ public class BeanNotificacion {
         this.fechaLimite = fechaLimite;
     }
 
-    // ==========================================
-    // Getters y Setters - Rama union
-    // ==========================================
     public String getMatricula() {
         return matricula;
     }

@@ -1,5 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!doctype html>
 <html lang="es">
 <head>
@@ -23,12 +24,6 @@
         <!-- Encabezado corregido -->
         <div class="text-center w-100 mb-4 text-white m-0 py-3 px-4" style="background-color: #002E60;">
             <div class="row align-items-center justify-content-between">
-                <!-- Botón Regresar -->
-                <div class="col-auto">
-                    <a href="javascript:history.back()" class="btn btn-outline-light d-flex align-items-center gap-2">
-                        <i class="bi bi-arrow-left fs-5"></i>
-                    </a>
-                </div>
                 <!-- Título Centrado -->
                 <div class="col text-center">
                     <h1 class="m-0 fs-2 fw-semibold">Perfil del Estudiante</h1>
@@ -37,51 +32,86 @@
         </div>
 
         <!-- Contenedor principal de información -->
-        <div class="mx-auto" style="max-width: 950px;">
+        <div class="w-100 px-4 mx-auto" style="max-width: 950px;">
 
-            <!-- Datos personales: Nombre, Apellidos, Matrícula -->
-            <div id="personales" class="row g-3 mb-3">
-                <div class="col-4">
-                    <label class="fw-bold fs-5 mb-1">Nombre(s):</label>
-                    <input class="form-control" type="text" disabled readonly value="${datosEstudiante.nombre}">
-                </div>
-                <div class="col-4">
-                    <label class="fw-bold fs-5 mb-1">Apellido(s):</label>
-                    <input class="form-control" type="text" disabled readonly value="${datosEstudiante.apellido}">
-                </div>
-                <div class="col-4">
-                    <label class="fw-bold fs-5 mb-1">Matricula:</label>
-                    <input class="form-control" type="text" disabled readonly value="${datosEstudiante.matricula}">
-                </div>
-            </div>
+            <!-- ==========================================
+                 FORMULARIO DE EDICIÓN DE PERFIL
+            ========================================== -->
+            <form action="${pageContext.request.contextPath}/servlet-modificar-estudiante" method="POST" id="formPerfilEstudiante">
 
-            <!-- Carrera, Cuatrimestre y Grupo -->
-            <div class="row g-3 mb-3">
-                <div class="col-4">
-                    <label class="fw-bold fs-5 mb-1">Carrera:</label>
-                    <input class="form-control" type="text" disabled readonly value="${datosEstudiante.carrera}">
-                </div>
-                <div class="col-4">
-                    <label class="fw-bold fs-5 mb-1">Cuatrimestre:</label>
-                    <input class="form-control" type="text" disabled readonly value="${datosEstudiante.cuatrimestre}">
-                </div>
-                <div class="col-4">
-                    <label class="fw-bold fs-5 mb-1">Grupo:</label>
-                    <input class="form-control" type="text" disabled readonly value="${datosEstudiante.grupo}">
-                </div>
-            </div>
+                <!-- La matrícula oculta (Llave primaria) -->
+                <input type="hidden" name="matricula" value="${datosEstudiante.matricula}">
 
-            <!-- Correo y Estado -->
-            <div class="row g-3 mb-3">
-                <div class="col-6">
-                    <label class="fw-bold fs-5 mb-1">Correo:</label>
-                    <input class="form-control" type="text" disabled readonly value="${datosEstudiante.correo}">
+                <!-- Datos personales -->
+                <div class="row g-3 mb-3">
+                    <div class="col-4">
+                        <label class="fw-bold fs-5 mb-1">Nombre(s):</label>
+                        <input class="form-control input-perfil bg-light" type="text" name="nombre" value="${datosEstudiante.nombre}" readonly required>
+                    </div>
+                    <div class="col-4">
+                        <label class="fw-bold fs-5 mb-1">Apellido(s):</label>
+                        <input class="form-control input-perfil bg-light" type="text" name="apellido" value="${datosEstudiante.apellido}" readonly required>
+                    </div>
+                    <div class="col-4">
+                        <label class="fw-bold fs-5 mb-1">Matrícula:</label>
+                        <!-- Solo lectura visual -->
+                        <input class="form-control bg-light" type="text" value="${datosEstudiante.matricula}" disabled>
+                    </div>
                 </div>
-                <div class="col-6">
-                    <label class="fw-bold fs-5 mb-1">Estado:</label>
-                    <input class="form-control" type="text" disabled readonly value="${datosEstudiante.estado}">
+
+                <!-- Carrera, Cuatrimestre y Grupo -->
+                <div class="row g-3 mb-3">
+                    <div class="col-4">
+                        <label class="fw-bold fs-5 mb-1">Carrera:</label>
+                        <input class="form-control input-perfil bg-light" type="text" name="carrera" value="${datosEstudiante.carrera}" readonly required>
+                    </div>
+                    <div class="col-4">
+                        <label class="fw-bold fs-5 mb-1">Cuatrimestre:</label>
+                        <select class="form-select input-perfil bg-light" name="cuatrimestre" disabled required>
+                            <!-- Comparamos con enteros (6 y 11) porque en tu Bean es un int -->
+                            <option value="6" ${datosEstudiante.cuatrimestre == 6 ? 'selected' : ''}>6</option>
+                            <option value="11" ${datosEstudiante.cuatrimestre == 11 ? 'selected' : ''}>11</option>
+                        </select>
+                    </div>
+                    <div class="col-4">
+                        <label class="fw-bold fs-5 mb-1">Grupo:</label>
+                        <input class="form-control input-perfil bg-light" type="text" name="grupo" value="${datosEstudiante.grupo}" readonly required>
+                    </div>
                 </div>
-            </div>
+
+                <!-- Correo y Estado -->
+                <div class="row g-3 mb-3">
+                    <div class="col-6">
+                        <label class="fw-bold fs-5 mb-1">Correo:</label>
+                        <input class="form-control input-perfil bg-light" type="email" name="correo" value="${datosEstudiante.correo}" readonly required>
+                    </div>
+                    <div class="col-6">
+                        <label class="fw-bold fs-5 mb-1">Estado:</label>
+                        <select class="form-select input-perfil bg-light" name="estado" disabled required>
+                            <option value="Activo" ${datosEstudiante.estado == 'Activo' ? 'selected' : ''}>Activo</option>
+                            <option value="Inactivo" ${datosEstudiante.estado == 'Inactivo' ? 'selected' : ''}>Inactivo</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Botones de Acción In-line -->
+                <div class="row mt-4 mb-2">
+                    <div class="col-12 d-flex justify-content-end gap-2">
+                        <!-- VISTA MODO NORMAL -->
+                        <button type="button" id="btnEditarPerfil" class="btn text-white fw-bold shadow-sm px-4" onclick="activarEdicionPerfil()" style="background-color: #002E60">
+                            <i class="bi bi-pencil-square me-2"></i> Editar datos
+                        </button>
+
+                        <!-- VISTA MODO EDICIÓN (Ocultos por defecto) -->
+                        <button type="button" id="btnCancelarPerfil" class="btn btn-secondary fw-bold shadow-sm d-none" onclick="cancelarEdicionPerfil()">
+                            Cancelar
+                        </button>
+                        <button type="submit" id="btnGuardarPerfil" class="btn text-white fw-bold shadow-sm d-none" style="background-color: #429983;">
+                            <i class="bi bi-save me-1"></i> Guardar Cambios
+                        </button>
+                    </div>
+                </div>
+            </form>
 
             <!-- Separador: Documentos -->
             <div class="w-100 mt-5 mb-4 border-bottom pb-2">
@@ -144,8 +174,25 @@
                                         </div>
 
                                         <!-- Textarea bloqueado por defecto -->
-                                        <textarea id="obs_${doc.id_tipo_doc}" class="form-control mb-1 bg-white" style="resize: none;" name="observaciones" rows="2" readonly>${doc.observaciones}</textarea>
-                                        <span class="text-muted small fw-bold">Fecha de entrega: <c:out value="${doc.fecha_limite}" default="Sin asignar" /></span>
+                                        <textarea id="obs_${doc.id_tipo_doc}" class="form-control mb-2 bg-white" style="resize: none;" name="observaciones" rows="2" readonly>${doc.observaciones}</textarea>
+
+                                        <div class="d-flex justify-content-between">
+                                            <span class="text-muted small fw-bold">
+                                                Subido el:
+                                                <c:choose>
+                                                    <c:when test="${not empty doc.fechaSubida}">
+                                                        <fmt:parseDate value="${doc.fechaSubida}" pattern="yyyy-MM-dd'T'HH:mm" var="parsedDateTime" type="both" />
+                                                        <fmt:formatDate pattern="dd/MM/yyyy HH:mm" value="${parsedDateTime}" />
+                                                    </c:when>
+                                                    <c:otherwise>
+                                                        No disponible
+                                                    </c:otherwise>
+                                                </c:choose>
+                                            </span>
+                                            <span class="text-muted small fw-bold">
+                                                Límite: <c:out value="${doc.fecha_limite}" default="Sin asignar" />
+                                            </span>
+                                        </div>
                                     </div>
 
                                     <div class="row g-2 mt-2">
@@ -296,6 +343,44 @@
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script>
+    // --- JAVASCRIPT PARA LA SECCIÓN DE PERFIL ---
+    let valoresOriginales = {};
+
+    function activarEdicionPerfil() {
+        const inputs = document.querySelectorAll('.input-perfil');
+        inputs.forEach(input => {
+            valoresOriginales[input.name] = input.value;
+            input.removeAttribute('readonly'); // Para inputs de texto
+            input.removeAttribute('disabled'); // Para el select
+            input.classList.remove('bg-light');
+        });
+
+        document.getElementById('btnEditarPerfil').classList.add('d-none');
+        document.getElementById('btnCancelarPerfil').classList.remove('d-none');
+        document.getElementById('btnGuardarPerfil').classList.remove('d-none');
+    }
+
+    function cancelarEdicionPerfil() {
+        const inputs = document.querySelectorAll('.input-perfil');
+        inputs.forEach(input => {
+            if(valoresOriginales[input.name] !== undefined){
+                input.value = valoresOriginales[input.name];
+            }
+            input.setAttribute('readonly', 'true'); // Para inputs de texto
+
+            if(input.tagName === 'SELECT') {
+                input.setAttribute('disabled', 'true'); // Para el select
+            }
+
+            input.classList.add('bg-light');
+        });
+
+        document.getElementById('btnEditarPerfil').classList.remove('d-none');
+        document.getElementById('btnCancelarPerfil').classList.add('d-none');
+        document.getElementById('btnGuardarPerfil').classList.add('d-none');
+    }
+
+    // --- JAVASCRIPT PARA LA SECCIÓN DE DOCUMENTOS ---
     function activarEdicion(id) {
         document.getElementById('obs_' + id).removeAttribute('readonly');
         document.getElementById('vista_icono_' + id).classList.add('d-none');

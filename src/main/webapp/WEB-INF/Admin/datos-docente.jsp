@@ -26,16 +26,6 @@
 
         <!-- Encabezado adaptado con botón regresar -->
         <div class="w-100 text-center mb-4 position-relative d-flex align-items-center justify-content-center" style="background-color: #002E60;">
-
-            <!-- Botón Regresar -->
-            <button type="button"
-                    onclick="window.history.back()"
-                    class="btn btn-outline-light position-absolute start-0 ms-3 d-flex align-items-center justify-content-center"
-                    style="width: 42px; height: 42px; border-radius: 8px;"
-                    title="Volver a la página anterior">
-                <i class="bi bi-arrow-left fs-4"></i>
-            </button>
-
             <!-- Título Principal (se mantiene perfectamente centrado) -->
             <h1 class="text-white m-0 py-3 fs-2 fw-semibold">Datos Docente</h1>
         </div>

@@ -1,23 +1,35 @@
 package mx.edu.utez.pres.srde.model;
 
-public class BeanUsuario{
+public class BeanUsuario {
     private String password;
     private int id;
     private String rol;
     private BeanPersona persona;
-    public BeanPersona getPersona()
-    {
+    private BeanPersona datosPersona;
+
+    // Nuevo atributo para el PIN de recuperación
+    private String tokenRestablecimiento;
+
+    public String getTokenRestablecimiento() {
+        return tokenRestablecimiento;
+    }
+
+    public void setTokenRestablecimiento(String tokenRestablecimiento) {
+        this.tokenRestablecimiento = tokenRestablecimiento;
+    }
+
+    public BeanPersona getPersona() {
         return persona;
     }
-    public void setPersona(BeanPersona persona)
-    {
+
+    public void setPersona(BeanPersona persona) {
         this.persona = persona;
     }
 
     public String getPassword() {
         return password;
     }
-    private BeanPersona datosPersona;
+
     public void setPassword(String password) {
         this.password = password;
     }

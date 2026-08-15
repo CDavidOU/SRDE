@@ -27,13 +27,6 @@
         <!-- Encabezado -->
         <div class="w-100  position-relative d-flex align-items-center justify-content-center py-3 text-white" style="background-color: #002E60" >
             <h1 class="text-white m-0 py-3 fs-2 fw-semibold" style="background-color: #002E60;">Programar Calendario de Documentos</h1>
-            <!-- Botón de calendarios -->
-            <a href="${pageContext.request.contextPath}/listaCalendariosServlet"
-               class="btn btn-success d-flex align-items-center justify-content-center shadow-sm"
-               style="height: 38px; z-index: 40;"
-               title="Calendario De Documentos Programados">
-                <span class="d-none d-md-inline small fw-bold">Calendarios Programados</span>
-            </a>
         </div>
 
         <div id="datos" class="p-4 flex-grow-1 d-flex justify-content-center">
@@ -83,13 +76,13 @@
                     <!-- 2. Comentario -->
                     <div class="col-md-12">
                         <label class="fw-bold mb-1 fs-6 text-secondary" for="txtComentario">Comentario:</label>
-                        <textarea class="form-control" id="txtComentario" name="txtComentario" style="resize: none;" placeholder="Escriba un comentario"></textarea>
+                        <textarea class="form-control mb-2" id="txtComentario" name="txtComentario" style="resize: none;" placeholder="Escriba un comentario"></textarea>
                     </div>
 
                     <!-- Fila 3: Botones Cancelar y Programar -->
-                    <div id="botones-accion" class="row g-3 mb-4">
+                    <div id="botones-accion" class="row g-3 m-4">
                         <div class="col-md-6">
-                            <button class="btn w-100 py-2 fs-5 text-white fw-medium rounded-3" style="background-color: #C85252;" type="button">Cancelar</button>
+                            <a href="${pageContext.request.contextPath}/listaCalendariosServlet" class="btn w-100 py-2 fs-5 text-white fw-medium rounded-3" style="background-color: #C85252;" type="button">Cancelar</a>
                         </div>
                         <div class="col-md-6">
                             <button class="btn w-100 py-2 fs-5 text-white fw-medium rounded-3" style="background-color: #429983;" type="submit">Programar</button>

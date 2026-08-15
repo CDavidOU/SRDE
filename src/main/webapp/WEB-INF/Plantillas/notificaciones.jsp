@@ -33,6 +33,33 @@
 
             <div class="w-100" style="max-width: 850px;">
 
+                <!-- ========================================== -->
+                <!-- ALERTA DE ÉXITO (Si se envió el mensaje)   -->
+                <!-- ========================================== -->
+                <c:if test="${not empty sessionScope.mensajeExito}">
+                    <div class="alert alert-success alert-dismissible fade show shadow-sm border-0 d-flex align-items-center" role="alert" style="background-color: #d1e7dd; color: #0f5132;">
+                        <i class="bi bi-check-circle-fill me-2 fs-5"></i>
+                        <div><strong>${sessionScope.mensajeExito}</strong></div>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                    <!-- Borramos el mensaje para que no salga de nuevo al recargar -->
+                    <c:remove var="mensajeExito" scope="session"/>
+                </c:if>
+
+                <!-- ========================================== -->
+                <!-- ALERTA DE ERROR                            -->
+                <!-- ========================================== -->
+                <c:if test="${not empty sessionScope.mensajeError}">
+                    <div class="alert alert-danger alert-dismissible fade show shadow-sm border-0 d-flex align-items-center" role="alert">
+                        <i class="bi bi-exclamation-triangle-fill me-2 fs-5"></i>
+                        <div><strong>${sessionScope.mensajeError}</strong></div>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                    <c:remove var="mensajeError" scope="session"/>
+                </c:if>
+                <!-- ========================================== -->
+
+
                 <c:choose>
                     <c:when test="${not empty listaNotificaciones}">
                         <div class="d-flex flex-column gap-2">

@@ -1,124 +1,107 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: jaca8
-  Date: 7/24/2026
---%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ taglib prefix="c" uri="jakarta.tags.core" %> <%-- O "http://java.sun.com/jsp/jstl/core" si usas una versión anterior a Jakarta --%>
-<!doctype html>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registro Estudiante</title>
-    <!-- Bootstrap CSS (versión estable) -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <title>Redactar Notificación</title>
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Iconos de Bootstrap -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
 </head>
-<body>
+<body class="bg-light">
 
-<div id="contenido" class="d-flex min-vh-100">
-
-    <!-- Menú Lateral -->
-    <div id="menu" class="bg-white border-end" style="width: 180px; flex-shrink: 0;">
-        <jsp:include page="WEB-INF/Plantillas/menu.jsp" />
+<div class="d-flex">
+    <!-- 1. Menú Lateral (Se mantiene igual que en tu vista de lista) -->
+    <div id="menu" class="flex-shrink-0" style="width: 180px; flex-shrink: 0;">
+        <jsp:include page="../Plantillas/menu.jsp" />
     </div>
 
-    <!-- Contenido Principal -->
-    <div id="cambiantes" class="flex-grow-1 d-flex flex-column bg-light">
+    <!-- 2. Área Principal -->
+    <div class="flex-grow-1 bg-white">
 
-        <!-- Encabezado -->
-        <div class="w-100 text-center mb-4">
-            <h1 class="text-white m-0 py-2 fs-2 fw-normal" style="background: #002E60;">Registro Estudiante</h1>
+        <!-- Cabecera / Header Superior -->
+        <div class="w-100 text-center text-white py-3 fw-bold fs-3" style="background-color: #002B66;">
+            Enviar Notificación a Docente
         </div>
 
-        <div id="datos" class="p-4 flex-grow-1 d-flex justify-content-center">
+        <!-- Contenedor del Formulario -->
+        <div class="container my-5 px-5" style="max-width: 800px;">
+            <div class="card shadow-sm border-0" style="background-color: #f8f9fa;">
+                <div class="card-body p-4 p-md-5">
 
-            <div class="card border-0 shadow-sm p-4 bg-white rounded-3 w-100" style="max-width: 800px; height: fit-content;">
+                    <form action="${pageContext.request.contextPath}/servlet-crear-notificacion" method="POST">
 
-                <!-- Alerta de Error (JSTL) -->
-                <c:if test="${not empty mensajeError}">
-                    <div class="alert alert-danger text-center py-2 mb-3" role="alert">
-                        <c:out value="${mensajeError}" />
-                    </div>
-                </c:if>
-
-                <form action="servlet-registro-estudiante" method="POST">
-
-                    <!-- Fila 1: Nombre y Apellido -->
-                    <div id="personal" class="row g-3 mb-3">
-                        <div class="col-6">
-                            <label class="fw-bold mb-1 fs-5 text-secondary" for="nombre">Nombre:</label>
-                            <input class="form-control p-2" type="text" id="nombre" name="nombre" required minlength="2" placeholder="Mariam Carlos">
-                        </div>
-                        <div class="col-6">
-                            <label class="fw-bold mb-1 fs-5 text-secondary" for="apellido">Apellido:</label>
-                            <input class="form-control p-2" type="text" id="apellido" name="apellido" required minlength="2" placeholder="Ortega Valdez">
-                        </div>
-                    </div>
-
-                    <!-- Fila 2: Matrícula y Correo -->
-                    <div id="institucional-contacto" class="row g-3 mb-3">
-                        <div class="col-6">
-                            <label class="fw-bold mb-1 fs-5 text-secondary" for="matricula">Matrícula:</label>
-                            <input class="form-control p-2" type="text" id="matricula" name="matricula" required maxlength="10" minlength="10" placeholder="20253DS043">
-                        </div>
-                        <div class="col-6">
-                            <label class="fw-bold mb-1 fs-5 text-secondary" for="correo">Correo:</label>
-                            <input class="form-control p-2" type="email" id="correo" name="correo" pattern="[a-zA-Z0-9.]+@utez\.edu\.mx$" required placeholder="20253DS043@utez.edu.mx">
-                        </div>
-                    </div>
-
-                    <!-- Fila 3: Cuatrimestre, Carrera y Grupo -->
-                    <div id="academicos" class="row g-3 mb-3">
-                        <div class="col-4">
-                            <label class="fw-bold mb-1 fs-5 text-secondary" for="cuatrimestre">Cuatrimestre:</label>
-                            <select class="form-select p-2" id="cuatrimestre" name="cuatrimestre" required>
-                                <option value="">Selecciona una opción</option>
-                                <option value="6">6° Cuatrimestre</option>
-                                <option value="11">11° Cuatrimestre</option>
-                            </select>
-                        </div>
-                        <div class="col-4">
-                            <label class="fw-bold mb-1 fs-5 text-secondary" for="carrera">Carrera:</label>
-                            <input class="form-control p-2" type="text" id="carrera" name="carrera" required minlength="3" placeholder="DSM">
-                        </div>
-                        <div class="col-4">
-                            <label class="fw-bold fs-5 mb-1 text-secondary" for="grupo">Grupo:</label>
-                            <input class="form-control p-2" type="text" id="grupo" name="grupo" required>
-                        </div>
-                    </div>
-
-                    <!-- Fila 4: Asignar profesor (Obligatorio) -->
-                    <div id="asignacion-tutor" class="row g-3 mb-4">
-                        <div class="col-12">
-                            <label class="fw-bold mb-1 fs-5 text-secondary" for="idDocenteAsignado">Profesor a Cargo:</label>
-                            <select class="form-select p-2" name="idDocenteAsignado" id="idDocenteAsignado" required>
-                                <option value="" disabled selected>-- Selecciona un Docente Obligatoriamente --</option>
-                                <c:forEach var="docente" items="${listaDocente}">
+                        <!-- Destinatario -->
+                        <div class="mb-4">
+                            <label class="form-label fw-bold text-dark" style="color: #002B66;">
+                                <i class="bi bi-person-badge-fill me-2"></i>Docente Destinatario
+                            </label>
+                            <select class="form-select border-secondary shadow-sm" name="idDocenteSelect" required>
+                                <option value="" disabled selected>Selecciona al docente que recibirá el aviso...</option>
+                                <c:forEach var="docente" items="${docentesDisponibles}">
                                     <option value="${docente.id}">${docente.nombre} ${docente.apellido}</option>
                                 </c:forEach>
                             </select>
                         </div>
-                    </div>
 
-                    <!-- Botones de Acción -->
-                    <div id="botones" class="row justify-content-between mt-4">
-                        <div class="col-5">
-                            <a class="btn btn-danger w-100 py-2 fs-5 text-white fw-medium rounded-3" href="${pageContext.request.contextPath}/servlet-estudiantes-admin">Cancelar</a>
-                        </div>
-                        <div class="col-5">
-                            <button class="btn w-100 py-2 fs-5 text-white fw-medium rounded-3" style="background-color: #429983;" type="submit">Registrar</button>
-                        </div>
-                    </div>
+                        <div class="row">
+                            <!-- Tipo de Documento -->
+                            <div class="col-md-6 mb-4">
+                                <label class="form-label fw-bold text-dark" style="color: #002B66;">
+                                    <i class="bi bi-file-earmark-text-fill me-2"></i>Tipo de Documento
+                                </label>
+                                <select class="form-select border-secondary shadow-sm" name="tipoDoc" required>
+                                    <option value="" disabled selected>Seleccionar documento...</option>
+                                    <c:forEach var="tipo" items="${listaTiposDocs}">
+                                        <option value="${tipo.id_tipo_doc}">${tipo.nombre_doc}</option>
+                                    </c:forEach>
+                                </select>
+                            </div>
 
-                </form>
+                            <!-- Fecha Límite -->
+                            <div class="col-md-6 mb-4">
+                                <label class="form-label fw-bold text-dark" style="color: #002B66;">
+                                    <i class="bi bi-calendar-event-fill me-2"></i>Fecha Límite
+                                </label>
+                                <input type="date" class="form-control border-secondary shadow-sm" name="fechaLimite" required>
+                            </div>
+                        </div>
+
+                        <!-- Instrucciones / Características (Comentario) -->
+                        <div class="mb-4">
+                            <label class="form-label fw-bold text-dark" style="color: #002B66;">
+                                <i class="bi bi-chat-left-text-fill me-2"></i>Instrucciones y Características
+                            </label>
+                            <textarea class="form-control border-secondary shadow-sm" name="comentario" rows="5"
+                                      placeholder="Ej. El documento debe entregarse firmado en tinta azul y con copias a color. Hora límite de entrega: 14:00 hrs." required></textarea>
+                            <div class="form-text mt-2 text-muted">
+                                <i class="bi bi-info-circle me-1"></i>
+                                Especifica aquí la <strong>hora exacta</strong> y cualquier formato especial que requiera el documento.
+                            </div>
+                        </div>
+
+                        <!-- Botones de Acción -->
+                        <hr class="my-4">
+                        <div class="d-flex justify-content-end gap-3">
+                            <a href="${pageContext.request.contextPath}/servlet-notificaciones" class="btn btn-outline-secondary px-4 fw-semibold">
+                                Cancelar
+                            </a>
+                            <button type="submit" class="btn text-white px-4 fw-semibold shadow-sm" style="background-color: #002B66;">
+                                <i class="bi bi-send-fill me-2"></i>Enviar Notificación
+                            </button>
+                        </div>
+
+                    </form>
+
+                </div>
             </div>
-
         </div>
     </div>
 </div>
 
-<!-- Bootstrap JS -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Scripts de Bootstrap -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
