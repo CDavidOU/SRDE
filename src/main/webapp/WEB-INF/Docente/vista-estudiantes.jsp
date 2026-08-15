@@ -42,46 +42,43 @@
             <div class="container" style="max-width: 800px;">
                 <div class="card border-0 shadow-sm p-4 bg-white rounded-3 w-100" style="max-width: 850px;">
 
-                    <!-- Barra de Búsqueda -->
-<<<<<<< HEAD
-                    <div id="busqueda" class="row g-2 mb-4">
-                        <form action="/servlet-buscar-estudiantes" method="post">
-=======
+                    <!-- Barra de Búsqueda con botón de Limpiar -->
+                    <form action="${pageContext.request.contextPath}/servlet-lista-estudiantes" method="post" class="mb-4">
+                        <div id="busqueda" class="row g-2">
 
-                    <form action="${pageContext.request.contextPath}/servlet-lista-estudiantes" method="post">
-                        <div id="busqueda" class="row g-2 mb-4">
->>>>>>> 67f14d35925100cfeb86833b4f77989b397c1287
-                            <div class="col-9">
-                                <div class="input-group">
+                            <!-- Caja de texto (reducida a 8 columnas) -->
+                            <div class="col-8">
+                                <div class="input-group h-100">
                                     <span class="input-group-text bg-white border-end-0">
                                         <i class="bi bi-search text-muted"></i>
                                     </span>
-<<<<<<< HEAD
-                                    <input id="buscador" name="buscador" type="text" placeholder="Buscar" class="form-control border-start-0 p-2">
-=======
-                                    <!-- Mantener el texto buscado en el input -->
                                     <input id="buscador"
                                            name="buscador"
                                            type="text"
                                            value="${terminoBuscado}"
                                            placeholder="Buscar por nombre, apellido o matrícula"
                                            class="form-control border-start-0 p-2">
->>>>>>> 67f14d35925100cfeb86833b4f77989b397c1287
                                 </div>
                             </div>
-                            <div class="col-3">
-                                <button class="btn btn-success w-100 h-100 fw-medium" type="submit">Buscar</button>
+
+                            <!-- Contenedor de botones (4 columnas) usando Flexbox -->
+                            <div class="col-4 d-flex gap-2">
+                                <button class="btn btn-success flex-grow-1 fw-medium" type="submit">Buscar</button>
+
+                                <!-- Este botón de Limpiar solo se mostrará si 'terminoBuscado' tiene texto -->
+                                <c:if test="${not empty terminoBuscado}">
+                                    <a href="${pageContext.request.contextPath}/servlet-lista-estudiantes"
+                                       class="btn btn-outline-secondary flex-grow-1 fw-medium d-flex align-items-center justify-content-center"
+                                       title="Borrar búsqueda y ver todos">
+                                        <i class="bi bi-x-circle me-1"></i> Limpiar
+                                    </a>
+                                </c:if>
                             </div>
-<<<<<<< HEAD
-                        </form>
-                    </div>
-                    <!-- En la vista de la Lista de Estudiantes (JSP) -->
-=======
+
                         </div>
                     </form>
 
                     <!-- Muestra si se agrego correctamente al estudiante -->
->>>>>>> 67f14d35925100cfeb86833b4f77989b397c1287
                     <c:if test="${not empty sessionScope.mensajeOk}">
                         <div class="alert alert-success alert-dismissible fade show text-center m-3" role="alert">
                             <c:out value="${sessionScope.mensajeOk}" />
@@ -95,37 +92,32 @@
                     <div id="Estudiantes" class="row">
                         <div class="col-12">
                             <table class="table align-middle bg-white border-1">
+                                <thead>
+                                <tr class="border-bottom">
+                                    <th class="fs-6 text-secondary">Matrícula</th>
+                                    <th class="fs-6 text-secondary">Nombre</th>
+                                    <th class="fs-6 text-secondary">Apellido</th>
+                                </tr>
+                                </thead>
                                 <tbody>
                                 <c:forEach var="asignacionEstadias" items="${listaEstudiantesActivos}">
                                     <tr class="border-bottom">
-                                        <td class="py-3 fs-5 w-20">
+                                        <td class="py-3 fs-5">
                                             <c:out value="${asignacionEstadias.estudiante.matricula}" />
                                         </td>
-                                        <td class="py-3 fs-5 w-80">
+                                        <td class="py-3 fs-5">
                                             <c:out value="${asignacionEstadias.estudiante.nombre}" />
+                                        </td>
+                                        <td class="py-3 fs-5">
+                                            <c:out value="${asignacionEstadias.estudiante.apellido}" />
                                         </td>
                                         <td class="py-3 text-end text-nowrap">
                                             <!-- Botón de Detalles -->
-<<<<<<< HEAD
-                                            <a href=""><button class="btn px-3 py-1 me-2 text-white" style="background-color: #002E60" type="button">
+                                            <a href="servlet-datos-estudiante?matricula=${asignacionEstadias.estudiante.matricula}"
+                                               class="btn px-3 py-1 me-2 text-white"
+                                               style="background-color: #002E60">
                                                 Detalles <i class="bi bi-journal-text ms-1"></i>
-                                            </button>
-=======
-                                            <a href="servlet-datos-estudiante?matricula=${asignacionEstadias.estudiante.matricula}">
-                                                <button class="btn px-3 py-1 me-2 text-white" style="background-color: #002E60" type="button">
-                                                    Detalles <i class="bi bi-journal-text ms-1"></i>
-                                                </button>
->>>>>>> 67f14d35925100cfeb86833b4f77989b397c1287
                                             </a>
-
-                                            <!-- Formulario para Desasignar -->
-                                            <form action="${pageContext.request.contextPath}/servlet-eliminar-asignacion" method="POST" class="d-inline" onsubmit="return confirm('¿Estás seguro de desasignar a este estudiante?');">
-                                                <input type="hidden" name="matricula" value="${asignacionEstadias.matricula}" />
-                                                <input type="hidden" name="id_periodo" value="${asignacionEstadias.id_periodo}" />
-                                                <button class="btn btn-link text-dark p-0 ms-1 align-middle" type="submit" title="Desasignar">
-                                                    <i class="bi bi-arrow-down-up fs-5"></i>
-                                                </button>
-                                            </form>
                                         </td>
                                     </tr>
                                 </c:forEach>
@@ -133,11 +125,11 @@
                             </table>
                         </div>
                     </div>
+
                 </div>
             </div>
         </div>
     </div>
-
 
 </div>
 

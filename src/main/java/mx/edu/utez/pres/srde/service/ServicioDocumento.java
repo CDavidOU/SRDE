@@ -4,25 +4,23 @@ import mx.edu.utez.pres.srde.dao.DaoArchivo;
 import mx.edu.utez.pres.srde.model.BeanArchivo;
 
 import java.util.List;
-
 public class ServicioDocumento {
 
     private DaoArchivo daoArchivo;
 
     public ServicioDocumento(){
-        //Inicializa el dao
+        // Inicializa el dao
         this.daoArchivo = new DaoArchivo();
     }
 
-    public boolean procesoSubirDocumento(BeanArchivo beanArchivo,int idAsignacion, int idTipoDoc, String estado, String observaciones, int idUsuarioModificador) {
+    public boolean procesoSubirDocumento(BeanArchivo beanArchivo, int idAsignacion, int idTipoDoc, String estado, String observaciones, int idUsuarioModificador) {
 
-        //Registrramos el archivo fisico y obetenemos el id
+        // Registramos el archivo físico y obtenemos el id
         int idArchivoGenerado = daoArchivo.registrarDocumento(beanArchivo);
 
-        //Se rebizo si se gguarda en oracle
+        // Se revisa si se guardó en oracle
         if(idArchivoGenerado > 0 ){
-
-            //Registramos el control del documento porque esta vinculado el id generado
+            // Registramos el control del documento porque está vinculado al id generado
             boolean exitoControl = daoArchivo.registrarDetallesDocumento(
                     idAsignacion, idTipoDoc, idArchivoGenerado, estado, observaciones, idUsuarioModificador
             );
@@ -30,9 +28,13 @@ public class ServicioDocumento {
         }
         return false;
     }
+
+    public boolean procesoMarcarRevisado(int idAsignacion, int idTipoDoc) {
+        return daoArchivo.marcarComoRevisado(idAsignacion, idTipoDoc);
+    }
+
     // Método para obtener los documentos de un estudiante usando su matrícula
     public List<BeanArchivo> obtenerDocumentosPorMatricula(String matricula) {
-        // Delegamos la búsqueda al DAO
         return daoArchivo.consultarDocumentosPorMatricula(matricula);
     }
 
@@ -47,18 +49,22 @@ public class ServicioDocumento {
 
     // Método puente para "Eliminar" (resetear a Pendiente)
     public boolean procesoEliminarDocumento(int idAsignacion, int idTipoDoc, int idUsuarioModificador) {
-        DaoArchivo dao = new DaoArchivo();
-        // Aquí podrías agregar validaciones extra de negocio en el futuro si las necesitas
-        return dao.eliminarDocumento(idAsignacion, idTipoDoc, idUsuarioModificador);
+        return daoArchivo.eliminarDocumento(idAsignacion, idTipoDoc, idUsuarioModificador);
     }
 
     // Método puente para Modificar Observaciones
     public boolean procesoModificarObservaciones(int idAsignacion, int idTipoDoc, String observaciones, int idUsuarioModificador) {
-        DaoArchivo dao = new DaoArchivo();
-        // Verificamos que las observaciones no vengan completamente nulas antes de mandarlas
         if (observaciones == null) {
             observaciones = "";
         }
-        return dao.modificarObservaciones(idAsignacion, idTipoDoc, observaciones, idUsuarioModificador);
+        return daoArchivo.modificarObservaciones(idAsignacion, idTipoDoc, observaciones, idUsuarioModificador);
+    }
+
+    public boolean procesoDesmarcarRevisado(int idAsignacion, int idTipoDoc) {
+        return daoArchivo.desmarcarRevisado(idAsignacion, idTipoDoc);
+    }
+
+    public BeanArchivo obtenerArchivo(int idArchivo) {
+        return daoArchivo.obtenerArchivoPorId(idArchivo);
     }
 }

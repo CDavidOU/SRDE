@@ -43,13 +43,14 @@ public class DaoAdminEstudiantes {
 
     public List<BeanEstudiante> buscarEstudiantes(int idPeriodo, String condicion) {
         List<BeanEstudiante> listaEstudiantes = new ArrayList<>();
-        String sql = SQL_BASE + "AND (es.nombre LIKE ? OR es.apellido LIKE ? OR es.matricula LIKE ?) " +
+        String sql = SQL_BASE + "AND (LOWER(es.nombre) LIKE LOWER(?) OR LOWER(es.apellido) LIKE LOWER(?) OR LOWER(es.matricula) LIKE LOWER(?)) " +
                 "ORDER BY es.nombre, es.apellido";
 
         try (Connection conexion = Conexion.getConexion();
              PreparedStatement prs = conexion.prepareStatement(sql)) {
 
-            String textoBuscar = "%" + condicion + "%";
+            String textoBuscar = "%" + condicion.toLowerCase() + "%";
+
             prs.setInt(1, idPeriodo);
             prs.setString(2, textoBuscar);
             prs.setString(3, textoBuscar);
@@ -66,7 +67,6 @@ public class DaoAdminEstudiantes {
         }
         return listaEstudiantes;
     }
-
     private BeanEstudiante mapearEstudiante(ResultSet rs) throws SQLException {
         BeanEstudiante estudiante = new BeanEstudiante();
         estudiante.setMatricula(rs.getString("matricula"));

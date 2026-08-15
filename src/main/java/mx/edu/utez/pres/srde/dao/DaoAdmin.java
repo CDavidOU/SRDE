@@ -33,5 +33,6 @@ public class DaoAdmin {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return datosAdmin;}
+        return datosAdmin;
+    }
 }

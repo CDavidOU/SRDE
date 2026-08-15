@@ -46,7 +46,13 @@
 
           <!-- Encabezado -->
           <div class="w-100 text-center mb-4">
-              <h1 class="text-white m-0 py-3 fs-2 fw-semibold" style="background-color: #002E60;">Periodo</h1>
+              <h1 class="w-100  position-relative d-flex align-items-center justify-content-center py-3 text-white" style="background-color: #002E60">Periodo</h1>
+              <!-- Botón de calendarios -->
+              <a href="${pageContext.request.contextPath}/listaCalendariosServlet"
+                 class="btn btn-success d-flex align-items-center justify-content-center shadow-sm"
+                 style="height: 38px; z-index: 40;"
+                 title="Calendario De Documentos">Calendario de documentos
+              </a>
           </div>
 
           <div id="datos" class="p-4 flex-grow-1 d-flex justify-content-center">
@@ -58,9 +64,6 @@
                   <form action="${pageContext.request.contextPath}/servlet-periodo-admin" method="POST" class="row g-2 mb-4 justify-content-center">
                       <div class="col-9">
                           <div class="input-group">
-                                <span class="input-group-text bg-white border-end-0">
-                                    <i class="bi bi-search"></i>
-                                </span>
                               <select class="form-select border-start-0 p-2" name="filtroPeriodo" id="filtroPeriodo" required>
                                   <option value="" disabled>Periodo:</option>
                                   <c:forEach var="p" items="${listaPeriodos}">

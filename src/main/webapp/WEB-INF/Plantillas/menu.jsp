@@ -1,14 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<jsp:useBean id="servicioNotificaciones" class="mx.edu.utez.pres.srde.service.ServicioNotificaciones" scope="page" />
-
-<%-- Documentos pendientes: por sus estudiantes si es Docente, de todo el sistema si es Admin --%>
-<c:if test="${not empty sessionScope.docenteLogueado}">
-    <c:set var="totalNotificaciones" value="${servicioNotificaciones.contarDocumentosPendientesDocente(sessionScope.docenteLogueado.id)}" />
-</c:if>
-<c:if test="${not empty sessionScope.adminLogueado}">
-    <c:set var="totalNotificaciones" value="${servicioNotificaciones.contarDocumentosPendientesGlobal()}" />
-</c:if>
 
 <!-- Carga de Bootstrap Icons para la campana -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
@@ -20,94 +11,109 @@
     <!-- Parte Superior: Logo y Opciones del Menú -->
     <div>
         <!-- Logo UTEZ (Sin márgenes inferiores para eliminar la línea blanca) -->
+
         <div class="bg-white p-3 text-center mb-0">
             <img src="${pageContext.request.contextPath}/imagenes/UtezLogo.png" class="img-fluid" alt="Logo UTEZ" style="height: 110px; width: 100%;">
         </div>
+        <!-- DOCENTE -->
+        <c:if test="${not empty sessionScope.docenteLogueado}">
+            <div class="list-group list-group-flush rounded-0 m-0 p-0">
 
-        <%-- DOCENTE / Admin: bloques mutuamente excluyentes según el rol en sesión --%>
-        <c:choose>
-            <c:when test="${not empty sessionScope.docenteLogueado}">
-                <!-- Menú de opciones sin bordes externos -->
-                <div class="list-group list-group-flush rounded-0 mt-2">
+                <!-- Perfil Docente (Pega directo al logo sin separación) -->
+                <a href="${pageContext.request.contextPath}/servlet-inicio"
+                   class="list-group-item list-group-item-action text-white d-flex align-items-center border-0 px-3 py-2"
+                   style="background-color: #429983;">
 
-                    <!-- Perfil Docente (Pega directo al logo sin separación) -->
-                    <a href="${pageContext.request.contextPath}/servlet-inicio"
-                       class="list-group-item list-group-item-action text-white d-flex align-items-center border-0 px-3 py-2"
-                       style="background-color: #429983;">
+                    <img src="${pageContext.request.contextPath}/imagenes/user.png" class="rounded-circle me-3" alt="Icono usuario" style="width: 35px; height: 35px; background: white; padding: 2px;">
 
-                        <img src="${pageContext.request.contextPath}/imagenes/user.png" class="rounded-circle me-3" alt="Icono usuario" style="width: 35px; height: 35px; background: white; padding: 2px;">
+                    <div class="d-flex flex-column text-start w-100">
+                        <span class="fw-bold" style="font-size: 0.95rem;">Docente</span>
+                        <input type="text" value="${sessionScope.docenteLogueado.nombre}" class="form-control form-control-sm p-0 text-white bg-transparent border-0 fw-light" disabled style="font-size: 0.9rem;">
+                    </div>
+                </a>
 
-                        <div class="d-flex flex-column text-start w-100">
-                            <span class="fw-bold" style="font-size: 0.95rem;">Docente</span>
-                            <input type="text" value="${sessionScope.docenteLogueado.nombre}" class="form-control form-control-sm p-0 text-white bg-transparent border-0 fw-light" disabled style="font-size: 0.9rem;">
-                        </div>
-                    </a>
+                <!-- Resto de enlaces con texto blanco y fondo transparente -->
+                <a href="${pageContext.request.contextPath}/servlet-periodos" class="list-group-item list-group-item-action text-white bg-transparent border-0 px-3 py-2">
+                    Periodos
+                </a>
+                <a href="${pageContext.request.contextPath}/servlet-lista-estudiantes" class="list-group-item list-group-item-action text-white bg-transparent border-0 px-3 py-2">
+                    Estudiantes
+                </a>
+                <a href="${pageContext.request.contextPath}/servlet-logout" class="list-group-item list-group-item-action text-white bg-transparent border-0 px-3 py-2">
+                    Salir
+                </a>
+            </div>
+        </c:if>
 
-                    <!-- Resto de enlaces con texto blanco y fondo transparente -->
-                    <a href="${pageContext.request.contextPath}/servlet-periodos" class="list-group-item list-group-item-action text-white bg-transparent border-0 px-3 py-2">
-                        Periodos
-                    </a>
-                    <a href="${pageContext.request.contextPath}/servlet-lista-estudiantes" class="list-group-item list-group-item-action text-white bg-transparent border-0 px-3 py-2">
-                        Estudiantes
-                    </a>
-                    <a href="${pageContext.request.contextPath}/servlet-logout" class="list-group-item list-group-item-action text-white bg-transparent border-0 px-3 py-2">
-                        Salir
-                    </a>
-                </div>
-            </c:when>
+        <!-- ADMIN -->
+        <c:if test="${not empty sessionScope.adminLogueado}">
+            <div class="list-group list-group-flush rounded-0 m-0 p-0">
+                <!-- Perfil Admin (Pega directo al logo sin separación) -->
+                <a href="${pageContext.request.contextPath}/servlet-inicio"
+                   class="list-group-item list-group-item-action text-white d-flex align-items-center border-0 px-3 py-2"
+                   style="background-color: #429983;">
 
-            <c:when test="${not empty sessionScope.adminLogueado}">
-                <div class="list-group list-group-flush rounded-0 mt-2">
+                    <img src="${pageContext.request.contextPath}/imagenes/user.png" class="rounded-circle me-3" alt="Icono usuario" style="width: 35px; height: 35px; background: white; padding: 2px;">
 
-                    <!-- Opción Activa: Perfil Admin (Fondo Verde) -->
-                    <a href="${pageContext.request.contextPath}/servlet-inicio"
-                       class="list-group-item list-group-item-action text-white d-flex align-items-center border-0 px-3 py-2"
-                       style="background-color: #429983;">
+                    <div class="d-flex flex-column text-start w-100">
+                        <span class="fw-bold" style="font-size: 0.95rem;">Admin</span>
+                        <input type="text" value="${sessionScope.adminLogueado.nombre}" class="form-control form-control-sm p-0 text-white bg-transparent border-0 fw-light" disabled style="font-size: 0.9rem;">
+                    </div>
+                </a>
 
-                        <img src="${pageContext.request.contextPath}/imagenes/user.png" class="rounded-circle me-3" alt="Icono usuario" style="width: 35px; height: 35px; background: white; padding: 2px;">
-
-                        <div class="d-flex flex-column text-start w-100">
-                            <span class="fw-bold" style="font-size: 0.95rem;">Admin</span>
-                            <input type="text" value="${sessionScope.adminLogueado.nombre}" class="form-control form-control-sm p-0 text-white bg-transparent border-0 fw-light" disabled style="font-size: 0.9rem;">
-                        </div>
-                    </a>
-
-                    <!-- Resto de enlaces con texto blanco y fondo transparente -->
-                    <a href="${pageContext.request.contextPath}/servlet-admin-periodos" class="list-group-item list-group-item-action text-white bg-transparent border-0 px-3 py-2">
-                        Periodos
-                    </a>
-                    <a href="${pageContext.request.contextPath}/servlet-admin-estudiantes" class="list-group-item list-group-item-action text-white bg-transparent border-0 px-3 py-2">
-                        Estudiantes
-                    </a>
-                    <a href="${pageContext.request.contextPath}/servlet-lista-docentes" class="list-group-item list-group-item-action text-white bg-transparent border-0 px-3 py-2">
-                        Docentes
-                    </a>
-                    
-                    <!-- Funcionalidad de la rama Carlos -->
-                    <a href="${pageContext.request.contextPath}/servlet-crear-notificacion" class="list-group-item list-group-item-action text-white bg-transparent border-0 px-3 py-2">
-                        Crear Notificación
-                    </a>
-                    
-                    <a href="${pageContext.request.contextPath}/servlet-admin-grafica" class="list-group-item list-group-item-action text-white bg-transparent border-0 px-3 py-2">
-                        Gráficas
-                    </a>
-                    <a href="${pageContext.request.contextPath}/servlet-logout" class="list-group-item list-group-item-action text-white bg-transparent border-0 px-3 py-2">
-                        Salir
-                    </a>
-                </div>
-            </c:when>
-        </c:choose>
+                <!-- Resto de enlaces con texto blanco y fondo transparente -->
+                <a href="${pageContext.request.contextPath}/servlet-periodo-admin" class="list-group-item list-group-item-action text-white bg-transparent border-0 px-3 py-2">
+                    Periodos
+                </a>
+                <a href="${pageContext.request.contextPath}/servlet-admin-estudiantes" class="list-group-item list-group-item-action text-white bg-transparent border-0 px-3 py-2">
+                    Estudiantes
+                </a>
+                <a href="${pageContext.request.contextPath}/servlet-lista-docentes" class="list-group-item list-group-item-action text-white bg-transparent border-0 px-3 py-2">
+                    Docente
+                </a>
+                <a href="${pageContext.request.contextPath}/servlet-admin-grafica" class="list-group-item list-group-item-action text-white bg-transparent border-0 px-3 py-2">
+                    Gráfica
+                </a>
+                <a href="${pageContext.request.contextPath}/servlet-logout" class="list-group-item list-group-item-action text-white bg-transparent border-0 px-3 py-2">
+                    Salir
+                </a>
+            </div>
+        </c:if>
     </div>
 
-    <!-- Opción Notificaciones fijada abajo: documentos pendientes de revisión (Rama Union) -->
-    <div class="p-2 border-top border-secondary">
-        <a href="${pageContext.request.contextPath}/servlet-notificaciones" class="btn text-white w-100 text-start d-flex align-items-center gap-2 border-0 bg-transparent" title="Documentos pendientes">
-            <i class="bi bi-bell"></i>
-            <span>Notificaciones</span>
-            <c:if test="${totalNotificaciones > 0}">
-                <span class="badge rounded-pill ms-auto" style="background-color: #D4AC0D;"><c:out value="${totalNotificaciones}" /></span>
-            </c:if>
-        </a>
+    <!-- Parte Inferior: Notificaciones Fijadas Abajo con Línea Superior -->
+    <div>
+        <c:if test="${not empty sessionScope.docenteLogueado}">
+            <div class="p-2 border-top border-white border-opacity-25">
+                <a href="${pageContext.request.contextPath}/servlet-mostrar-notificaciones" class="list-group-item list-group-item-action text-white bg-transparent border-0 px-3 py-2 d-flex align-items-center gap-2">
+                    <i class="bi bi-bell-fill"></i>
+                    <span>Notificaciones</span>
+                </a>
+            </div>
+        </c:if>
     </div>
-
 </div>
+
+<!-- Script de lógica para detectar e iluminar el botón activo -->
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // Obtiene la ruta actual de la ventana (ej. /MiApp/servlet-periodos)
+        const rutaActual = window.location.pathname;
+
+        // Selecciona todos los enlaces (<a>) dentro del menú
+        const enlacesMenu = document.querySelectorAll('.list-group-item[href]');
+
+        enlacesMenu.forEach(enlace => {
+            // Extrae solo la ruta (pathname) de cada enlace del menú
+            const rutaEnlace = new URL(enlace.href, window.location.origin).pathname;
+
+            // Si la ruta del navegador coincide con la del enlace, aplicamos la clase de resaltado
+            if (rutaActual === rutaEnlace) {
+                // Quitamos el color de texto blanco y el fondo transparente
+                enlace.classList.remove('bg-transparent', 'text-white');
+                // Añadimos la nueva clase que lo colorea
+                enlace.classList.add('menu-activo');
+            }
+        });
+    });
+</script>

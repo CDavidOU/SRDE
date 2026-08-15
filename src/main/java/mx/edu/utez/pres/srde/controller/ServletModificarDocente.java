@@ -40,11 +40,15 @@ public class ServletModificarDocente extends HttpServlet {
         docenteEditado.setEstado(req.getParameter("estado"));
 
         boolean exito = servicioEditandoDocente.editarDocente(docenteEditado);
+
         if (exito) {
-            List<BeanDocente> listaActualizada = servicioEditandoDocente.listaDocente();
-            req.getSession().setAttribute("mensajeExito", "¡Docente actualizado correctamente!");
-            req.setAttribute("listaDocentes", listaActualizada);
-            req.getRequestDispatcher("WEB-INF/Admin/lista-docentes.jsp").forward(req, res);
+            // 1. Cambiamos "mensajeExito" a "mensajeOk" para que el JSP lo reconozca
+            req.getSession().setAttribute("mensajeOk", "¡Docente actualizado correctamente!");
+
+            // 2. Redirigimos al Servlet de la lista en lugar de hacer un forward.
+            // NOTA: Asegúrate de que "/servlet-lista-docentes" sea la ruta correcta de tu servlet que lista los docentes.
+            res.sendRedirect(req.getContextPath() + "/servlet-lista-docentes");
+
         } else {
             req.setAttribute("mensajeError", "No se pudieron guardar los cambios en la base de datos.");
             req.setAttribute("datoDocente", docenteEditado);
