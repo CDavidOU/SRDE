@@ -6,54 +6,73 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import mx.edu.utez.pres.srde.model.BeanDocente;
-import mx.edu.utez.pres.srde.model.BeanNotificacion;
-import mx.edu.utez.pres.srde.model.BeanUsuario;
-import mx.edu.utez.pres.srde.service.ServicioNotificacion;
+import mx.edu.utez.pres.srde.model.*;
+import mx.edu.utez.pres.srde.service.ServicioNotificaciones;
+import mx.edu.utez.pres.srde.service.ServicioPeriodos;
 
 import java.io.IOException;
-import java.util.List;
-@WebServlet(name = "servletMostrarNotificaciones", value = "/servlet-mostrar-notificaciones")
+import java.util.List;@WebServlet(name = "servletMostrarNotificaciones", value = "/servlet-mostrar-notificaciones")
 public class ServletMostrarNotificaciones extends HttpServlet {
-    @Override
-    public void doGet (HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
-        ServicioNotificacion servicioListaNotificaciones = new ServicioNotificacion();
-        HttpSession session = req.getSession();
-        BeanDocente docente = (BeanDocente) session.getAttribute("docenteLogueado");
-        int idDocente = (docente != null) ? docente.getId() : 0;
 
-        List<BeanNotificacion> listaNotificaciones = servicioListaNotificaciones.buscarListaNotificaciones(idDocente);
-        req.setAttribute("listaNotificaciones", listaNotificaciones);
-        if (listaNotificaciones != null && !listaNotificaciones.isEmpty()) {
-            req.getRequestDispatcher("WEB-INF/Docente/notificaciones.jsp").forward(req, res);
-        } else {
-            System.out.println("Redireccionando al perfil por falta de datos.");
-            req.setAttribute("mensajeNoti","No hay notificaciones");
-            req.getRequestDispatcher("WEB-INF/Docente/notificaciones.jsp").forward(req, res);
+    private final ServicioNotificaciones servicioNotificaciones = new ServicioNotificaciones();
+    private final ServicioPeriodos servicioPeriodos = new ServicioPeriodos();
+
+    @Override
+    public void doGet(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
+        HttpSession session = req.getSession(false);
+        BeanDocente docente = (session != null) ? (BeanDocente) session.getAttribute("docenteLogueado") : null;
+
+        // Validamos que el docente esté en sesión
+        if (docente == null) {
+            res.sendRedirect(req.getContextPath() + "/index.jsp");
+            return;
         }
+
+        // Obtener periodo activo para filtrar los calendarios
+        BeanPeriodo periodoActivo = servicioPeriodos.automatizacionPeriodos();
+        int idPeriodo = (periodoActivo != null) ? periodoActivo.getId_periodo() : 0;
+
+        // Consultamos la lista de calendarios/avisos asignados a ese periodo y no ocultados
+        List<CalendarioBean> listaNotificaciones = servicioNotificaciones.buscarListaNotificaciones(docente.getId(), idPeriodo);
+
+        req.setAttribute("listaNotificaciones", listaNotificaciones);
+
+        if (listaNotificaciones == null || listaNotificaciones.isEmpty()) {
+            req.setAttribute("mensajeNoti", "No hay notificaciones disponibles por el momento.");
+        }
+
+        req.getRequestDispatcher("/WEB-INF/Docente/notificaciones.jsp").forward(req, res);
     }
 
     @Override
-    public void doPost (HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
-        ServicioNotificacion servicio = new ServicioNotificacion();
+    public void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
+        HttpSession session = req.getSession(false);
+        BeanDocente docente = (session != null) ? (BeanDocente) session.getAttribute("docenteLogueado") : null;
+
+        if (docente == null) {
+            res.sendRedirect(req.getContextPath() + "/index.jsp");
+            return;
+        }
+
         String idParam = req.getParameter("idNoti");
+        String accion = req.getParameter("accion"); // "ocultar" o "restaurar"
 
         if (idParam != null && !idParam.isEmpty()) {
-            int idNoti = Integer.parseInt(idParam);
-            servicio.ocultarNotificacion(idNoti);
-        }
-        HttpSession session = req.getSession();
-        BeanDocente docente = (BeanDocente) session.getAttribute("docenteLogueado");
-        int idDocente = (docente != null) ? docente.getId() : 0;
-        List<BeanNotificacion> listaNotificaciones = servicio.buscarListaNotificaciones(idDocente);
-        req.setAttribute("listaNotificaciones", listaNotificaciones);
+            int idCalendario = Integer.parseInt(idParam);
 
-        if (listaNotificaciones != null && !listaNotificaciones.isEmpty()) {
-            req.getRequestDispatcher("WEB-INF/Docente/notificaciones.jsp").forward(req, res);
-        } else {
-            req.setAttribute("mensajeNoti", "No hay notificaciones");
-            req.getRequestDispatcher("WEB-INF/Docente/notificaciones.jsp").forward(req, res);
+            NotificacionBean notif = new NotificacionBean();
+            notif.setId_docente(docente.getId());
+            notif.setIdCalendario(idCalendario);
+
+            ServicioNotificaciones servicio = new ServicioNotificaciones();
+
+            if ("restaurar".equals(accion)) {
+                servicio.desocultarNotificacion(notif);
+            } else {
+                servicio.ocultarNotificacion(notif);
+            }
         }
+
+        res.sendRedirect(req.getContextPath() + "/servlet-mostrar-notificaciones");
     }
 }
-

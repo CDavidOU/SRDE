@@ -1,5 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!doctype html>
 <html lang="es">
 <head>
@@ -23,12 +24,6 @@
         <!-- Encabezado corregido -->
         <div class="text-center w-100 mb-4 text-white m-0 py-3 px-4" style="background-color: #002E60;">
             <div class="row align-items-center justify-content-between">
-                <!-- Botón Regresar -->
-                <div class="col-auto">
-                    <a href="javascript:history.back()" class="btn btn-outline-light d-flex align-items-center gap-2">
-                        <i class="bi bi-arrow-left fs-5"></i>
-                    </a>
-                </div>
                 <!-- Título Centrado -->
                 <div class="col text-center">
                     <h1 class="m-0 fs-2 fw-semibold">Perfil del Estudiante</h1>
@@ -179,8 +174,25 @@
                                         </div>
 
                                         <!-- Textarea bloqueado por defecto -->
-                                        <textarea id="obs_${doc.id_tipo_doc}" class="form-control mb-1 bg-white" style="resize: none;" name="observaciones" rows="2" readonly>${doc.observaciones}</textarea>
-                                        <span class="text-muted small fw-bold">Fecha de entrega: <c:out value="${doc.fecha_limite}" default="Sin asignar" /></span>
+                                        <textarea id="obs_${doc.id_tipo_doc}" class="form-control mb-2 bg-white" style="resize: none;" name="observaciones" rows="2" readonly>${doc.observaciones}</textarea>
+
+                                        <div class="d-flex justify-content-between">
+                                            <span class="text-muted small fw-bold">
+                                                Subido el:
+                                                <c:choose>
+                                                    <c:when test="${not empty doc.fechaSubida}">
+                                                        <fmt:parseDate value="${doc.fechaSubida}" pattern="yyyy-MM-dd'T'HH:mm" var="parsedDateTime" type="both" />
+                                                        <fmt:formatDate pattern="dd/MM/yyyy HH:mm" value="${parsedDateTime}" />
+                                                    </c:when>
+                                                    <c:otherwise>
+                                                        No disponible
+                                                    </c:otherwise>
+                                                </c:choose>
+                                            </span>
+                                            <span class="text-muted small fw-bold">
+                                                Límite: <c:out value="${doc.fecha_limite}" default="Sin asignar" />
+                                            </span>
+                                        </div>
                                     </div>
 
                                     <div class="row g-2 mt-2">

@@ -1,5 +1,6 @@
 <%@page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
 <!doctype html>
 <html lang="es">
 <head>
@@ -21,13 +22,6 @@
                 <!-- Encabezado -->
                 <div class="text-center w-100 mb-4 text-white m-0 py-3 px-4" style="background-color: #002E60;">
                         <div class="row align-items-center justify-content-between">
-                                <!-- Botón Regresar -->
-                                <div class="col-auto">
-                                        <a href="javascript:history.back()" class="btn btn-outline-light d-flex align-items-center gap-2">
-                                                <i class="bi bi-arrow-left fs-5"></i>
-                                        </a>
-                                </div>
-
                                 <!-- Título Centrado -->
                                 <div class="col text-center">
                                         <h1 class="m-0 fs-2 fw-semibold">Perfil del Estudiante</h1>
