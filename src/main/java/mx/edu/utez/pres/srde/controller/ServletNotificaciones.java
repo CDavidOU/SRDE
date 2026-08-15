@@ -23,7 +23,6 @@ import java.sql.Date;
 import java.time.LocalDate;
 import java.util.List;
 
-// Mapeamos el Servlet a ambas URLs para manejar ambas funcionalidades
 @WebServlet(name = "servletNotificaciones", urlPatterns = {"/servlet-crear-notificacion", "/servlet-notificaciones"})
 public class ServletNotificaciones extends HttpServlet {
 
@@ -31,7 +30,6 @@ public class ServletNotificaciones extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
         String path = req.getServletPath();
 
-        // LOGICA DE LA RAMA CARLOS (Formulario para crear notificación)
         if ("/servlet-crear-notificacion".equals(path)) {
             ServicioDocente datosDocente = new ServicioDocente();
             List<BeanDocente> listaDocentes = datosDocente.listaDocente();
@@ -42,7 +40,6 @@ public class ServletNotificaciones extends HttpServlet {
             req.setAttribute("docentesDisponibles", listaDocentes);
             req.getRequestDispatcher("/WEB-INF/Admin/programar-documentacion.jsp").forward(req, res);
         }
-        // LOGICA DE LA RAMA UNION (Listar notificaciones pendientes)
         else if ("/servlet-notificaciones".equals(path)) {
             HttpSession sesion = req.getSession(false);
 
@@ -71,7 +68,6 @@ public class ServletNotificaciones extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
-        // Lógica exclusiva de /servlet-crear-notificacion
         ServicioPeriodos servicioPeriodos = new ServicioPeriodos();
         BeanPeriodo periodoActivo = servicioPeriodos.automatizacionPeriodos();
         req.setAttribute("periodoActivo", periodoActivo);
@@ -104,7 +100,7 @@ public class ServletNotificaciones extends HttpServlet {
             creandoNotificacion.setId_usuario_docente(docenteId);
         }
 
-        // Prueba de datos notificaciones
+        // Prueba de datos
         System.out.println("====== PROBANDO DATOS ENTRANTES ======");
         System.out.println("Docente ID: " + creandoNotificacion.getId_usuario_docente());
         System.out.println("Comentario: " + creandoNotificacion.getDescripcion());
@@ -115,12 +111,16 @@ public class ServletNotificaciones extends HttpServlet {
 
         BeanNotificacion nuevaNoti = servicioNotificacion.crearNotificacion(creandoNotificacion);
 
+        // AQUÍ ES DONDE ESTABA EL PROBLEMA (Se dejó limpio con una sola validación)
         if (nuevaNoti != null) {
-            // Se agregó .forward(req, res) que faltaba en el código original
-            req.getRequestDispatcher("/WEB-INF/Admin/perfil.jsp").forward(req, res);
+            // ÉXITO: Guardamos un mensaje en la sesión y redirigimos a la lista de notificaciones
+            req.getSession().setAttribute("mensajeExito", "¡Notificación enviada correctamente al docente!");
+            res.sendRedirect(req.getContextPath() + "/servlet-notificaciones");
         } else {
-            System.out.println("faltan datos o falla algo en la notificacion");
-            req.getRequestDispatcher("/WEB-INF/Admin/programar-documentacion.jsp").forward(req, res);
+            // ERROR: Si algo falla (ej. faltan datos), regresamos a la pantalla de redactar
+            System.out.println("Faltan datos o falla algo en la notificacion");
+            req.getSession().setAttribute("mensajeError", "Ocurrió un error al enviar la notificación. Verifica los datos.");
+            res.sendRedirect(req.getContextPath() + "/servlet-enviar-mensaje");
         }
     }
 }

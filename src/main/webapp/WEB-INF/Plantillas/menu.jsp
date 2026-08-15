@@ -91,15 +91,6 @@
                 </a>
             </div>
         </c:if>
-
-        <c:if test="${not empty sessionScope.adminLogueado}">
-            <div class="p-2 border-top border-white border-opacity-25">
-                <a href="${pageContext.request.contextPath}/servlet-crear-notificacion" class="list-group-item list-group-item-action text-white bg-transparent border-0 px-3 py-2 d-flex align-items-center gap-2">
-                    <i class="bi bi-bell-fill"></i>
-                    <span>Notificaciones</span>
-                </a>
-            </div>
-        </c:if>
     </div>
 </div>
 
