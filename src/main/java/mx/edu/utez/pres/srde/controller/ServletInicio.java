@@ -40,7 +40,6 @@ public class ServletInicio extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
-        // Asegurar codificación de caracteres para que no se corrompan las contraseñas
         req.setCharacterEncoding("UTF-8");
         String correoStr = req.getParameter("correoUsuario");
         String passwordStr = req.getParameter("password");
@@ -49,13 +48,13 @@ public class ServletInicio extends HttpServlet {
         BeanUsuario usuarioLogueado = servicioUsuario.verificarUsuario(correoStr, passwordStr);
 
         if (usuarioLogueado != null) {
-            // Invalidamos cualquier sesión previa para no arrastrar el rol de un login anterior
+            // Invalidar sesión previa
             HttpSession sesionPrevia = req.getSession(false);
             if (sesionPrevia != null) {
                 sesionPrevia.invalidate();
             }
-            
-            // Creamos la nueva sesión limpia
+
+            // Nueva sesión limpia
             HttpSession sesion = req.getSession(true);
 
             if ("Administrador".equals(usuarioLogueado.getRol())) {
@@ -63,20 +62,15 @@ public class ServletInicio extends HttpServlet {
                 BeanAdmin admin = servicioAdmin.datosAdmin(usuarioLogueado.getId());
                 sesion.setAttribute("adminLogueado", admin);
 
-                int idAdmin = admin.getId();
-                System.out.println(idAdmin);
-                req.getRequestDispatcher("/WEB-INF/Admin/perfil.jsp").forward(req, res);
-
             } else {
                 ServicioDocente serviceDocente = new ServicioDocente();
                 BeanDocente datosDocente = serviceDocente.datosDocente(usuarioLogueado.getId());
                 sesion.setAttribute("docenteLogueado", datosDocente);
-
-                int idDocente = datosDocente.getId();
-                req.getRequestDispatcher("/WEB-INF/Docente/perfilDocente.jsp").forward(req, res);
             }
+            res.sendRedirect(req.getContextPath() + "/servlet-inicio");
+
         } else {
-            req.setAttribute("mensajeError", "Usuario o Contraseña incorrectos");
+            req.setAttribute("mensajeError", "Usuario o contraseña incorrectos, o cuenta inactiva.");
             req.getRequestDispatcher("/index.jsp").forward(req, res);
         }
     }

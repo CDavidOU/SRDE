@@ -70,7 +70,7 @@
           <div id="contacto-docente" class="row g-3 mb-4">
             <div class="col-6">
               <label class="fw-bold mb-1 fs-5 text-secondary" for="telefono">Teléfono:</label>
-              <input class="form-control p-2" type="tel" id="telefono" name="telefono" required pattern="[0-9]{10}" placeholder="Ej: 7773712397" required>
+              <input class="form-control p-2" type="tel" id="telefono" name="telefono" required pattern="[0-9]{10}" placeholder="Ej: 7773712397" required minlength="10" maxlength="10">
             </div>
             <div class="col-6">
               <label class="fw-bold mb-1 fs-5 text-secondary" for="correo">Correo Electrónico:</label>
@@ -89,6 +89,8 @@
           </div>
 
         </form>
+
+
       </div>
 
     </div>
