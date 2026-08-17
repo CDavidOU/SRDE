@@ -59,25 +59,36 @@ public class ServletRegistroEstudiante extends HttpServlet {
             res.sendRedirect(req.getContextPath() + "/index.jsp");
             return;
         }
-        //este nos servira en caso de ser el form del admin asignara el docente
-        int idDocenteDestino = 0;
 
+        int idDocenteDestino = 0;
         if (docenteLogueado != null) {
-            // Si es docente, se autoasigna
             idDocenteDestino = docenteLogueado.getId();
         } else if (adminLogueado != null) {
-            // Si es admin, recuperamos el ID del profesor seleccionado en el <select>
             String strIdDocente = req.getParameter("idDocenteAsignado");
             if (strIdDocente != null && !strIdDocente.trim().isEmpty()) {
                 try {
                     idDocenteDestino = Integer.parseInt(strIdDocente.trim());
                 } catch (NumberFormatException e) {
-                    System.err.println("Error al parsear el ID del docente seleccionado por el Admin: " + e.getMessage());
+                    System.err.println("Error al parsear el ID del docente: " + e.getMessage());
                 }
             }
         }
 
-        // Parseo del cuatrimestre
+        ServicioPeriodos servicioPeriodos = new ServicioPeriodos();
+        BeanPeriodo periodoActual = servicioPeriodos.automatizacionPeriodos();
+
+        if (idDocenteDestino > 0 && periodoActual != null) {
+            ServicioAsignacionEstadias servicioAsignacion = new ServicioAsignacionEstadias();
+            int totalActual = servicioAsignacion.contarEstudiantes(idDocenteDestino, periodoActual.getId_periodo(), null);
+
+            if (totalActual >= 10) {
+                req.setAttribute("mensajeError", "El docente seleccionado ya ha alcanzado el límite máximo permitido (10 estudiantes).");
+                recargarVistaFormulario(req, res, adminLogueado);
+                return;
+            }
+        }
+
+        // Parseo de cuatrimestre
         String strCuatrimestre = req.getParameter("cuatrimestre");
         int cuatrimestre = 0;
         if (strCuatrimestre != null && !strCuatrimestre.trim().isEmpty()) {
@@ -87,6 +98,7 @@ public class ServletRegistroEstudiante extends HttpServlet {
                 System.err.println("Error parseando cuatrimestre: " + e.getMessage());
             }
         }
+
         BeanEstudiante estudiante = new BeanEstudiante();
         estudiante.setNombre(req.getParameter("nombre"));
         estudiante.setApellido(req.getParameter("apellido"));
@@ -100,66 +112,63 @@ public class ServletRegistroEstudiante extends HttpServlet {
         BeanEstudiante registroEstudiante = null;
         String errorOracle = null;
 
-        // Controlamos la excepción de la base de datos (Unique Constraint) para evitar caídas en el servidor
         try {
             registroEstudiante = nuevoRegistro.registrarEstudiante(estudiante);
         } catch (Exception e) {
             errorOracle = e.getMessage();
-            System.err.println("Error capturado al insertar en base de datos: " + errorOracle);
+            System.err.println("Error capturado al insertar en BD: " + errorOracle);
         }
 
         if (registroEstudiante != null) {
-            if (idDocenteDestino > 0) {
-                ServicioPeriodos servicioPeriodos = new ServicioPeriodos();
-                BeanPeriodo periodoActual = servicioPeriodos.automatizacionPeriodos();
+            boolean asignadoConExito = false;
 
-                if (periodoActual != null) {
-                    ServicioAsignacionEstadias servicioAsignacionEstadias = new ServicioAsignacionEstadias();
+            if (idDocenteDestino > 0 && periodoActual != null) {
+                ServicioAsignacionEstadias servicioAsignacionEstadias = new ServicioAsignacionEstadias();
 
-                    int idAsignacionGenerada = servicioAsignacionEstadias.registroAsignacionEstadias(
-                            idDocenteDestino,
-                            periodoActual.getId_periodo(),
-                            registroEstudiante.getMatricula()
-                    );
+                int idAsignacionGenerada = servicioAsignacionEstadias.registroAsignacionEstadias(
+                        idDocenteDestino,
+                        periodoActual.getId_periodo(),
+                        registroEstudiante.getMatricula()
+                );
 
-                    // Inicializar documentos con el ID del docente a cargo
-                    if (idAsignacionGenerada > 0) {
-                        ServicioDocumento servicioDoc = new ServicioDocumento();
-                        servicioDoc.inicializarDocumento(idAsignacionGenerada, idDocenteDestino);
-                    }
+                if (idAsignacionGenerada > 0) {
+                    asignadoConExito = true;
+                    ServicioDocumento servicioDoc = new ServicioDocumento();
+                    servicioDoc.inicializarDocumento(idAsignacionGenerada, idDocenteDestino);
                 }
             }
 
-            // GUARDAR EN SESIÓN PARA SOBREVIVIR AL REDIRECT
-            System.out.println("Estoy en servletRegistro y si ingrese al estudiante");
-            System.out.println("Estudiante registrado y asignado correctamente.");
-            sesion.setAttribute("mensajeOk", "Se ha ingresado el estudiante correctamente.");
-
-            if (adminLogueado != null) {
-                // Ruta corregida:
-                res.sendRedirect(req.getContextPath() + "/servlet-admin-estudiantes");
+            if (asignadoConExito) {
+                sesion.setAttribute("mensajeOk", "Se ha ingresado el estudiante correctamente.");
+                if (adminLogueado != null) {
+                    res.sendRedirect(req.getContextPath() + "/servlet-admin-estudiantes");
+                } else {
+                    res.sendRedirect(req.getContextPath() + "/servlet-lista-estudiantes");
+                }
             } else {
-                // Verifica que esta ruta también sea correcta para el docente
-                res.sendRedirect(req.getContextPath() + "/servlet-lista-estudiantes");
+                req.setAttribute("mensajeError", "El estudiante se registró, pero no se pudo asignar debido a que se alcanzó el límite de 10 alumnos.");
+                recargarVistaFormulario(req, res, adminLogueado);
             }
 
         } else {
-            // Determinamos el mensaje exacto si ocurrió la restricción del nombre único de Oracle
             String mensajeFinal = (errorOracle != null && errorOracle.contains("UQ_ESTUDIANTE_NOMBRE"))
                     ? "Error: Ya existe un estudiante registrado con ese mismo nombre."
                     : "Error: La matrícula ya existe o faltan campos obligatorios.";
 
             req.setAttribute("mensajeError", mensajeFinal);
+            recargarVistaFormulario(req, res, adminLogueado);
+        }
+    }
 
-            if (adminLogueado != null) {
-                ServicioDocente servicioDocente = new ServicioDocente();
-                List<BeanDocente> listaDocente = servicioDocente.listaDocente();
-                req.setAttribute("listaDocent", listaDocente);
-
-                req.getRequestDispatcher("WEB-INF/Admin/registro-estudiantes-admin.jsp").forward(req, res);
-            } else {
-                req.getRequestDispatcher("WEB-INF/Docente/registro-estudiantes.jsp").forward(req, res);
-            }
+    private void recargarVistaFormulario(HttpServletRequest req, HttpServletResponse res, BeanAdmin adminLogueado)
+            throws ServletException, IOException {
+        if (adminLogueado != null) {
+            ServicioDocente servicioDocente = new ServicioDocente();
+            List<BeanDocente> listaDocente = servicioDocente.listaDocente();
+            req.setAttribute("listaDocente", listaDocente); // Nombre corregido (decía listaDocent en tu código anterior)
+            req.getRequestDispatcher("WEB-INF/Admin/registro-estudiantes-admin.jsp").forward(req, res);
+        } else {
+            req.getRequestDispatcher("WEB-INF/Docente/registro-estudiantes.jsp").forward(req, res);
         }
     }
 }
