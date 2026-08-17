@@ -11,13 +11,12 @@
 <body class="bg-light">
 
 <form action="${pageContext.request.contextPath}/servlet-inicio" method="POST">
-    <div class="container min-vh-100 d-flex align-items-center justify-content-center py-4">
+    <div class="container min-vh-100 d-flex align-items-center justify-content-center ">
 
         <!-- Ancho de la tarjeta en pantalla -->
-        <div class="col-12 col-md-8 col-lg-6">
+        <div class="col-12 col-md-6 col-lg-4">
 
-            <!-- LOGO: Controlamos la altura para que no se vea gigante -->
-            <div class="text-center mb-3">
+            <div class="text-center mb-0">
                 <img src="${pageContext.request.contextPath}/imagenes/UtezLogo.png"
                      class="img-fluid"
                      alt="Logo UTEZ"
@@ -67,12 +66,6 @@
                     <div class="text-center mb-3">
                         <button class="btn text-white fw-bold w-100" style="background-color: #429983;" type="submit">Iniciar</button>
                     </div>
-
-                    <!-- Botón pruebas (opcional) -->
-                    <div class="text-center">
-                        <a class="btn btn-sm btn-outline-secondary" href="test-vista.jsp">Pruebas</a>
-                    </div>
-
                 </div>
             </div>
 

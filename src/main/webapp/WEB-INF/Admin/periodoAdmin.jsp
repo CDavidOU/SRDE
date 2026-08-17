@@ -51,7 +51,7 @@
             <a href="${pageContext.request.contextPath}/listaCalendariosServlet"
                class="btn btn-success position-absolute end-0 me-3 d-flex align-items-center justify-content-center shadow-sm"
                style="width: 38px; height: 38px; z-index: 40;"
-               title="Calendarios Programados">
+               title="Calendario de Documentos">
                 <i class="bi bi-calendar-plus fs-5"></i>
             </a>
         </div>

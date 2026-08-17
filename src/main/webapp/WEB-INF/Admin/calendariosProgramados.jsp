@@ -55,6 +55,7 @@
                                 ${periodoActivo != null ? periodoActivo.nombre_periodo : 'Sin Periodo Activo'}
                             </strong>
                         </h5>
+                        <a class="btn text-white" href="${pageContext.request.contextPath}/servlet-crear-calendario" style="background-color: #429983">Nuevo Calendario</a>
                     </div>
                     <c:if test="${not empty mensajeCorrecto}">
                         <div class="alert alert-success" role="alert">

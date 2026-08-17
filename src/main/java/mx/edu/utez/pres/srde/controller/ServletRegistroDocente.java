@@ -12,6 +12,7 @@ import mx.edu.utez.pres.srde.model.BeanUsuario;
 import mx.edu.utez.pres.srde.service.ServicioRegistroDocente;
 
 import java.io.IOException;
+import java.text.Normalizer;
 
 @WebServlet(name = "servletRegistroDocente", value = "/servlet-registro-docente")
 public class ServletRegistroDocente extends HttpServlet {
@@ -40,7 +41,7 @@ public class ServletRegistroDocente extends HttpServlet {
         req.setCharacterEncoding("UTF-8");
 
         String nombre = req.getParameter("nombre");
-        
+
         // Compatibilidad de parámetros entre la rama Carlos y union
         String apellido = req.getParameter("apellido");
         if (apellido == null) {
@@ -51,12 +52,12 @@ public class ServletRegistroDocente extends HttpServlet {
 
         String correo = req.getParameter("correo");
         String telefono = req.getParameter("telefono");
-        
+
         String academia = req.getParameter("academia");
         if (academia == null) {
             academia = req.getParameter("area");
         }
-        
+
         String carrera = req.getParameter("carrera");
 
         // Validación de campos vacíos de la rama union
@@ -83,10 +84,15 @@ public class ServletRegistroDocente extends HttpServlet {
         BeanUsuario usuarioDocente = new BeanUsuario();
         usuarioDocente.setRol("Docente");
         usuarioDocente.setDatosPersona(nuevoDocente);
-        
-        // Generación de contraseña de la rama Carlos
-        String contrasenaAutomatica = (nombre.trim() + apellido.trim()).toLowerCase().replace(" ", "");
-        usuarioDocente.setPassword(contrasenaAutomatica);
+
+        // Normalizamos para quitar acentos y caracteres especiales (ej. 'María José' ->)
+        String textoBase = nombre.trim() + apellido.trim();
+        String contrasenaLimpia = Normalizer.normalize(textoBase, Normalizer.Form.NFD)
+                .replaceAll("\\p{M}", "")      // Elimina los acentos/tildes
+                .replaceAll("[^a-zA-Z0-9]", "") // Elimina cualquier carácter que no sea letra o número
+                .toLowerCase();                // Todo a minúsculas
+
+        usuarioDocente.setPassword(contrasenaLimpia);
 
         ServicioRegistroDocente servicioRegistroDocente = new ServicioRegistroDocente();
         String resultado = servicioRegistroDocente.registrarTodoElDocente(nuevoDocente, usuarioDocente);
@@ -94,9 +100,12 @@ public class ServletRegistroDocente extends HttpServlet {
         if ("EXISTE".equals(resultado)) {
             req.setAttribute("mensajeError", "El correo ya se encuentra registrado por otro docente.");
             req.getRequestDispatcher("WEB-INF/Admin/registro-docente.jsp").forward(req, res);
-        } else if ("EXITO".equals(resultado)) {
-            req.setAttribute("mensajeExito", "¡Docente registrado con éxito! Contraseña: " + contrasenaAutomatica);
-            req.getRequestDispatcher("WEB-INF/Admin/registro-docente.jsp").forward(req, res);
+        }else if ("EXITO".equals(resultado)) {
+            // Guardas el mensaje en la sesión para que sobreviva a la redirección (sendRedirect)
+            sesion.setAttribute("mensajeOk", "¡Docente registrado con éxito! Contraseña: " + usuarioDocente.getPassword());
+
+            // Rediriges al SERVLET que consulta y muestra la lista de docentes
+            res.sendRedirect(req.getContextPath() + "/servlet-lista-docentes");
         } else {
             req.setAttribute("mensajeError", "Ocurrió un error interno en la base de datos.");
             req.getRequestDispatcher("WEB-INF/Admin/registro-docente.jsp").forward(req, res);

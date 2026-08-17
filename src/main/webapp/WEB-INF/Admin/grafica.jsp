@@ -49,7 +49,7 @@
                     </div>
                     <div class="col-4">
                         <div class="card border-0 shadow-sm rounded-3 text-center p-3 text-white" style="background-color: #D4AC0D;">
-                            <span class="fs-6 fw-bold"><c:out value="${periodoActual.nombre_periodo}" /></span>
+                            <span class="fs-4 fw-bold"><c:out value="${periodoActual.nombre_periodo}" /></span>
                             <span class="fs-6">Periodo actual</span>
                         </div>
                     </div>

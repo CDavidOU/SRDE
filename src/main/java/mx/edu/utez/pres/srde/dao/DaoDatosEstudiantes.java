@@ -44,4 +44,29 @@ public class DaoDatosEstudiantes {
         }
         return estudiante;
     }
+
+    public boolean actualizarEstudiante(BeanEstudiante estudiante) {
+        boolean actualizado = false;
+        // Ajusta los nombres de las columnas si en tu BD se llaman diferente
+        String sql = "UPDATE ESTUDIANTE SET NOMBRE = ?, APELLIDO = ?, CARRERA = ?, CUATRIMESTRE = ?, GRUPO = ?, CORREO = ?, ESTADO = ? WHERE MATRICULA = ?";
+
+        try (Connection conexion = Conexion.getConexion();
+             PreparedStatement prs = conexion.prepareStatement(sql)) {
+
+            prs.setString(1, estudiante.getNombre());
+            prs.setString(2, estudiante.getApellido());
+            prs.setString(3, estudiante.getCarrera());
+            prs.setInt(4, estudiante.getCuatrimestre());
+            prs.setString(5, estudiante.getGrupo());
+            prs.setString(6, estudiante.getCorreo());
+            prs.setString(7, estudiante.getEstado());
+            prs.setString(8, estudiante.getMatricula());
+
+            actualizado = prs.executeUpdate() > 0;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return actualizado;
+    }
 }
