@@ -118,6 +118,9 @@
                                                style="background-color: #002E60">
                                                 Detalles <i class="bi bi-journal-text ms-1"></i>
                                             </a>
+
+                                            <!-- Formulario para Desasignar -->
+
                                         </td>
                                     </tr>
                                 </c:forEach>
