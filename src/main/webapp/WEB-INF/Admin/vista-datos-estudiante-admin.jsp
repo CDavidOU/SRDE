@@ -23,7 +23,7 @@
                         <div class="row align-items-center justify-content-between">
                                 <!-- Botón Regresar -->
                                 <div class="col-auto">
-                                        <a href="javascript:history.back()" class="btn btn-outline-light d-flex align-items-center gap-2">
+                                        <a href="${pageContext.request.contextPath}/servlet-admin-estudiantes" class="btn btn-outline-light d-flex align-items-center gap-2">
                                                 <i class="bi bi-arrow-left fs-5"></i>
                                         </a>
                                 </div>
@@ -137,7 +137,7 @@
                                                                                                         <span class="badge bg-success"><i class="bi bi-check-circle-fill me-1"></i> Revisado</span>
                                                                                                 </c:when>
                                                                                                 <c:otherwise>
-                                                                                                        <span class="badge bg-warning text-dark"><i class="bi bi-hourglass-split me-1"></i> Pendiente</span>
+                                                                                                        <span class="badge text-white" style="background-color: #D4AC0D;"><i class="bi bi-hourglass-split me-1"></i> Pendiente</span>
                                                                                                 </c:otherwise>
                                                                                         </c:choose>
                                                                                 </div>
@@ -174,21 +174,21 @@
                                                                                                 <c:when test="${not empty sessionScope.adminLogueado || not empty sessionScope.docenteLogueado || (doc.tieneCalendario && doc.puedeSubir)}">
                                                                                                         <c:choose>
                                                                                                                 <c:when test="${!doc.revisado}">
-                                                                                                                        <button type="submit" name="accion" value="marcar" class="btn btn-success fw-bold shadow-sm flex-grow-1">
-                                                                                                                                <i class="bi bi-check2-circle me-1"></i> Marcar Revisado
+                                                                                                                        <button type="submit" name="accion" value="marcar" class="btn fw-bold text-white shadow-sm flex-grow-1" style="background-color: #429983;">
+                                                                                                                                <i class="bi bi-check2-circle me-1"></i> Revisar
                                                                                                                         </button>
                                                                                                                 </c:when>
                                                                                                                 <c:otherwise>
                                                                                                                         <button type="submit" name="accion" value="desmarcar" class="btn fw-bold text-white shadow-sm flex-grow-1" style="background-color: #D4AC0D;">
-                                                                                                                                <i class="bi bi-arrow-counterclockwise me-1"></i> Quitar Revisado
+                                                                                                                                <i class="bi bi-arrow-counterclockwise me-1"></i> Pendiente
                                                                                                                         </button>
                                                                                                                 </c:otherwise>
                                                                                                         </c:choose>
 
-                                                                                                        <button type="button" class="btn fw-bold text-white shadow-sm flex-grow-1" style="background-color: #D4AC0D;" onclick="activarEdicion(${doc.id_tipo_doc})">
+                                                                                                        <button type="button" class="btn fw-bold text-white shadow-sm flex-grow-1" style="background-color: #345177;" onclick="activarEdicion(${doc.id_tipo_doc})">
                                                                                                                 <i class="bi bi-pencil-square me-1"></i> Editar
                                                                                                         </button>
-                                                                                                        <button type="submit" form="formEliminar_${doc.id_tipo_doc}" class="btn btn-danger fw-bold shadow-sm flex-grow-1">
+                                                                                                        <button type="submit" form="formEliminar_${doc.id_tipo_doc}" class="btn fw-bold shadow-sm flex-grow-1" style="background-color: #C85252; color: white" >
                                                                                                                 Eliminar
                                                                                                         </button>
                                                                                                 </c:when>

@@ -20,12 +20,12 @@
     </div>
 
     <div id="cambiantes" class="flex-grow-1 d-flex flex-column">
-        <!-- Encabezado corregido -->
+        <!-- Encabezado -->
         <div class="text-center w-100 mb-4 text-white m-0 py-3 px-4" style="background-color: #002E60;">
             <div class="row align-items-center justify-content-between">
                 <!-- Botón Regresar -->
                 <div class="col-auto">
-                    <a href="javascript:history.back()" class="btn btn-outline-light d-flex align-items-center gap-2">
+                    <a href="${pageContext.request.contextPath}/servlet-lista-estudiantes" class="btn btn-outline-light d-flex align-items-center gap-2">
                         <i class="bi bi-arrow-left fs-5"></i>
                     </a>
                 </div>
@@ -135,10 +135,10 @@
                                             <label class="fw-bold fs-5 mb-0">Observaciones</label>
                                             <c:choose>
                                                 <c:when test="${doc.revisado}">
-                                                    <span class="badge bg-success"><i class="bi bi-check-circle-fill me-1"></i> Revisado</span>
+                                                    <span class="badge text-white" style="background-color: #429983;"><i class="bi bi-check-circle-fill me-1"></i> Revisado</span>
                                                 </c:when>
                                                 <c:otherwise>
-                                                    <span class="badge bg-warning text-dark"><i class="bi bi-hourglass-split me-1"></i> Pendiente</span>
+                                                    <span class="badge text-white" style="background-color: #D4AC0D;"><i class="bi bi-hourglass-split me-1"></i> Pendiente</span>
                                                 </c:otherwise>
                                             </c:choose>
                                         </div>
@@ -151,52 +151,53 @@
                                     <div class="row g-2 mt-2">
 
                                         <!-- BOTONES: MODO VISTA -->
-                                        <div id="botones_vista_${doc.id_tipo_doc}" class="col-12 d-flex gap-2 align-items-center">
+                                        <div id="botones_vista_${doc.id_tipo_doc}" class="col-12 d-flex gap-2 align-items-stretch">
                                             <c:choose>
                                                 <c:when test="${doc.tieneCalendario && doc.puedeSubir}">
 
                                                     <!-- Marcar / Desmarcar Revisado -->
                                                     <c:choose>
                                                         <c:when test="${!doc.revisado}">
-                                                            <button type="submit" name="accion" value="marcar" class="btn btn-success fw-bold shadow-sm flex-grow-1">
-                                                                <i class="bi bi-check2-circle me-1"></i> Marcar Revisado
+                                                            <button type="submit" name="accion" value="marcar" class="btn fw-bold text-white shadow-sm d-flex align-items-center justify-content-center text-nowrap py-2 px-1" style="background-color: #429983; flex: 1 1 0px; font-size: 0.88rem;">
+                                                                <i class="bi bi-check2-circle me-1"></i> Revisar
                                                             </button>
                                                         </c:when>
                                                         <c:otherwise>
-                                                            <button type="submit" name="accion" value="desmarcar" class="btn btn-warning fw-bold text-dark shadow-sm flex-grow-1">
-                                                                <i class="bi bi-arrow-counterclockwise me-1"></i> Quitar Revisado
+                                                            <button type="submit" name="accion" value="desmarcar" class="btn fw-bold text-white shadow-sm d-flex align-items-center justify-content-center text-nowrap py-2 px-1" style="background-color: #D4AC0D; flex: 1 1 0px; font-size: 0.88rem;">
+                                                                <i class="bi bi-arrow-counterclockwise me-1"></i> Pendiente
                                                             </button>
                                                         </c:otherwise>
                                                     </c:choose>
 
                                                     <!-- Editar y Eliminar -->
-                                                    <button type="button" class="btn fw-bold text-white shadow-sm flex-grow-1" style="background-color: #D4AC0D;" onclick="activarEdicion(${doc.id_tipo_doc})">
+                                                    <button type="button" class="btn fw-bold text-white shadow-sm d-flex align-items-center justify-content-center text-nowrap py-2 px-1" style="background-color: #3C5A80; flex: 1 1 0px; font-size: 0.88rem;" onclick="activarEdicion(${doc.id_tipo_doc})">
                                                         <i class="bi bi-pencil-square me-1"></i> Editar
                                                     </button>
-                                                    <button type="submit" form="formEliminar_${doc.id_tipo_doc}" class="btn btn-danger fw-bold shadow-sm flex-grow-1">
+                                                    <button type="submit" form="formEliminar_${doc.id_tipo_doc}" class="btn fw-bold shadow-sm d-flex align-items-center justify-content-center text-nowrap py-2 px-1" style="flex: 1 1 0px; font-size: 0.88rem; background-color: #C85252; color: white">
                                                         Eliminar
                                                     </button>
                                                 </c:when>
 
                                                 <c:otherwise>
-                                                    <!-- Plazo Vencido -->
-                                                    <span class="badge bg-secondary align-self-center py-2 px-3">
+                                                    <!-- Plazo Vencido (Exactamente 50% de ancho) -->
+                                                    <button type="button" class="btn btn-secondary fw-bold shadow-sm disabled d-flex align-items-center justify-content-center text-nowrap py-2 px-1" style="opacity: 0.85; pointer-events: none; flex: 1 1 0px; font-size: 0.88rem;">
                                                         <i class="bi bi-lock-fill me-1"></i> Plazo vencido
-                                                    </span>
+                                                    </button>
                                                 </c:otherwise>
                                             </c:choose>
 
-                                            <a href="servlet-ver-documento?idArchivo=${doc.id_archivo}" target="_blank" class="btn fw-bold text-white shadow-sm flex-grow-1" style="background-color: #002E60;">
+                                            <!-- Abrir Archivo -->
+                                            <a href="servlet-ver-documento?idArchivo=${doc.id_archivo}" target="_blank" class="btn fw-bold text-white shadow-sm d-flex align-items-center justify-content-center text-nowrap py-2 px-1" style="background-color: #002E60; flex: 1 1 0px; font-size: 0.88rem;">
                                                 Abrir archivo
                                             </a>
                                         </div>
 
                                         <!-- BOTONES: MODO EDICIÓN -->
-                                        <div id="botones_edicion_${doc.id_tipo_doc}" class="col-12 d-flex gap-2 d-none">
-                                            <button type="submit" class="btn fw-bold text-white shadow-sm flex-grow-1" style="background-color: #429983;">
+                                        <div id="botones_edicion_${doc.id_tipo_doc}" class="col-12 d-flex gap-2 align-items-stretch d-none">
+                                            <button type="submit" class="btn fw-bold text-white shadow-sm d-flex align-items-center justify-content-center text-nowrap py-2 px-1" style="background-color: #429983; flex: 1 1 0px; font-size: 0.88rem;">
                                                 <i class="bi bi-check-circle me-1"></i> Guardar Cambios
                                             </button>
-                                            <button type="button" class="btn btn-secondary fw-bold shadow-sm flex-grow-1" onclick="cancelarEdicion(${doc.id_tipo_doc})">
+                                            <button type="button" class="btn btn-secondary fw-bold shadow-sm d-flex align-items-center justify-content-center text-nowrap py-2 px-1" style="flex: 1 1 0px; font-size: 0.88rem;" onclick="cancelarEdicion(${doc.id_tipo_doc})">
                                                 Cancelar
                                             </button>
                                         </div>
@@ -217,7 +218,7 @@
                 </c:if>
 
                 <!-- ==========================================
-                ESTADO 2: DOCUMENTO NO SUBIDO (AMARILLO)
+                ESTADO 2: DOCUMENTO NO SUBIDO (AMARILLO / PENDIENTE)
                 ========================================== -->
                 <c:if test="${doc.estado == 'Pendiente'}">
                     <div class="card shadow-sm mb-4 border-0" style="background-color: #f8f9fa;">

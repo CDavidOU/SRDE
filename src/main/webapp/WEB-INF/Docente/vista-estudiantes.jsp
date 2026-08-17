@@ -120,13 +120,7 @@
                                             </a>
 
                                             <!-- Formulario para Desasignar -->
-                                            <form action="${pageContext.request.contextPath}/servlet-eliminar-asignacion" method="POST" class="d-inline" onsubmit="return confirm('¿Estás seguro de desasignar a este estudiante?');">
-                                                <input type="hidden" name="matricula" value="${asignacionEstadias.matricula}" />
-                                                <input type="hidden" name="id_periodo" value="${asignacionEstadias.id_periodo}" />
-                                                <button class="btn btn-link text-dark p-0 ms-1 align-middle" type="submit" title="Desasignar">
-                                                    <i class="bi bi-arrow-down-up fs-5"></i>
-                                                </button>
-                                            </form>
+
                                         </td>
                                     </tr>
                                 </c:forEach>
