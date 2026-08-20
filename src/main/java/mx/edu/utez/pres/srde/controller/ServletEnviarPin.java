@@ -6,6 +6,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import mx.edu.utez.pres.srde.service.ServiceUsuario;
+import mx.edu.utez.pres.srde.service.ServicioCorreo;
 
 import java.io.IOException;
 
@@ -36,16 +37,18 @@ public class ServletEnviarPin extends HttpServlet {
         boolean pinGuardado = servicioUsuario.asignarTokenUsuario(correo.trim(), pin);
 
         if (pinGuardado) {
-            // 3. TODO: Aquí llamaremos a la clase JavaMail para enviar el correo (siguiente paso)
-            // Por ahora, lo imprimimos en la consola de IntelliJ para que lo puedas ver y probar
-            System.out.println("======================================");
-            System.out.println("SIMULACIÓN DE CORREO ENVIADO");
-            System.out.println("Para: " + correo);
-            System.out.println("PIN de recuperación: " + pin);
-            System.out.println("======================================");
+            // Llamamos a la clase que creamos para que envíe el correo de verdad
+            ServicioCorreo servicioCorreo = new ServicioCorreo();
+            boolean correoEnviado = servicioCorreo.enviarPinRecuperacion(correo.trim(), pin);
 
-            // 4. Redirigir al servlet de la pantalla 2, pasando el correo por la URL
-            res.sendRedirect(req.getContextPath() + "/servlet-restablecer?correo=" + correo.trim());
+            if (correoEnviado) {
+                // Si el correo se fue con éxito, pasamos a la pantalla de escribir el PIN
+                res.sendRedirect(req.getContextPath() + "/servlet-restablecer?correo=" + correo.trim());
+            } else {
+                req.setAttribute("mensajeError", "No pudimos enviar el correo. Verifica tu conexión.");
+                req.getRequestDispatcher("/olvide-password.jsp").forward(req, res);
+            }
+
         } else {
             req.setAttribute("mensajeError", "Error al generar el PIN de recuperación.");
             req.getRequestDispatcher("/olvide-password.jsp").forward(req, res);

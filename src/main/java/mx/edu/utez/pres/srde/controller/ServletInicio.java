@@ -70,7 +70,7 @@ public class ServletInicio extends HttpServlet {
             res.sendRedirect(req.getContextPath() + "/servlet-inicio");
 
         } else {
-            req.setAttribute("mensajeError", "Usuario o contraseña incorrectos, o cuenta inactiva.");
+            req.setAttribute("mensajeError", "Credenciales incorrectas o cuenta inactiva.");
             req.getRequestDispatcher("/index.jsp").forward(req, res);
         }
     }
