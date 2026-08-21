@@ -24,11 +24,9 @@
     <div id="cambiantes" class="flex-grow-1 d-flex flex-column bg-light">
 
         <!-- Encabezado con Botón de Registro Integrado -->
-        <!-- Usamos bg-primary (o style solo si el azul institucional es estricto) -->
         <div class="w-100 position-relative d-flex align-items-center justify-content-center py-3 text-white" style="background-color: #002E60">
             <h1 class="m-0 fs-2 fw-normal">Estudiantes</h1>
 
-            <!-- Botón de registrar (Usando clases de posición y tamaño de Bootstrap) -->
             <a href="${pageContext.request.contextPath}/servlet-registro-estudiante"
                class="btn btn-success position-absolute end-0 me-4 d-flex align-items-center justify-content-center p-0 rounded"
                style="width: 38px; height: 38px;"
@@ -38,7 +36,7 @@
         </div>
 
         <!-- Área de Datos -->
-        <div id="datos" class="p-4 flex-grow-1 ">
+        <div id="datos" class="p-4 flex-grow-1">
             <div class="container" style="max-width: 800px;">
                 <div class="card border-0 shadow-sm p-4 bg-white rounded-3 w-100" style="max-width: 850px;">
 
@@ -46,7 +44,7 @@
                     <form action="${pageContext.request.contextPath}/servlet-lista-estudiantes" method="post" class="mb-4">
                         <div id="busqueda" class="row g-2">
 
-                            <!-- Caja de texto (reducida a 8 columnas) -->
+                            <!-- Caja de texto -->
                             <div class="col-8">
                                 <div class="input-group h-100">
                                     <span class="input-group-text bg-white border-end-0">
@@ -61,11 +59,10 @@
                                 </div>
                             </div>
 
-                            <!-- Contenedor de botones (4 columnas) usando Flexbox -->
+                            <!-- Contenedor de botones -->
                             <div class="col-4 d-flex gap-2">
                                 <button class="btn btn-success flex-grow-1 fw-medium" type="submit">Buscar</button>
 
-                                <!-- Este botón de Limpiar solo se mostrará si 'terminoBuscado' tiene texto -->
                                 <c:if test="${not empty terminoBuscado}">
                                     <a href="${pageContext.request.contextPath}/servlet-lista-estudiantes"
                                        class="btn btn-outline-secondary flex-grow-1 fw-medium d-flex align-items-center justify-content-center"
@@ -78,54 +75,120 @@
                         </div>
                     </form>
 
-                    <!-- Muestra si se agrego correctamente al estudiante -->
+                    <!-- Mensaje de confirmación -->
                     <c:if test="${not empty sessionScope.mensajeOk}">
-                        <div class="alert alert-success alert-dismissible fade show text-center m-3" role="alert">
+                        <div class="alert alert-success alert-dismissible fade show text-center mb-4" role="alert">
                             <c:out value="${sessionScope.mensajeOk}" />
                             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                         </div>
-                        <%-- Limpiamos el mensaje de la sesión para que no vuelva a aparecer al recargar --%>
                         <c:remove var="mensajeOk" scope="session" />
                     </c:if>
 
-                    <!-- Tabla de Estudiantes -->
+                    <!-- Tablas de Estudiantes -->
                     <div id="Estudiantes" class="row">
                         <div class="col-12">
-                            <table class="table align-middle bg-white border-1">
-                                <thead>
-                                <tr class="border-bottom">
-                                    <th class="fs-6 text-secondary">Matrícula</th>
-                                    <th class="fs-6 text-secondary">Nombre</th>
-                                    <th class="fs-6 text-secondary">Apellido</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <c:forEach var="asignacionEstadias" items="${listaEstudiantesActivos}">
-                                    <tr class="border-bottom">
-                                        <td class="py-3 fs-5">
-                                            <c:out value="${asignacionEstadias.estudiante.matricula}" />
-                                        </td>
-                                        <td class="py-3 fs-5">
-                                            <c:out value="${asignacionEstadias.estudiante.nombre}" />
-                                        </td>
-                                        <td class="py-3 fs-5">
-                                            <c:out value="${asignacionEstadias.estudiante.apellido}" />
-                                        </td>
-                                        <td class="py-3 text-end text-nowrap">
-                                            <!-- Botón de Detalles -->
-                                            <a href="servlet-datos-estudiante?matricula=${asignacionEstadias.estudiante.matricula}"
-                                               class="btn px-3 py-1 me-2 text-white"
-                                               style="background-color: #002E60">
-                                                Detalles <i class="bi bi-journal-text ms-1"></i>
-                                            </a>
+                            <c:choose>
+                                <c:when test="${not empty listaEstudiantesActivos}">
 
-                                            <!-- Formulario para Desasignar -->
+                                    <!-- ==========================================
+                                    1. TABLA: ESTUDIANTES ACTIVOS
+                                    ========================================== -->
+                                    <c:set var="hayActivos" value="false" />
+                                    <c:forEach var="item" items="${listaEstudiantesActivos}">
+                                        <c:if test="${item.estudiante.estado eq 'Activo'}">
+                                            <c:set var="hayActivos" value="true" />
+                                        </c:if>
+                                    </c:forEach>
 
-                                        </td>
-                                    </tr>
-                                </c:forEach>
-                                </tbody>
-                            </table>
+                                    <c:if test="${hayActivos}">
+                                        <div class="d-flex align-items-center my-3">
+                                            <span class="fw-bold text-success text-uppercase small me-3">Activos</span>
+                                            <hr class="flex-grow-1 my-0 text-secondary opacity-25">
+                                        </div>
+
+                                        <table class="table align-middle bg-white border-1 mb-4">
+                                            <thead>
+                                            <tr class="border-bottom">
+                                                <th class="fs-6 text-secondary">Matrícula</th>
+                                                <th class="fs-6 text-secondary">Nombre</th>
+                                                <th class="fs-6 text-secondary">Apellido</th>
+                                                <th class="fs-6 text-secondary"></th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <c:forEach var="item" items="${listaEstudiantesActivos}">
+                                                <c:if test="${item.estudiante.estado eq 'Activo'}">
+                                                    <tr class="border-bottom">
+                                                        <td class="py-3 fs-6"><c:out value="${item.estudiante.matricula}" /></td>
+                                                        <td class="py-3 fs-6"><c:out value="${item.estudiante.nombre}" /></td>
+                                                        <td class="py-3 fs-6"><c:out value="${item.estudiante.apellido}" /></td>
+                                                        <td class="py-3 text-end text-nowrap">
+                                                            <a href="servlet-datos-estudiante?matricula=${item.estudiante.matricula}"
+                                                               class="btn px-3 py-1 me-2 text-white"
+                                                               style="background-color: #002E60">
+                                                                Detalles <i class="bi bi-journal-text ms-1"></i>
+                                                            </a>
+                                                        </td>
+                                                    </tr>
+                                                </c:if>
+                                            </c:forEach>
+                                            </tbody>
+                                        </table>
+                                    </c:if>
+
+                                    <!-- ==========================================
+                                    2. SECCIÓN Y TABLA: INACTIVOS
+                                    ========================================== -->
+                                    <c:set var="hayInactivos" value="false" />
+                                    <c:forEach var="item" items="${listaEstudiantesActivos}">
+                                        <c:if test="${item.estudiante.estado ne 'Activo'}">
+                                            <c:set var="hayInactivos" value="true" />
+                                        </c:if>
+                                    </c:forEach>
+
+                                    <c:if test="${hayInactivos}">
+                                        <div class="d-flex align-items-center my-3">
+                                            <span class="fw-bold text-danger text-uppercase small me-3">Inactivos</span>
+                                            <hr class="flex-grow-1 my-0 text-secondary opacity-25">
+                                        </div>
+
+                                        <table class="table align-middle border-1 mb-0" style="background-color: #fdfdfd;">
+                                            <thead>
+                                            <tr class="border-bottom">
+                                                <th class="fs-6 text-secondary">Matrícula</th>
+                                                <th class="fs-6 text-secondary">Nombre</th>
+                                                <th class="fs-6 text-secondary">Apellido</th>
+                                                <th class="fs-6 text-secondary"></th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <c:forEach var="item" items="${listaEstudiantesActivos}">
+                                                <c:if test="${item.estudiante.estado ne 'Activo'}">
+                                                    <tr class="border-bottom text-muted">
+                                                        <td class="py-3 fs-6"><c:out value="${item.estudiante.matricula}" /></td>
+                                                        <td class="py-3 fs-6"><c:out value="${item.estudiante.nombre}" /></td>
+                                                        <td class="py-3 fs-6"><c:out value="${item.estudiante.apellido}" /></td>
+                                                        <td class="py-3 text-end text-nowrap">
+                                                            <a href="servlet-datos-estudiante?matricula=${item.estudiante.matricula}"
+                                                               class="btn px-3 py-1 me-2 text-white"
+                                                               style="background-color: #002E60">
+                                                                Detalles <i class="bi bi-journal-text ms-1"></i>
+                                                            </a>
+                                                        </td>
+                                                    </tr>
+                                                </c:if>
+                                            </c:forEach>
+                                            </tbody>
+                                        </table>
+                                    </c:if>
+
+                                </c:when>
+                                <c:otherwise>
+                                    <div class="text-center text-secondary fs-5 py-4">
+                                        No hay estudiantes registrados.
+                                    </div>
+                                </c:otherwise>
+                            </c:choose>
                         </div>
                     </div>
 

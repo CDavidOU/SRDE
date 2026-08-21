@@ -13,30 +13,25 @@ import mx.edu.utez.pres.srde.service.ServicioDocumento;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet(name = "servletDatosEstudiante",value = "/servlet-datos-estudiante")
+@WebServlet(name = "servletDatosEstudiante", value = "/servlet-datos-estudiante")
 public class ServletDatosEstudiante extends HttpServlet {
 
     @Override
     public void doGet(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
         HttpSession sesion = req.getSession(false);
 
-        // 1. Declarar la variable intentando obtenerla de la sesión
-        Object adminLogueado = null;
-        if (sesion != null) {
-            adminLogueado = sesion.getAttribute("adminLogueado");
-        }
-
-        // 2. Validar que exista una sesión activa
+        // 1. Validar sesión activa
         if (sesion == null || (sesion.getAttribute("docenteLogueado") == null && sesion.getAttribute("adminLogueado") == null)) {
             res.sendRedirect(req.getContextPath() + "/index.jsp");
             return;
         }
 
-        ServicioDatosEstudiantes servicioDatosEstudiante = new ServicioDatosEstudiantes();
+        Object adminLogueado = sesion.getAttribute("adminLogueado");
         String matricula = req.getParameter("matricula");
 
-        // 3. Buscar los datos del estudiante
+        // 2. Buscar datos del estudiante
         if (matricula != null && !matricula.trim().isEmpty()) {
+            ServicioDatosEstudiantes servicioDatosEstudiante = new ServicioDatosEstudiantes();
             BeanEstudiante estudiante = servicioDatosEstudiante.datosEstudiante(matricula);
 
             if (estudiante != null) {
@@ -46,35 +41,23 @@ public class ServletDatosEstudiante extends HttpServlet {
                 List<BeanArchivo> listaDocumentos = servicioDoc.obtenerDocumentosPorMatricula(matricula);
                 req.setAttribute("listaDocumentos", listaDocumentos);
 
-                // ==========================================
-                // AQUÍ ESTÁ LA CORRECCIÓN DE LAS RUTAS
-                // ==========================================
+                // Rutas con diagonal inicial (/) obligatoria
                 if (adminLogueado != null) {
-                    // Si es Admin, va a la carpeta Admin
-                    req.getRequestDispatcher("WEB-INF/Admin/vista-datos-estudiante-admin.jsp").forward(req, res);
+                    req.getRequestDispatcher("/WEB-INF/Admin/vista-datos-estudiante-admin.jsp").forward(req, res);
                 } else {
-                    // Si es Docente, va a la carpeta Docente
-                    req.getRequestDispatcher("WEB-INF/Docente/vista-datos-estudiante.jsp").forward(req, res);
+                    req.getRequestDispatcher("/WEB-INF/Docente/vista-datos-estudiante.jsp").forward(req, res);
                 }
                 return;
             }
         }
 
-        // ==========================================
-        // CORRECCIÓN SI LA MATRÍCULA NO SE ENCUENTRA
-        // ==========================================
+        // 3. Redirección si la matrícula es inválida o no existe
         System.out.println("Matrícula inválida o no encontrada");
 
         if (adminLogueado != null) {
-            // Lo regresamos a la tabla de estudiantes del administrador
             res.sendRedirect(req.getContextPath() + "/servlet-admin-estudiantes");
         } else {
-            // Lo regresamos a la tabla de estudiantes del docente
-            // (Verifica que este sea el nombre correcto de tu Servlet de lista para el docente)
-            res.sendRedirect(req.getContextPath() + "/servlet-lista-estudiantes-docente");
+            res.sendRedirect(req.getContextPath() + "/servlet-lista-estudiantes");
         }
     }
-
-    //Aqui estara el doPost
-
 }

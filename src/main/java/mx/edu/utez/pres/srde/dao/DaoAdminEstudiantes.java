@@ -12,13 +12,13 @@ import java.util.List;
 
 public class DaoAdminEstudiantes {
 
+    // Eliminamos el filtro estricto de es.estado = 'Activo'
     private static final String SQL_BASE =
             "SELECT es.matricula, es.nombre, es.apellido, es.carrera, es.estado, " +
-            "d.nombre AS docente_nombre, d.apellido AS docente_apellido " +
-            "FROM estudiante es " +
-            "LEFT JOIN asignacion_estadias ae ON es.matricula = ae.matricula AND ae.id_periodo = ? " +
-            "LEFT JOIN docente d ON ae.id_usuario_docente = d.id_usuario " +
-            "WHERE es.estado = 'Activo' ";
+                    "d.nombre AS docente_nombre, d.apellido AS docente_apellido " +
+                    "FROM estudiante es " +
+                    "LEFT JOIN asignacion_estadias ae ON es.matricula = ae.matricula AND ae.id_periodo = ? " +
+                    "LEFT JOIN docente d ON ae.id_usuario_docente = d.id_usuario ";
 
     public List<BeanEstudiante> listaEstudiantes(int idPeriodo) {
         List<BeanEstudiante> listaEstudiantes = new ArrayList<>();
@@ -43,7 +43,8 @@ public class DaoAdminEstudiantes {
 
     public List<BeanEstudiante> buscarEstudiantes(int idPeriodo, String condicion) {
         List<BeanEstudiante> listaEstudiantes = new ArrayList<>();
-        String sql = SQL_BASE + "AND (LOWER(es.nombre) LIKE LOWER(?) OR LOWER(es.apellido) LIKE LOWER(?) OR LOWER(es.matricula) LIKE LOWER(?)) " +
+        // Agregamos WHERE para el buscador
+        String sql = SQL_BASE + "WHERE (LOWER(es.nombre) LIKE LOWER(?) OR LOWER(es.apellido) LIKE LOWER(?) OR LOWER(es.matricula) LIKE LOWER(?)) " +
                 "ORDER BY es.nombre, es.apellido";
 
         try (Connection conexion = Conexion.getConexion();
@@ -67,6 +68,7 @@ public class DaoAdminEstudiantes {
         }
         return listaEstudiantes;
     }
+
     private BeanEstudiante mapearEstudiante(ResultSet rs) throws SQLException {
         BeanEstudiante estudiante = new BeanEstudiante();
         estudiante.setMatricula(rs.getString("matricula"));

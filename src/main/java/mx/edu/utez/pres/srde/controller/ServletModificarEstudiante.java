@@ -5,18 +5,22 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import mx.edu.utez.pres.srde.dao.DaoDatosEstudiantes;
 import mx.edu.utez.pres.srde.model.BeanEstudiante;
 
 import java.io.IOException;
 
-@WebServlet (name = "ServletModificarEstudiante", value = "/servlet-modificar-estudiante")
+@WebServlet(name = "ServletModificarEstudiante", value = "/servlet-modificar-estudiante")
 public class ServletModificarEstudiante extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
 
-        // 1. Recoger parámetros del formulario de la vista
+        HttpSession sesion = request.getSession(false);
+        boolean esAdmin = (sesion != null && sesion.getAttribute("adminLogueado") != null);
+
+        // 1. Recoger parámetros del formulario
         String matricula = request.getParameter("matricula");
         String nombre = request.getParameter("nombre");
         String apellido = request.getParameter("apellido");
@@ -24,9 +28,21 @@ public class ServletModificarEstudiante extends HttpServlet {
         int cuatrimestre = Integer.parseInt(request.getParameter("cuatrimestre"));
         String grupo = request.getParameter("grupo");
         String correo = request.getParameter("correo");
-        String estado = request.getParameter("estado");
 
-        // 2. Construir el Bean
+        DaoDatosEstudiantes dao = new DaoDatosEstudiantes();
+
+        // 2. Determinar el estado
+        String estado;
+        if (esAdmin) {
+            // El admin sí envía el valor desde su <select name="estado">
+            estado = request.getParameter("estado");
+        } else {
+            // El docente no puede alterarlo; conservamos el estado actual de la BD
+            BeanEstudiante estudianteActual = dao.datosEstudiante(matricula);
+            estado = (estudianteActual != null) ? estudianteActual.getEstado() : "Activo";
+        }
+
+        // 3. Construir el Bean
         BeanEstudiante estudiante = new BeanEstudiante();
         estudiante.setMatricula(matricula);
         estudiante.setNombre(nombre);
@@ -37,12 +53,11 @@ public class ServletModificarEstudiante extends HttpServlet {
         estudiante.setCorreo(correo);
         estudiante.setEstado(estado);
 
-        // 3. Mandar a guardar al DAO
-        DaoDatosEstudiantes dao = new DaoDatosEstudiantes();
+        // 4. Guardar en base de datos
         boolean exito = dao.actualizarEstudiante(estudiante);
 
-        // 4. Redirigir de vuelta a la vista del estudiante (Ajusta el nombre de tu servlet de vista si es diferente)
-        if(exito){
+        // 5. Redireccionar
+        if (exito) {
             response.sendRedirect(request.getContextPath() + "/servlet-datos-estudiante?matricula=" + matricula + "&msg=success");
         } else {
             response.sendRedirect(request.getContextPath() + "/servlet-datos-estudiante?matricula=" + matricula + "&msg=error");

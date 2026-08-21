@@ -1,4 +1,4 @@
-<%@page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
 <!doctype html>
@@ -6,90 +6,80 @@
 <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Detalles de Estudiante - Administración</title>
-        <!-- Bootstrap CSS -->
+        <title>Perfil de Estudiante - Administración</title>
+        <!-- Bootstrap y Iconos -->
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-        <!-- Bootstrap Icons -->
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 </head>
 <body>
+
 <div id="contenido" class="d-flex min-vh-100">
 
-        <!-- Menú Lateral Estático -->
+        <!-- Menú Lateral -->
         <div id="menu" class="border-end" style="width: 180px; flex-shrink: 0; position: sticky; top: 0; height: 100vh; overflow-y: auto;">
                 <jsp:include page="../Plantillas/menu.jsp" />
         </div>
 
+        <!-- Contenido Principal -->
         <div id="cambiantes" class="flex-grow-1 d-flex flex-column">
-                <!-- Encabezado -->
-                <div class="text-center w-100 mb-4 text-white m-0 py-3 px-4" style="background-color: #002E60;">
-                        <div class="row align-items-center justify-content-between">
-                                <!-- Botón Regresar -->
-                                <div class="col-auto">
-                                        <a href="javascript:history.back()" class="btn btn-outline-light d-flex align-items-center gap-2">
-                                                <i class="bi bi-arrow-left fs-5"></i>
-                                        </a>
-                                </div>
 
-                                <!-- Título Centrado -->
+                <!-- Encabezado -->
+                <div class="text-center w-100 mb-4 text-white py-3 px-4" style="background-color: #002E60;">
+                        <div class="row align-items-center justify-content-between">
                                 <div class="col text-center">
                                         <h1 class="m-0 fs-2 fw-semibold">Perfil del Estudiante</h1>
                                 </div>
                         </div>
                 </div>
 
-                <!-- Contenedor principal de información -->
                 <div class="w-100 px-4 mx-auto" style="max-width: 950px;">
-                        <form action="${pageContext.request.contextPath}/servlet-modificar-estudiante" method="POST" id="formPerfilEstudiante">
 
-                                <!-- La matrícula no debe editarse porque es la llave primaria, la enviamos oculta -->
+                        <!-- ==========================================
+                             1. FORMULARIO DE DATOS PERSONALES
+                        ========================================== -->
+                        <form action="${pageContext.request.contextPath}/servlet-modificar-estudiante" method="POST" id="formPerfil">
                                 <input type="hidden" name="matricula" value="${datosEstudiante.matricula}">
 
-                                <!-- Datos personales -->
                                 <div class="row g-3 mb-3">
                                         <div class="col-4">
-                                                <label class="fw-bold fs-5 mb-1">Nombre(s):</label>
+                                                <label class="fw-bold mb-1">Nombre(s):</label>
                                                 <input class="form-control input-perfil bg-light" type="text" name="nombre" value="${datosEstudiante.nombre}" readonly required>
                                         </div>
                                         <div class="col-4">
-                                                <label class="fw-bold fs-5 mb-1">Apellido(s):</label>
+                                                <label class="fw-bold mb-1">Apellido(s):</label>
                                                 <input class="form-control input-perfil bg-light" type="text" name="apellido" value="${datosEstudiante.apellido}" readonly required>
                                         </div>
                                         <div class="col-4">
-                                                <label class="fw-bold fs-5 mb-1">Matrícula:</label>
+                                                <label class="fw-bold mb-1">Matrícula:</label>
                                                 <input class="form-control bg-light" type="text" value="${datosEstudiante.matricula}" disabled>
-                                                <!-- Se muestra disabled por seguridad visual, pero el valor real viaja en el input oculto de arriba -->
                                         </div>
                                 </div>
 
-                                <!-- Carrera, Cuatrimestre y Grupo -->
                                 <div class="row g-3 mb-3">
                                         <div class="col-4">
-                                                <label class="fw-bold fs-5 mb-1">Carrera:</label>
+                                                <label class="fw-bold mb-1">Carrera:</label>
                                                 <input class="form-control input-perfil bg-light" type="text" name="carrera" value="${datosEstudiante.carrera}" readonly required>
                                         </div>
                                         <div class="col-4">
-                                                <label class="fw-bold fs-5 mb-1">Cuatrimestre:</label>
+                                                <label class="fw-bold mb-1">Cuatrimestre:</label>
                                                 <select class="form-select input-perfil bg-light" name="cuatrimestre" disabled required>
-                                                        <!-- Comparamos con enteros (6 y 11) porque en tu Bean es un int -->
                                                         <option value="6" ${datosEstudiante.cuatrimestre == 6 ? 'selected' : ''}>6</option>
                                                         <option value="11" ${datosEstudiante.cuatrimestre == 11 ? 'selected' : ''}>11</option>
                                                 </select>
                                         </div>
                                         <div class="col-4">
-                                                <label class="fw-bold fs-5 mb-1">Grupo:</label>
+                                                <label class="fw-bold mb-1">Grupo:</label>
                                                 <input class="form-control input-perfil bg-light" type="text" name="grupo" value="${datosEstudiante.grupo}" readonly required>
                                         </div>
                                 </div>
 
-                                <!-- Correo y Estado -->
                                 <div class="row g-3 mb-3">
                                         <div class="col-6">
-                                                <label class="fw-bold fs-5 mb-1">Correo:</label>
+                                                <label class="fw-bold mb-1">Correo:</label>
                                                 <input class="form-control input-perfil bg-light" type="email" name="correo" value="${datosEstudiante.correo}" readonly required>
                                         </div>
                                         <div class="col-6">
-                                                <label class="fw-bold fs-5 mb-1">Estado:</label>
+                                                <label class="fw-bold mb-1">Estado:</label>
                                                 <select class="form-select input-perfil bg-light" name="estado" disabled required>
                                                         <option value="Activo" ${datosEstudiante.estado == 'Activo' ? 'selected' : ''}>Activo</option>
                                                         <option value="Inactivo" ${datosEstudiante.estado == 'Inactivo' ? 'selected' : ''}>Inactivo</option>
@@ -97,310 +87,215 @@
                                         </div>
                                 </div>
 
-                                <!-- Botones de Acción In-line -->
-                                <div class="row mt-4 mb-2">
-                                        <div class="col-12 d-flex justify-content-end gap-2">
-                                                <!-- VISTA MODO NORMAL -->
-                                                <button type="button" id="btnEditarPerfil" class="btn text-white fw-bold shadow-sm px-4" onclick="activarEdicionPerfil()" style="background-color: #002E60">
-                                                        <i class="bi bi-pencil-square me-2"></i> Editar datos
-                                                </button>
-
-                                                <!-- VISTA MODO EDICIÓN (Ocultos por defecto) -->
-                                                <button type="button" id="btnCancelarPerfil" class="btn btn-secondary fw-bold shadow-sm d-none" onclick="cancelarEdicionPerfil()">
-                                                        Cancelar
-                                                </button>
-                                                <button type="submit" id="btnGuardarPerfil" class="btn text-white fw-bold shadow-sm d-none" style="background-color: #429983;">
-                                                        <i class="bi bi-save me-1"></i> Guardar Cambios
-                                                </button>
-                                        </div>
+                                <div class="d-flex justify-content-end gap-2 mt-3 mb-4">
+                                        <button type="button" id="btnEditar" class="btn text-white fw-bold px-4" onclick="toggleEdicion(true)" style="background-color: #002E60">
+                                                <i class="bi bi-pencil-square me-1"></i> Editar datos
+                                        </button>
+                                        <button type="button" id="btnCancelar" class="btn btn-secondary fw-bold d-none" onclick="toggleEdicion(false)">
+                                                Cancelar
+                                        </button>
+                                        <button type="submit" id="btnGuardar" class="btn text-white fw-bold d-none" style="background-color: #429983;">
+                                                <i class="bi bi-save me-1"></i> Guardar Cambios
+                                        </button>
                                 </div>
                         </form>
 
-                        <!-- Título separador para la sección de documentos -->
-                        <div class="w-100 mt-5 mb-4 border-bottom pb-2">
+                        <!-- ==========================================
+                             2. SECCIÓN DE DOCUMENTOS
+                        ========================================== -->
+                        <div class="w-100 border-bottom pb-2 mb-4">
                                 <h3 class="fw-bold" style="color: #002E60;">Documentos del Estudiante</h3>
                         </div>
 
-                        <!-- Iterador de Documentos -->
                         <c:forEach var="doc" items="${listaDocumentos}">
+                                <%-- Permisos: Admin siempre puede, Docente solo si está a tiempo --%>
+                                <c:set var="esAdmin" value="${not empty sessionScope.adminLogueado}" />
+                                <c:set var="estaVencido" value="${!doc.puedeSubir && doc.tieneCalendario}" />
+                                <c:set var="puedeModificar" value="${esAdmin || (!estaVencido && doc.tieneCalendario)}" />
 
-                                <!-- ==========================================
-                                ESTADO 1: DOCUMENTO YA SUBIDO (VERDE)
-                                ========================================== -->
-                                <c:if test="${doc.estado == 'Completado'}">
-                                        <div class="card shadow-sm mb-4 border-0" style="background-color: #f8f9fa;">
-                                                <div class="card-body row g-0">
+                                <%-- Color del Icono:
+                                     - Verde (#429983): Si ya está revisado
+                                     - Azul (#002E60): Subido pero falta revisar
+                                     - Rojo (#C85252): Sin archivo y ya venció fecha
+                                     - Amarillo (#D4AC0D): Sin archivo pero aún tiene tiempo
+                                --%>
+                                <c:choose>
+                                        <c:when test="${doc.estado eq 'Completado' && doc.revisado}">
+                                                <c:set var="colorCard" value="#429983" />
+                                        </c:when>
+                                        <c:when test="${doc.estado eq 'Completado' && !doc.revisado}">
+                                                <c:set var="colorCard" value="#002E60" />
+                                        </c:when>
+                                        <c:when test="${estaVencido}">
+                                                <c:set var="colorCard" value="#C85252" />
+                                        </c:when>
+                                        <c:otherwise>
+                                                <c:set var="colorCard" value="#D4AC0D" />
+                                        </c:otherwise>
+                                </c:choose>
 
-                                                        <!-- FORMULARIO ÚNICO DE MODIFICACIÓN -->
-                                                        <form action="<%=request.getContextPath()%>/servlet-modificar-observacion" method="POST" id="formModificar_${doc.id_tipo_doc}" enctype="multipart/form-data" class="col-12 d-flex m-0">
+                                <!-- Tarjeta del Documento -->
+                                <div class="card shadow-sm mb-4 border-0" style="background-color: #f8f9fa;">
+                                        <div class="card-body row g-0">
 
-                                                                <input type="hidden" name="idAsignacion" value="${datosEstudiante.idAsignacion}">
-                                                                <input type="hidden" name="matricula" value="${datosEstudiante.matricula}">
-                                                                <input type="hidden" name="idTipoDoc" value="${doc.id_tipo_doc}">
-
-                                                                <!-- LADO IZQUIERDO: Logo o Input de Archivo -->
-                                                                <div class="col-3 d-flex flex-column align-items-center justify-content-center pe-3 border-end">
-
-                                                                        <!-- VISTA NORMAL (Logo Verde) -->
-                                                                        <div id="vista_icono_${doc.id_tipo_doc}" class="w-100">
-                                                                                <div class="w-100 text-center rounded p-3 mb-2 text-white shadow-sm" style="background-color: #429983;">
-                                                                                        <i class="bi bi-file-earmark-text-fill" style="font-size: 4rem;"></i>
-                                                                                </div>
-                                                                                <div class="w-100 text-center py-2 rounded text-white fw-bold shadow-sm" style="background-color: #429983;">
-                                                                                                ${doc.nombre_archivo}
-                                                                                </div>
-                                                                        </div>
-
-                                                                        <!-- VISTA EDICIÓN (Input para reemplazar - Oculto por defecto) -->
-                                                                        <div id="vista_subir_${doc.id_tipo_doc}" class="w-100 d-none text-center">
-                                                                                <div class="w-100 text-center rounded p-3 mb-2 text-white shadow-sm" style="background-color: #D4AC0D;">
-                                                                                        <i class="bi bi-upload" style="font-size: 3rem;"></i>
-                                                                                </div>
-                                                                                <label class="fw-bold text-secondary small mb-1">Reemplazar archivo:</label>
-                                                                                <input type="file" class="form-control form-control-sm border-warning" name="nuevoArchivoPDF" accept=".pdf">
-                                                                        </div>
-                                                                </div>
-
-                                                                <!-- LADO DERECHO: Observaciones y Botones -->
-                                                                <div class="col-9 ps-4 d-flex flex-column justify-content-between">
-                                                                        <div>
-                                                                                <div class="d-flex justify-content-between align-items-center mb-1">
-                                                                                        <label class="fw-bold fs-5 mb-0">Observaciones</label>
-                                                                                        <c:choose>
-                                                                                                <c:when test="${doc.revisado}">
-                                                                                                        <span class="badge bg-success"><i class="bi bi-check-circle-fill me-1"></i> Revisado</span>
-                                                                                                </c:when>
-                                                                                                <c:otherwise>
-                                                                                                        <span class="badge text-white" style="background-color: #D4AC0D;"><i class="bi bi-hourglass-split me-1"></i> Pendiente</span>
-                                                                                                </c:otherwise>
-                                                                                        </c:choose>
-                                                                                </div>
-
-                                                                                <!-- Textarea bloqueado por defecto (readonly) -->
-                                                                                <textarea id="obs_${doc.id_tipo_doc}" class="form-control mb-2 bg-white" style="resize: none;" name="observaciones" rows="2" readonly>${doc.observaciones}</textarea>
-
-                                                                                <div class="d-flex justify-content-between">
-                                            <span class="text-muted small fw-bold">
-                                                Subido el:
-                                                <c:choose>
-                                                        <c:when test="${not empty doc.fechaSubida}">
-                                                                <fmt:parseDate value="${doc.fechaSubida}" pattern="yyyy-MM-dd'T'HH:mm" var="parsedDateTime" type="both" />
-                                                                <fmt:formatDate pattern="dd/MM/yyyy HH:mm" value="${parsedDateTime}" />
-                                                        </c:when>
-                                                        <c:otherwise>
-                                                                No disponible
-                                                        </c:otherwise>
-                                                </c:choose>
-                                            </span>
-                                                                                        <span class="text-muted small fw-bold">
-                                                Límite: <c:out value="${doc.fecha_limite}" default="Sin asignar" />
-                                            </span>
-                                                                                </div>
-                                                                        </div>
-
-                                                                        <div class="row g-2 mt-3">
-
-                                                                                <!-- BOTONES: MODO VISTA -->
-                                                                                <div id="botones_vista_${doc.id_tipo_doc}" class="col-12 d-flex gap-2">
-
-                                                                                        <!-- Llave Maestra: Administrador o si está a tiempo -->
-                                                                                        <c:choose>
-                                                                                                <c:when test="${sessionScope.usuarioLogueado.rol eq 'Administrador' || (doc.tieneCalendario && doc.puedeSubir)}">
-                                                                                                        <c:choose>
-                                                                                                                <c:when test="${!doc.revisado}">
-                                                                                                                        <button type="submit" name="accion" value="marcar" class="btn fw-bold text-white shadow-sm flex-grow-1" style="background-color: #429983;">
-                                                                                                                                <i class="bi bi-check2-circle me-1"></i> Revisar
-                                                                                                                        </button>
-                                                                                                                </c:when>
-                                                                                                                <c:otherwise>
-                                                                                                                        <button type="submit" name="accion" value="desmarcar" class="btn fw-bold text-white shadow-sm flex-grow-1" style="background-color: #D4AC0D;">
-                                                                                                                                <i class="bi bi-arrow-counterclockwise me-1"></i> Pendiente
-                                                                                                                        </button>
-                                                                                                                </c:otherwise>
-                                                                                                        </c:choose>
-
-                                                                                                        <button type="button" class="btn fw-bold text-white shadow-sm flex-grow-1" style="background-color: #345177;" onclick="activarEdicion(${doc.id_tipo_doc})">
-                                                                                                                <i class="bi bi-pencil-square me-1"></i> Editar
-                                                                                                        </button>
-                                                                                                        <button type="submit" form="formEliminar_${doc.id_tipo_doc}" class="btn fw-bold shadow-sm flex-grow-1" style="background-color: #C85252; color: white" >
-                                                                                                                Eliminar
-                                                                                                        </button>
-                                                                                                </c:when>
-
-                                                                                                <c:otherwise>
-                                                                                                        <!-- SOLO APLICA A ESTUDIANTES FUERA DE PLAZO (que no son admin) -->
-                                                                                                        <button type="button" class="btn btn-secondary fw-bold shadow-sm flex-grow-1 disabled" style="opacity: 0.8; pointer-events: none;">
-                                                                                                                <i class="bi bi-lock-fill me-1"></i> Plazo vencido
-                                                                                                        </button>
-                                                                                                </c:otherwise>
-                                                                                        </c:choose>
-
-                                                                                        <a href="servlet-ver-documento?idArchivo=${doc.id_archivo}" target="_blank" class="btn fw-bold text-white shadow-sm flex-grow-1" style="background-color: #002E60;">
-                                                                                                Abrir archivo
-                                                                                        </a>
-                                                                                </div>
-
-                                                                                <!-- BOTONES: MODO EDICIÓN (Ocultos por defecto) -->
-                                                                                <div id="botones_edicion_${doc.id_tipo_doc}" class="col-12 d-flex gap-2 d-none">
-                                                                                        <button type="submit" class="btn fw-bold text-white shadow-sm flex-grow-1" style="background-color: #429983;">
-                                                                                                <i class="bi bi-check-circle me-1"></i> Guardar Cambios
-                                                                                        </button>
-                                                                                        <button type="button" class="btn btn-secondary fw-bold shadow-sm flex-grow-1" onclick="cancelarEdicion(${doc.id_tipo_doc})">
-                                                                                                Cancelar
-                                                                                        </button>
-                                                                                </div>
-
-                                                                        </div>
-                                                                </div>
-                                                        </form>
-
-                                                        <!-- Formulario independiente solo para Eliminar -->
-                                                        <form action="<%=request.getContextPath()%>/servlet-eliminar-documento" method="POST" id="formEliminar_${doc.id_tipo_doc}" class="d-none">
-                                                                <input type="hidden" name="idAsignacion" value="${datosEstudiante.idAsignacion}">
-                                                                <input type="hidden" name="idTipoDoc" value="${doc.id_tipo_doc}">
-                                                                <input type="hidden" name="matricula" value="${datosEstudiante.matricula}">
-                                                        </form>
-
-                                                </div>
-                                        </div>
-                                </c:if>
-
-                                <!-- ==========================================
-                                ESTADO 2: DOCUMENTO NO SUBIDO (AMARILLO / PENDIENTE)
-                                ========================================== -->
-                                <c:if test="${doc.estado == 'Pendiente'}">
-                                        <div class="card shadow-sm mb-4 border-0" style="background-color: #f8f9fa;">
-                                                <div class="card-body row g-0">
-                                                        <!-- Izquierda: Icono y Nombre -->
-                                                        <div class="col-3 d-flex flex-column align-items-center justify-content-center pe-3 border-end">
-                                                                <div class="w-100 text-center rounded p-3 mb-2 text-white shadow-sm" style="background-color: #D4AC0D;">
-                                                                        <i class="bi bi-file-earmark-text-fill" style="font-size: 4rem;"></i>
-                                                                </div>
-                                                                <div class="w-100 text-center py-2 rounded text-white fw-bold shadow-sm" style="background-color: #D4AC0D;">
-                                                                                ${doc.nombre_archivo}
-                                                                </div>
+                                                <!-- Icono y Nombre -->
+                                                <div class="col-3 d-flex flex-column align-items-center justify-content-center pe-3 border-end">
+                                                        <div class="w-100 text-center rounded p-3 mb-2 text-white shadow-sm" style="background-color: ${colorCard};">
+                                                                <i class="bi bi-file-earmark-text-fill" style="font-size: 3.5rem;"></i>
                                                         </div>
+                                                        <div class="w-100 text-center py-2 rounded text-white fw-bold small shadow-sm" style="background-color: ${colorCard};">
+                                                                <c:out value="${doc.nombre_archivo}" />
+                                                        </div>
+                                                </div>
 
-                                                        <!-- Derecha: Observaciones y Formulario -->
-                                                        <div class="col-9 ps-4 d-flex flex-column justify-content-between">
-                                                                <!-- Llave Maestra: Administrador o si está a tiempo -->
+                                                <!-- Información y Acciones -->
+                                                <div class="col-9 ps-4 d-flex flex-column justify-content-between">
+
+                                                        <!-- CASO 1: ARCHIVO YA SUBIDO -->
+                                                        <c:if test="${doc.estado eq 'Completado'}">
+                                                                <form action="${pageContext.request.contextPath}/servlet-modificar-observacion" method="POST" id="formDoc_${doc.id_tipo_doc}" enctype="multipart/form-data">
+                                                                        <input type="hidden" name="idAsignacion" value="${datosEstudiante.idAsignacion}">
+                                                                        <input type="hidden" name="matricula" value="${datosEstudiante.matricula}">
+                                                                        <input type="hidden" name="idTipoDoc" value="${doc.id_tipo_doc}">
+
+                                                                        <div class="d-flex justify-content-between align-items-center mb-1">
+                                                                                <label class="fw-bold mb-0">Observaciones</label>
+                                                                                <span class="badge ${doc.revisado ? 'bg-success' : 'text-white'}" style="${!doc.revisado ? 'background-color: #002E60;' : ''}">
+                                            <i class="bi ${doc.revisado ? 'bi-check-circle-fill' : 'bi-hourglass-split'} me-1"></i>
+                                            ${doc.revisado ? 'Revisado' : 'Pendiente de revisión'}
+                                        </span>
+                                                                        </div>
+
+                                                                        <textarea id="obs_${doc.id_tipo_doc}" name="observaciones" class="form-control mb-2 bg-white" rows="2" style="resize: none;" readonly>${doc.observaciones}</textarea>
+
+                                                                        <!-- Campo para reemplazar PDF (Oculto hasta pulsar Editar) -->
+                                                                        <div id="campoReemplazar_${doc.id_tipo_doc}" class="mb-2 d-none">
+                                                                                <label class="small fw-bold text-muted">Reemplazar archivo PDF:</label>
+                                                                                <input type="file" name="nuevoArchivoPDF" class="form-control form-control-sm" accept=".pdf">
+                                                                        </div>
+
+                                                                        <div class="d-flex justify-content-between small text-muted fw-bold mb-3">
+                                                                                <span>Subido el: <c:out value="${doc.fechaSubida}" default="No disponible" /></span>
+                                                                                <span>Límite: <c:out value="${doc.fecha_limite}" default="Sin asignar" /></span>
+                                                                        </div>
+
+                                                                        <!-- Botones de Acción -->
+                                                                        <div class="d-flex gap-2">
+                                                                                <c:choose>
+                                                                                        <c:when test="${puedeModificar}">
+                                                                                                <!-- Botón Revisar / Pendiente -->
+                                                                                                <button type="submit" name="accion" value="${doc.revisado ? 'desmarcar' : 'marcar'}" class="btn text-white fw-bold flex-grow-1" style="background-color: ${doc.revisado ? '#D4AC0D' : '#429983'};">
+                                                                                                        <i class="bi ${doc.revisado ? 'bi-arrow-counterclockwise' : 'bi-check2-circle'} me-1"></i>
+                                                                                                                ${doc.revisado ? 'Pendiente' : 'Revisar'}
+                                                                                                </button>
+
+                                                                                                <!-- Botón Editar Observación/Archivo -->
+                                                                                                <button type="button" class="btn text-white fw-bold flex-grow-1" style="background-color: #345177;" onclick="editarDoc(${doc.id_tipo_doc})">
+                                                                                                        <i class="bi bi-pencil-square me-1"></i> Editar
+                                                                                                </button>
+
+                                                                                                <!-- Botón Guardar cambios de edición (Oculto) -->
+                                                                                                <button type="submit" id="btnGuardarDoc_${doc.id_tipo_doc}" class="btn btn-success fw-bold flex-grow-1 d-none">
+                                                                                                        Guardar
+                                                                                                </button>
+
+                                                                                                <!-- Botón Eliminar -->
+                                                                                                <button type="submit" formaction="${pageContext.request.contextPath}/servlet-eliminar-documento" class="btn btn-danger fw-bold flex-grow-1">
+                                                                                                        Eliminar
+                                                                                                </button>
+                                                                                        </c:when>
+                                                                                        <c:otherwise>
+                                                                                                <button type="button" class="btn btn-secondary fw-bold flex-grow-1 disabled">
+                                                                                                        <i class="bi bi-lock-fill me-1"></i> Plazo vencido
+                                                                                                </button>
+                                                                                        </c:otherwise>
+                                                                                </c:choose>
+
+                                                                                <a href="servlet-ver-documento?idArchivo=${doc.id_archivo}" target="_blank" class="btn text-white fw-bold flex-grow-1" style="background-color: #002E60;">
+                                                                                        Abrir archivo
+                                                                                </a>
+                                                                        </div>
+                                                                </form>
+                                                        </c:if>
+
+                                                        <!-- CASO 2: ARCHIVO PENDIENTE DE SUBIR -->
+                                                        <c:if test="${doc.estado eq 'Pendiente'}">
                                                                 <c:choose>
-                                                                        <c:when test="${sessionScope.usuarioLogueado.rol eq 'Administrador' || (doc.tieneCalendario && doc.puedeSubir)}">
-                                                                                <form action="${pageContext.request.contextPath}/servlet-subir-documentos" method="POST" enctype="multipart/form-data" class="d-flex flex-column h-100 justify-content-between m-0">
-
+                                                                        <c:when test="${puedeModificar}">
+                                                                                <form action="${pageContext.request.contextPath}/servlet-subir-documentos" method="POST" enctype="multipart/form-data">
                                                                                         <input type="hidden" name="matricula" value="${datosEstudiante.matricula}">
                                                                                         <input type="hidden" name="idAsignacion" value="${datosEstudiante.idAsignacion}">
                                                                                         <input type="hidden" name="idTipoDoc" value="${doc.id_tipo_doc}">
                                                                                         <input type="hidden" name="estado" value="Completado">
 
-                                                                                        <div>
-                                                                                                <label class="fw-bold fs-5 mb-1">Observaciones</label>
-                                                                                                <textarea class="form-control mb-1" style="resize: none;" name="observaciones" rows="2" placeholder="Agrega un comentario..."></textarea>
-                                                                                                <span class="text-muted small fw-bold">Fecha de entrega: <c:out value="${doc.fecha_limite}" default="Pendiente / Vencida" /></span>
+                                                                                        <label class="fw-bold mb-1">Observaciones</label>
+                                                                                        <textarea name="observaciones" class="form-control mb-2" rows="2" style="resize: none;" placeholder="Comentario opcional..."></textarea>
+
+                                                                                        <div class="d-flex justify-content-between small text-muted fw-bold mb-2">
+                                                                                                <span>Fecha de entrega: <c:out value="${doc.fecha_limite}" default="Sin asignar" /></span>
+                                                                                                <c:if test="${esAdmin && estaVencido}">
+                                                                                                        <span class="text-danger"><i class="bi bi-shield-lock"></i> Plazo vencido (Permiso Admin)</span>
+                                                                                                </c:if>
                                                                                         </div>
 
-                                                                                        <div class="row mt-2">
-                                                                                                <div class="col-12">
-                                                                                                        <div class="input-group shadow-sm">
-                                                                                                                <input type="file" class="form-control" name="archivoPDF" accept=".pdf" required>
-                                                                                                                <button type="submit" class="btn text-white fw-bold px-5" style="background-color: #429983;">
-                                                                                                                        Subir
-                                                                                                                </button>
-                                                                                                        </div>
-                                                                                                </div>
+                                                                                        <div class="input-group shadow-sm">
+                                                                                                <input type="file" name="archivoPDF" class="form-control" accept=".pdf" required>
+                                                                                                <button type="submit" class="btn text-white fw-bold px-4" style="background-color: #429983;">
+                                                                                                        Subir
+                                                                                                </button>
                                                                                         </div>
                                                                                 </form>
                                                                         </c:when>
-
-                                                                        <c:when test="${!doc.tieneCalendario}">
-                                                                                <div>
-                                                                                        <label class="fw-bold fs-5 mb-1">Observaciones</label>
-                                                                                        <textarea class="form-control mb-1 bg-white" rows="2" style="resize: none;" readonly placeholder="Sin observaciones"></textarea>
-                                                                                        <span class="text-muted small fw-bold">Fecha de entrega: Sin asignar</span>
-                                                                                </div>
-                                                                                <div class="text-warning small fw-bold mt-2">
-                                                                                        <i class="bi bi-exclamation-triangle-fill me-1"></i> Calendario no asignado.
-                                                                                </div>
-                                                                        </c:when>
-
                                                                         <c:otherwise>
                                                                                 <div>
-                                                                                        <label class="fw-bold fs-5 mb-1">Observaciones</label>
-                                                                                        <textarea class="form-control mb-1 bg-white" rows="2" style="resize: none;" readonly placeholder="Plazo de entrega finalizado"></textarea>
-                                                                                        <span class="text-muted small fw-bold">Fecha límite: <c:out value="${doc.fecha_limite}" /></span>
+                                                                                        <label class="fw-bold mb-1">Observaciones</label>
+                                                                                        <textarea class="form-control mb-2 bg-white" rows="2" style="resize: none;" readonly placeholder="Sin observaciones"></textarea>
+                                                                                        <span class="text-muted small fw-bold">Fecha límite: <c:out value="${doc.fecha_limite}" default="Sin asignar" /></span>
                                                                                 </div>
                                                                                 <div class="text-danger small fw-bold mt-2">
                                                                                         <i class="bi bi-clock-history me-1"></i> La fecha límite de entrega ya venció.
                                                                                 </div>
                                                                         </c:otherwise>
                                                                 </c:choose>
-                                                        </div>
+                                                        </c:if>
+
                                                 </div>
                                         </div>
-                                </c:if>
+                                </div>
                         </c:forEach>
+
                 </div>
         </div>
 </div>
 
-<!-- Scripts al final del body -->
+<!-- JavaScript básico -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-        // --- JAVASCRIPT PARA LA SECCIÓN DE DOCUMENTOS ---
-        function activarEdicion(id) {
+        // Activar/desactivar edición del formulario de estudiante
+        function toggleEdicion(activar) {
+                const inputs = document.querySelectorAll('.input-perfil');
+                inputs.forEach(input => {
+                        if (activar) {
+                                input.removeAttribute('readonly');
+                                input.removeAttribute('disabled');
+                                input.classList.remove('bg-light');
+                        } else {
+                                input.setAttribute('readonly', 'true');
+                                if (input.tagName === 'SELECT') input.setAttribute('disabled', 'true');
+                                input.classList.add('bg-light');
+                        }
+                });
+                document.getElementById('btnEditar').classList.toggle('d-none', activar);
+                document.getElementById('btnCancelar').classList.toggle('d-none', !activar);
+                document.getElementById('btnGuardar').classList.toggle('d-none', !activar);
+        }
+
+        // Activar edición de un documento específico
+        function editarDoc(id) {
                 document.getElementById('obs_' + id).removeAttribute('readonly');
-                document.getElementById('vista_icono_' + id).classList.add('d-none');
-                document.getElementById('vista_subir_' + id).classList.remove('d-none');
-                document.getElementById('botones_vista_' + id).classList.add('d-none');
-                document.getElementById('botones_edicion_' + id).classList.remove('d-none');
+                document.getElementById('campoReemplazar_' + id).classList.remove('d-none');
+                document.getElementById('btnGuardarDoc_' + id).classList.remove('d-none');
         }
-
-        function cancelarEdicion(id) {
-                document.getElementById('obs_' + id).setAttribute('readonly', true);
-                document.getElementById('vista_icono_' + id).classList.remove('d-none');
-                document.getElementById('vista_subir_' + id).classList.add('d-none');
-                document.getElementById('botones_vista_' + id).classList.remove('d-none');
-                document.getElementById('botones_edicion_' + id).classList.add('d-none');
-        }
-
-        // --- JAVASCRIPT PARA LA SECCIÓN DE PERFIL ---
-        let valoresOriginales = {};
-
-        function activarEdicionPerfil() {
-                const inputs = document.querySelectorAll('.input-perfil');
-                inputs.forEach(input => {
-                        valoresOriginales[input.name] = input.value;
-                        input.removeAttribute('readonly'); // Para los inputs de texto
-                        input.removeAttribute('disabled'); // Para el select
-                        input.classList.remove('bg-light');
-                });
-
-                document.getElementById('btnEditarPerfil').classList.add('d-none');
-                document.getElementById('btnCancelarPerfil').classList.remove('d-none');
-                document.getElementById('btnGuardarPerfil').classList.remove('d-none');
-        }
-
-        function cancelarEdicionPerfil() {
-                const inputs = document.querySelectorAll('.input-perfil');
-                inputs.forEach(input => {
-                        if(valoresOriginales[input.name] !== undefined){
-                                input.value = valoresOriginales[input.name];
-                        }
-                        input.setAttribute('readonly', 'true'); // Para los inputs de texto
-
-                        // Si es el select, le volvemos a poner el disabled
-                        if(input.tagName === 'SELECT') {
-                                input.setAttribute('disabled', 'true');
-                        }
-
-                        input.classList.add('bg-light');
-                });
-
-                document.getElementById('btnEditarPerfil').classList.remove('d-none');
-                document.getElementById('btnCancelarPerfil').classList.add('d-none');
-                document.getElementById('btnGuardarPerfil').classList.add('d-none');
-        }
-
 </script>
 </body>
 </html>
