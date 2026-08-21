@@ -24,7 +24,7 @@ public class ServletEliminarDocumento extends HttpServlet {
             String paramIdTipoDoc = request.getParameter("idTipoDoc");
 
             if (paramIdAsignacion == null || paramIdTipoDoc == null || matricula == null) {
-                throw new IllegalArgumentException("Parámetros incompletos para eliminar el documento.");
+                throw new IllegalArgumentException("Parámetros incompletos para elimainar el documento.");
             }
 
             int idAsignacion = Integer.parseInt(paramIdAsignacion);
@@ -63,15 +63,21 @@ public class ServletEliminarDocumento extends HttpServlet {
             }
 
         } catch (Exception e) {
-            System.err.println("Error en ServletEliminarDocumento: " + e.getMessage());
-            e.printStackTrace();
+        System.err.println("Error en ServletEliminarDocumento: " + e.getMessage());
+        e.printStackTrace();
 
-            // Si ocurrió un error pero tenemos la matrícula, volvemos a la vista del alumno
-            if (matricula != null && !matricula.isBlank()) {
-                response.sendRedirect(request.getContextPath() + "/servlet-datos-estudiante?matricula=" + matricula + "&error=true");
+        // Si ocurrió un error pero tenemos la matrícula, volvemos a la vista del alumno
+        if (matricula != null && !matricula.isBlank()) {
+            response.sendRedirect(request.getContextPath() + "/servlet-datos-estudiante?matricula=" + matricula + "&error=true");
+        } else {
+            // Recuperar la sesión para saber a dónde redirigir y evitar el error 403
+            HttpSession session = request.getSession(false);
+            if (session != null && session.getAttribute("adminLogueado") != null) {
+                response.sendRedirect(request.getContextPath() + "/servlet-admin-estudiantes?error=true");
             } else {
                 response.sendRedirect(request.getContextPath() + "/servlet-lista-estudiantes?error=true");
             }
         }
+    }
     }
 }

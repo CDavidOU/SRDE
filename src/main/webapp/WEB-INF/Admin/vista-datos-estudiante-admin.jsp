@@ -199,8 +199,8 @@
                                                                                                         Guardar
                                                                                                 </button>
 
-                                                                                                <!-- Botón Eliminar -->
-                                                                                                <button type="submit" formaction="${pageContext.request.contextPath}/servlet-eliminar-documento" class="btn btn-danger fw-bold flex-grow-1">
+                                                                                                <!-- Botón Eliminar (Conectado al formulario oculto) -->
+                                                                                                <button type="submit" form="formEliminar_${doc.id_tipo_doc}" class="btn btn-danger fw-bold flex-grow-1" onclick="return confirm('¿Seguro que deseas eliminar este documento?');">
                                                                                                         Eliminar
                                                                                                 </button>
                                                                                         </c:when>
@@ -215,6 +215,13 @@
                                                                                         Abrir archivo
                                                                                 </a>
                                                                         </div>
+                                                                </form> <!-- CIERRE DEL FORMULARIO PRINCIPAL -->
+
+                                                                <!-- FORMULARIO INDEPENDIENTE PARA ELIMINAR -->
+                                                                <form action="${pageContext.request.contextPath}/servlet-eliminar-documento" method="POST" id="formEliminar_${doc.id_tipo_doc}" class="d-none">
+                                                                        <input type="hidden" name="idAsignacion" value="${datosEstudiante.idAsignacion}">
+                                                                        <input type="hidden" name="idTipoDoc" value="${doc.id_tipo_doc}">
+                                                                        <input type="hidden" name="matricula" value="${datosEstudiante.matricula}">
                                                                 </form>
                                                         </c:if>
 
