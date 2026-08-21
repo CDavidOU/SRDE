@@ -223,11 +223,7 @@ public class DaoDocente {
         // Mantenemos tu consulta original (con el INNER JOIN y el conteo de alumnos)
         // pero agregamos el WHERE con LIKE para buscar coincidencias.
         // Usamos LOWER para que la búsqueda ignore mayúsculas y minúsculas.
-        String sql = "SELECT u.id_usuario, d.nombre, d.apellido, d.carrera, d.telefono, d.academia, u.correo, d.estado, " +
-                "(SELECT COUNT(*) FROM asignacion_estadias ae WHERE ae.id_usuario_docente = u.id_usuario AND ae.id_periodo = ?) AS num_alumnos " +
-                "FROM docente d INNER JOIN usuario u ON d.id_usuario = u.id_usuario " +
-                "WHERE LOWER(d.nombre) LIKE LOWER(?) OR LOWER(d.apellido) LIKE LOWER(?) OR LOWER(d.estado) LIKE LOWER(?) " +
-                "ORDER BY d.nombre, d.apellido";
+        String sql = "SELECT u.id_usuario, d.nombre, d.apellido, d.carrera, d.telefono, d.academia, u.correo, d.estado, (SELECT COUNT(*) FROM asignacion_estadias ae WHERE ae.id_usuario_docente = u.id_usuario AND ae.id_periodo = ?) AS num_alumnos FROM docente d INNER JOIN usuario u ON d.id_usuario = u.id_usuario WHERE LOWER(TRANSLATE(d.nombre, 'ÁÉÍÓÚáéíóú', 'AEIOUaeiou')) LIKE LOWER(TRANSLATE(?, 'ÁÉÍÓÚáéíóú', 'AEIOUaeiou')) OR LOWER(TRANSLATE(d.apellido, 'ÁÉÍÓÚáéíóú', 'AEIOUaeiou')) LIKE LOWER(TRANSLATE(?, 'ÁÉÍÓÚáéíóú', 'AEIOUaeiou')) OR LOWER(TRANSLATE(d.estado, 'ÁÉÍÓÚáéíóú', 'AEIOUaeiou')) LIKE LOWER(TRANSLATE(?, 'ÁÉÍÓÚáéíóú', 'AEIOUaeiou')) ORDER BY d.nombre, d.apellido";
 
         try (Connection con = Conexion.getConexion();
              PreparedStatement ps = con.prepareStatement(sql)) {

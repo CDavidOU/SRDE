@@ -1,5 +1,6 @@
 <%@page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!doctype html>
 <html lang="es">
 <head>
@@ -10,27 +11,10 @@
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
         <style>
-                .input-gris {
-                        background-color: #EFEFEF !important;
-                        border: none !important;
-                        color: #333 !important;
-                }
-                .input-edicion {
-                        background-color: #FFFFFF !important;
-                        border: 1px solid #0557B3 !important;
-                        color: #000 !important;
-                }
-                .card-documento {
-                        background-color: #EBF0F2;
-                        border-radius: 8px;
-                }
-                .box-icono-doc {
-                        height: 100%;
-                        min-height: 150px;
-                        display: flex;
-                        flex-direction: column;
-                        justify-content: space-between;
-                }
+                .input-gris { background-color: #EFEFEF !important; border: none !important; color: #333 !important; }
+                .input-edicion { background-color: #FFFFFF !important; border: 1px solid #0557B3 !important; color: #000 !important; }
+                .card-documento { background-color: #EBF0F2; border-radius: 8px; }
+                .box-icono-doc { height: 100%; min-height: 150px; display: flex; flex-direction: column; justify-content: space-between; }
         </style>
 </head>
 <body class="bg-white">
@@ -42,7 +26,7 @@
         </div>
 
         <div id="cambiantes" class="flex-grow-1 d-flex flex-column">
-                <!-- Encabezado azul oscuro amplio -->
+                <!-- Encabezado azul oscuro -->
                 <div class="text-center w-100 mb-4 text-white m-0 py-3 px-4" style="background-color: #002E60;">
                         <div class="row align-items-center justify-content-between">
                                 <div class="col-auto">
@@ -57,7 +41,7 @@
                         </div>
                 </div>
 
-                <!-- Contenedor principal (850px) -->
+                <!-- Contenedor principal -->
                 <div class="mx-auto px-3" style="max-width: 850px; width: 100%;">
 
                         <!-- FORMULARIO DE EDICIÓN DEL PERFIL -->
@@ -65,7 +49,7 @@
 
                                 <input type="hidden" name="matriculaOriginal" value="${datosEstudiante.matricula}">
 
-                                <!-- Fila 1: Nombre(s), Apellido(s), Matrícula -->
+                                <!-- Fila 1 -->
                                 <div class="row g-4 mb-3">
                                         <div class="col-4">
                                                 <label class="fw-bold small mb-1 text-dark">Nombre(s):</label>
@@ -81,7 +65,7 @@
                                         </div>
                                 </div>
 
-                                <!-- Fila 2: Carrera, Cuatrimestre, Grupo -->
+                                <!-- Fila 2 -->
                                 <div class="row g-4 mb-3">
                                         <div class="col-4">
                                                 <label class="fw-bold small mb-1 text-dark">Carrera:</label>
@@ -97,7 +81,7 @@
                                         </div>
                                 </div>
 
-                                <!-- Fila 3: Correo electrónico y Estado -->
+                                <!-- Fila 3 -->
                                 <div class="row g-4 mb-3">
                                         <div class="col-6">
                                                 <label class="fw-bold small mb-1 text-dark">Correo electrónico:</label>
@@ -112,16 +96,14 @@
                                         </div>
                                 </div>
 
-                                <!-- Fila 4: Docente Asesor -->
+                                <!-- Fila 4 -->
                                 <div class="row g-4 mb-3">
                                         <div class="col-12">
                                                 <label class="fw-bold small mb-1 text-dark">Docente Asesor Actual:</label>
 
-                                                <!-- Vista Lectura -->
                                                 <input id="inputDocenteLectura" class="form-control form-control-sm input-gris" type="text" disabled readonly
                                                        value="${not empty datosEstudiante.docenteAsignado ? datosEstudiante.docenteAsignado : 'Sin asignar'}">
 
-                                                <!-- Vista Edición -->
                                                 <select id="selectDocenteEdicion" name="idDocente" class="form-select form-select-sm border-primary text-dark d-none">
                                                         <option value="0">-- Sin asignar --</option>
                                                         <c:forEach var="docente" items="${listaDocentesActivos}">
@@ -133,13 +115,12 @@
                                         </div>
                                 </div>
 
-                                <!-- Botones de Acción del perfil -->
+                                <!-- Botones Perfil -->
                                 <div class="row mt-3">
                                         <div class="col-12 d-flex justify-content-end gap-2">
                                                 <button type="button" id="btnEditarPerfil" class="btn btn-sm text-white fw-bold px-3 shadow-sm" onclick="activarEdicionPerfil()" style="background-color: #002E60">
                                                         <i class="bi bi-pencil-square me-1"></i> Editar datos
                                                 </button>
-
                                                 <button type="button" id="btnCancelarPerfil" class="btn btn-sm btn-secondary fw-bold shadow-sm d-none" onclick="cancelarEdicionPerfil()">
                                                         Cancelar
                                                 </button>
@@ -150,7 +131,7 @@
                                 </div>
                         </form>
 
-                        <!-- Título separador de Documentos -->
+                        <!-- Título Separador Documentos -->
                         <div class="w-100 mb-4 border-bottom pb-2 d-flex justify-content-between align-items-center">
                                 <h2 class="fw-bold m-0 fs-3" style="color: #002E60;">Documentos del Estudiante</h2>
 
@@ -169,7 +150,6 @@
                                 </c:if>
                         </div>
 
-                        <!-- Lista vacía -->
                         <c:if test="${empty listaDocumentos}">
                                 <div class="alert alert-warning text-center fw-bold shadow-sm py-2 my-3 small">
                                         <i class="bi bi-exclamation-triangle-fill fs-6 me-2"></i>
@@ -180,34 +160,27 @@
                         <!-- Iterador de Documentos -->
                         <c:forEach var="doc" items="${listaDocumentos}">
 
-                                <!-- ==========================================
-                                ESTADO 1: DOCUMENTO YA SUBIDO (VERDE)
-                                ========================================== -->
+                                <!-- ESTADO 1: DOCUMENTO COMPLETADO (YA SUBIDO) -->
                                 <c:if test="${doc.estado == 'Completado'}">
                                         <div class="card shadow-sm mb-4 border-0" style="background-color: #f8f9fa;">
                                                 <div class="card-body row g-0">
 
-                                                        <!-- FORMULARIO ÚNICO DE MODIFICACIÓN -->
-                                                        <form action="<%=request.getContextPath()%>/servlet-modificar-observacion" method="POST" id="formModificar_${doc.id_tipo_doc}" enctype="multipart/form-data" class="col-12 d-flex m-0">
+                                                        <form action="${pageContext.request.contextPath}/servlet-modificar-observacion" method="POST" id="formModificar_${doc.id_tipo_doc}" enctype="multipart/form-data" class="col-12 d-flex m-0">
 
                                                                 <input type="hidden" name="idAsignacion" value="${datosEstudiante.idAsignacion}">
                                                                 <input type="hidden" name="matricula" value="${datosEstudiante.matricula}">
                                                                 <input type="hidden" name="idTipoDoc" value="${doc.id_tipo_doc}">
 
-                                                                <!-- LADO IZQUIERDO: Logo o Input de Archivo -->
                                                                 <div class="col-3 d-flex flex-column align-items-center justify-content-center pe-3 border-end">
-
-                                                                        <!-- VISTA NORMAL (Logo Verde) -->
                                                                         <div id="vista_icono_${doc.id_tipo_doc}" class="w-100">
                                                                                 <div class="w-100 text-center rounded p-3 mb-2 text-white shadow-sm" style="background-color: #429983;">
                                                                                         <i class="bi bi-file-earmark-text-fill" style="font-size: 4rem;"></i>
                                                                                 </div>
-                                                                                <div class="w-100 text-center py-2 rounded text-white fw-bold shadow-sm" style="background-color: #429983;">
-                                                                                                ${doc.nombre_archivo}
+                                                                                <div class="w-100 text-center py-2 rounded text-white fw-bold shadow-sm text-truncate" style="background-color: #429983;">
+                                                                                        <c:out value="${doc.nombre_archivo}" default="Documento" />
                                                                                 </div>
                                                                         </div>
 
-                                                                        <!-- VISTA EDICIÓN (Input para reemplazar - Oculto por defecto) -->
                                                                         <div id="vista_subir_${doc.id_tipo_doc}" class="w-100 d-none text-center">
                                                                                 <div class="w-100 text-center rounded p-3 mb-2 text-white shadow-sm" style="background-color: #D4AC0D;">
                                                                                         <i class="bi bi-upload" style="font-size: 3rem;"></i>
@@ -217,7 +190,6 @@
                                                                         </div>
                                                                 </div>
 
-                                                                <!-- LADO DERECHO: Observaciones y Botones -->
                                                                 <div class="col-9 ps-4 d-flex flex-column justify-content-between">
                                                                         <div>
                                                                                 <div class="d-flex justify-content-between align-items-center mb-1">
@@ -232,115 +204,98 @@
                                                                                         </c:choose>
                                                                                 </div>
 
-                                                                                <!-- Textarea bloqueado por defecto (readonly) -->
                                                                                 <textarea id="obs_${doc.id_tipo_doc}" class="form-control mb-2 bg-white" style="resize: none;" name="observaciones" rows="2" readonly>${doc.observaciones}</textarea>
 
                                                                                 <div class="d-flex justify-content-between">
+                                            <span class="text-muted small fw-bold">
+                                                Subido el:
+                                                <c:choose>
+                                                        <c:when test="${not empty doc.fechaSubida}">
+                                                                <fmt:parseDate value="${doc.fechaSubida}" pattern="yyyy-MM-dd'T'HH:mm" var="parsedDateTime" type="both" />
+                                                                <fmt:formatDate pattern="dd/MM/yyyy HH:mm" value="${parsedDateTime}" />
+                                                        </c:when>
+                                                        <c:otherwise>No disponible</c:otherwise>
+                                                </c:choose>
+                                            </span>
                                                                                         <span class="text-muted small fw-bold">
-                                                                                                Subido el:
-                                                                                                <c:choose>
-                                                                                                        <c:when test="${not empty doc.fechaSubida}">
-                                                                                                                <fmt:parseDate value="${doc.fechaSubida}" pattern="yyyy-MM-dd'T'HH:mm" var="parsedDateTime" type="both" />
-                                                                                                                <fmt:formatDate pattern="dd/MM/yyyy HH:mm" value="${parsedDateTime}" />
-                                                                                                        </c:when>
-                                                                                                        <c:otherwise>
-                                                                                                                No disponible
-                                                                                                        </c:otherwise>
-                                                                                                </c:choose>
-                                                                                        </span>
-                                                                                        <span class="text-muted small fw-bold">
-                                                                                                Límite: <c:out value="${doc.fecha_limite}" default="Sin asignar" />
-                                                                                        </span>
+                                                Límite: <c:out value="${doc.fecha_limite}" default="Sin asignar" />
+                                            </span>
                                                                                 </div>
                                                                         </div>
 
                                                                         <div class="row g-2 mt-3">
-
-                                                                                <!-- BOTONES: MODO VISTA -->
                                                                                 <div id="botones_vista_${doc.id_tipo_doc}" class="col-12 d-flex gap-2">
-
-                                                                                        <!-- PERMISOS ADMINISTRATIVOS: Ignora si venció la fecha o si no hay calendario -->
                                                                                         <c:choose>
                                                                                                 <c:when test="${not empty sessionScope.adminLogueado || not empty sessionScope.docenteLogueado || (doc.tieneCalendario && doc.puedeSubir)}">
                                                                                                         <c:choose>
                                                                                                                 <c:when test="${!doc.revisado}">
-                                                                                                                        <button type="submit" name="accion" value="marcar" class="btn fw-bold text-white shadow-sm flex-grow-1" style="background-color: #429983;">
+                                                                                                                        <button type="submit" name="accion" value="marcar" class="btn fw-bold text-white shadow-sm flex-grow-1 text-truncate" style="background-color: #429983;">
                                                                                                                                 <i class="bi bi-check2-circle me-1"></i> Revisar
                                                                                                                         </button>
                                                                                                                 </c:when>
                                                                                                                 <c:otherwise>
-                                                                                                                        <button type="submit" name="accion" value="desmarcar" class="btn fw-bold text-white shadow-sm flex-grow-1" style="background-color: #D4AC0D;">
+                                                                                                                        <button type="submit" name="accion" value="desmarcar" class="btn fw-bold text-white shadow-sm flex-grow-1 text-truncate" style="background-color: #D4AC0D;">
                                                                                                                                 <i class="bi bi-arrow-counterclockwise me-1"></i> Pendiente
                                                                                                                         </button>
                                                                                                                 </c:otherwise>
                                                                                                         </c:choose>
 
-                                                                                                        <button type="button" class="btn fw-bold text-white shadow-sm flex-grow-1" style="background-color: #345177;" onclick="activarEdicion(${doc.id_tipo_doc})">
+                                                                                                        <button type="button" class="btn fw-bold text-white shadow-sm flex-grow-1 text-truncate" style="background-color: #345177;" onclick="activarEdicion(${doc.id_tipo_doc})">
                                                                                                                 <i class="bi bi-pencil-square me-1"></i> Editar
                                                                                                         </button>
-                                                                                                        <button type="submit" form="formEliminar_${doc.id_tipo_doc}" class="btn fw-bold shadow-sm flex-grow-1" style="background-color: #C85252; color: white" >
-                                                                                                                Eliminar
+                                                                                                        <button type="submit" form="formEliminar_${doc.id_tipo_doc}" class="btn fw-bold shadow-sm flex-grow-1 text-truncate" style="background-color: #C85252; color: white;">
+                                                                                                                <i class="bi bi-trash-fill me-1"></i> Eliminar
                                                                                                         </button>
                                                                                                 </c:when>
 
                                                                                                 <c:otherwise>
-                                                                                                        <!-- SOLO APLICA A ESTUDIANTES FUERA DE PLAZO -->
                                                                                                         <button type="button" class="btn btn-secondary fw-bold shadow-sm flex-grow-1 disabled" style="opacity: 0.8; pointer-events: none;">
                                                                                                                 <i class="bi bi-lock-fill me-1"></i> Plazo vencido
                                                                                                         </button>
                                                                                                 </c:otherwise>
                                                                                         </c:choose>
 
-                                                                                        <a href="servlet-ver-documento?idArchivo=${doc.id_archivo}" target="_blank" class="btn fw-bold text-white shadow-sm flex-grow-1" style="background-color: #002E60;">
+                                                                                        <a href="servlet-ver-documento?idArchivo=${doc.id_archivo}" target="_blank" class="btn fw-bold text-white shadow-sm flex-grow-1 text-center text-truncate" style="background-color: #002E60;">
                                                                                                 Abrir archivo
                                                                                         </a>
                                                                                 </div>
 
-                                                                                <!-- BOTONES: MODO EDICIÓN (Ocultos por defecto) -->
                                                                                 <div id="botones_edicion_${doc.id_tipo_doc}" class="col-12 d-flex gap-2 d-none">
-                                                                                        <button type="submit" class="btn fw-bold text-white shadow-sm flex-grow-1" style="background-color: #429983;">
+                                                                                        <button type="submit" name="accion" value="guardar_edicion" class="btn fw-bold text-white shadow-sm flex-grow-1" style="background-color: #429983;">
                                                                                                 <i class="bi bi-check-circle me-1"></i> Guardar Cambios
                                                                                         </button>
                                                                                         <button type="button" class="btn btn-secondary fw-bold shadow-sm flex-grow-1" onclick="cancelarEdicion(${doc.id_tipo_doc})">
                                                                                                 Cancelar
                                                                                         </button>
                                                                                 </div>
-
                                                                         </div>
                                                                 </div>
                                                         </form>
 
-                                                        <!-- Formulario independiente solo para Eliminar -->
-                                                        <form action="<%=request.getContextPath()%>/servlet-eliminar-documento" method="POST" id="formEliminar_${doc.id_tipo_doc}" class="d-none">
+                                                        <form action="${pageContext.request.contextPath}/servlet-eliminar-documento" method="POST" id="formEliminar_${doc.id_tipo_doc}" class="d-none" onsubmit="return confirm('¿Seguro que deseas eliminar este documento?');">
                                                                 <input type="hidden" name="idAsignacion" value="${datosEstudiante.idAsignacion}">
                                                                 <input type="hidden" name="idTipoDoc" value="${doc.id_tipo_doc}">
                                                                 <input type="hidden" name="matricula" value="${datosEstudiante.matricula}">
                                                         </form>
-
                                                 </div>
                                         </div>
                                 </c:if>
 
-                                <!-- ==========================================
-                                ESTADO 2: DOCUMENTO NO SUBIDO (AMARILLO / PENDIENTE)
-                                ========================================== -->
+                                <!-- ESTADO 2: DOCUMENTO PENDIENTE (NO SUBIDO) -->
                                 <c:if test="${doc.estado == 'Pendiente'}">
                                         <div class="card shadow-sm mb-4 border-0" style="background-color: #f8f9fa;">
                                                 <div class="card-body row g-0">
-                                                        <!-- Izquierda: Icono y Nombre -->
                                                         <div class="col-3 d-flex flex-column align-items-center justify-content-center pe-3 border-end">
                                                                 <div class="w-100 text-center rounded p-3 mb-2 text-white shadow-sm" style="background-color: #D4AC0D;">
                                                                         <i class="bi bi-file-earmark-text-fill" style="font-size: 4rem;"></i>
                                                                 </div>
-                                                                <div class="w-100 text-center py-2 rounded text-white fw-bold shadow-sm" style="background-color: #D4AC0D;">
-                                                                                ${doc.nombre_archivo}
+                                                                <div class="w-100 text-center py-2 rounded text-white fw-bold shadow-sm text-truncate" style="background-color: #D4AC0D;">
+                                                                        <c:out value="${doc.nombre_archivo}" default="Documento" />
                                                                 </div>
                                                         </div>
 
-                                                        <!-- Derecha: Observaciones y Formulario -->
                                                         <div class="col-9 ps-4 d-flex flex-column justify-content-between">
                                                                 <c:choose>
-                                                                        <%-- Si es Admin o Docente, SIEMPRE puede subir el archivo a nombre del alumno --%>
                                                                         <c:when test="${not empty sessionScope.adminLogueado || not empty sessionScope.docenteLogueado || (doc.tieneCalendario && doc.puedeSubir)}">
                                                                                 <form action="${pageContext.request.contextPath}/servlet-subir-documentos" method="POST" enctype="multipart/form-data" class="d-flex flex-column h-100 justify-content-between m-0">
 
@@ -402,6 +357,8 @@
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script>
+        const textoOriginal = {};
+
         function activarEdicionPerfil() {
                 const campos = document.querySelectorAll('.campo-estudiante');
                 campos.forEach(campo => {
@@ -437,7 +394,10 @@
         }
 
         function activarEdicion(id) {
-                document.getElementById('obs_' + id).removeAttribute('readonly');
+                const textarea = document.getElementById('obs_' + id);
+                textoOriginal[id] = textarea.value;
+
+                textarea.removeAttribute('readonly');
                 document.getElementById('vista_icono_' + id).classList.add('d-none');
                 document.getElementById('vista_subir_' + id).classList.remove('d-none');
                 document.getElementById('botones_vista_' + id).classList.add('d-none');
@@ -445,7 +405,12 @@
         }
 
         function cancelarEdicion(id) {
-                document.getElementById('obs_' + id).setAttribute('readonly', true);
+                const textarea = document.getElementById('obs_' + id);
+                if (textoOriginal[id] !== undefined) {
+                        textarea.value = textoOriginal[id];
+                }
+
+                textarea.setAttribute('readonly', true);
                 document.getElementById('vista_icono_' + id).classList.remove('d-none');
                 document.getElementById('vista_subir_' + id).classList.add('d-none');
                 document.getElementById('botones_vista_' + id).classList.remove('d-none');

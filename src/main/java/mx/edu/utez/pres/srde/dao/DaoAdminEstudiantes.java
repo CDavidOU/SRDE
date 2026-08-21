@@ -12,73 +12,64 @@ import java.util.List;
 
 public class DaoAdminEstudiantes {
 
-    private static final String SQL_BASE =
-            "SELECT es.matricula, es.nombre, es.apellido, es.carrera, es.estado, " +
-            "d.nombre AS docente_nombre, d.apellido AS docente_apellido " +
-            "FROM estudiante es " +
-            "LEFT JOIN asignacion_estadias ae ON es.matricula = ae.matricula AND ae.id_periodo = ? " +
-            "LEFT JOIN docente d ON ae.id_usuario_docente = d.id_usuario " +
-            "WHERE es.estado = 'Activo' ";
-
     public List<BeanEstudiante> listaEstudiantes(int idPeriodo) {
-        List<BeanEstudiante> listaEstudiantes = new ArrayList<>();
-        String sql = SQL_BASE + "ORDER BY es.nombre, es.apellido";
+        List<BeanEstudiante> lista = new ArrayList<>();
+        String sql = "SELECT matricula, nombre, apellido, carrera, estado, correo, cuatrimestre, grupo " +
+                "FROM estudiante ORDER BY apellido ASC, nombre ASC";
 
-        try (Connection conexion = Conexion.getConexion();
-             PreparedStatement prs = conexion.prepareStatement(sql)) {
+        try (Connection con = Conexion.getConexion();
+             PreparedStatement ps = con.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
 
-            prs.setInt(1, idPeriodo);
-
-            try (ResultSet rs = prs.executeQuery()) {
-                while (rs.next()) {
-                    listaEstudiantes.add(mapearEstudiante(rs));
-                }
+            while (rs.next()) {
+                lista.add(mapearEstudiante(rs));
             }
         } catch (SQLException e) {
             System.err.println("Error al listar estudiantes (admin): " + e.getMessage());
             e.printStackTrace();
         }
-        return listaEstudiantes;
+        return lista;
     }
 
     public List<BeanEstudiante> buscarEstudiantes(int idPeriodo, String condicion) {
-        List<BeanEstudiante> listaEstudiantes = new ArrayList<>();
-        String sql = SQL_BASE + "AND (LOWER(es.nombre) LIKE LOWER(?) OR LOWER(es.apellido) LIKE LOWER(?) OR LOWER(es.matricula) LIKE LOWER(?)) " +
-                "ORDER BY es.nombre, es.apellido";
+        List<BeanEstudiante> lista = new ArrayList<>();
+        String sql = "SELECT matricula, nombre, apellido, carrera, estado, correo, cuatrimestre, grupo " +
+                "FROM estudiante " +
+                "WHERE LOWER(TRANSLATE(nombre, 'ÁÉÍÓÚáéíóú', 'AEIOUaeiou')) LIKE LOWER(TRANSLATE(?, 'ÁÉÍÓÚáéíóú', 'AEIOUaeiou')) " +
+                "OR LOWER(TRANSLATE(apellido, 'ÁÉÍÓÚáéíóú', 'AEIOUaeiou')) LIKE LOWER(TRANSLATE(?, 'ÁÉÍÓÚáéíóú', 'AEIOUaeiou')) " +
+                "OR LOWER(matricula) LIKE LOWER(?) " +
+                "ORDER BY apellido ASC, nombre ASC";
 
-        try (Connection conexion = Conexion.getConexion();
-             PreparedStatement prs = conexion.prepareStatement(sql)) {
+        try (Connection con = Conexion.getConexion();
+             PreparedStatement ps = con.prepareStatement(sql)) {
 
-            String textoBuscar = "%" + condicion.toLowerCase() + "%";
+            String texto = "%" + (condicion != null ? condicion.trim() : "") + "%";
+            ps.setString(1, texto);
+            ps.setString(2, texto);
+            ps.setString(3, texto);
 
-            prs.setInt(1, idPeriodo);
-            prs.setString(2, textoBuscar);
-            prs.setString(3, textoBuscar);
-            prs.setString(4, textoBuscar);
-
-            try (ResultSet rs = prs.executeQuery()) {
+            try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
-                    listaEstudiantes.add(mapearEstudiante(rs));
+                    lista.add(mapearEstudiante(rs));
                 }
             }
         } catch (SQLException e) {
             System.err.println("Error al buscar estudiantes (admin): " + e.getMessage());
             e.printStackTrace();
         }
-        return listaEstudiantes;
+        return lista;
     }
+
     private BeanEstudiante mapearEstudiante(ResultSet rs) throws SQLException {
-        BeanEstudiante estudiante = new BeanEstudiante();
-        estudiante.setMatricula(rs.getString("matricula"));
-        estudiante.setNombre(rs.getString("nombre"));
-        estudiante.setApellido(rs.getString("apellido"));
-        estudiante.setCarrera(rs.getString("carrera"));
-        estudiante.setEstado(rs.getString("estado"));
-
-        String docenteNombre = rs.getString("docente_nombre");
-        String docenteApellido = rs.getString("docente_apellido");
-        estudiante.setDocenteAsignado(docenteNombre != null ? docenteNombre + " " + docenteApellido : "Sin asignar");
-
-        return estudiante;
+        BeanEstudiante e = new BeanEstudiante();
+        e.setMatricula(rs.getString("matricula"));
+        e.setNombre(rs.getString("nombre"));
+        e.setApellido(rs.getString("apellido"));
+        e.setCarrera(rs.getString("carrera"));
+        e.setEstado(rs.getString("estado"));
+        e.setCorreo(rs.getString("correo"));
+        e.setCuatrimestre(rs.getInt("cuatrimestre"));
+        e.setGrupo(rs.getString("grupo"));
+        return e;
     }
 }

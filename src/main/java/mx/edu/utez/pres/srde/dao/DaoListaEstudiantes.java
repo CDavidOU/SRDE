@@ -50,10 +50,13 @@ public class DaoListaEstudiantes {
 
     public List<BeanAsignacionEstadias> listaEstudiantes(int id_docente, int id_periodo) {
         List<BeanAsignacionEstadias> listaEstudiantes = new ArrayList<>();
+
+        // Convertimos 'estado' a Mayúsculas para evitar fallos si en la BD dice 'activo' o 'Activo'
         String sql = "SELECT aes.id_usuario_docente, aes.id_periodo, es.nombre, es.matricula, es.apellido " +
                 "FROM asignacion_estadias aes " +
                 "INNER JOIN estudiante es ON aes.matricula = es.matricula " +
-                "WHERE (aes.id_usuario_docente = ? AND aes.id_periodo = ? AND es.estado = 'Activo')";
+                "WHERE aes.id_usuario_docente = ? AND aes.id_periodo = ? AND UPPER(es.estado) = 'ACTIVO' " +
+                "ORDER BY es.apellido ASC, es.nombre ASC";
 
         try (Connection conexion = Conexion.getConexion();
              PreparedStatement prs = conexion.prepareStatement(sql)) {
@@ -79,7 +82,7 @@ public class DaoListaEstudiantes {
                 }
             }
         } catch (SQLException e) {
-            System.err.println("Error al listar estudiantes: " + e.getMessage());
+            System.err.println("Error al listar estudiantes para el docente: " + e.getMessage());
             e.printStackTrace();
         }
         return listaEstudiantes;
@@ -94,7 +97,6 @@ public class DaoListaEstudiantes {
                 "INNER JOIN estudiante es ON aes.matricula = es.matricula " +
                 "WHERE aes.id_usuario_docente = ? " +
                 "AND aes.id_periodo = ? " +
-                "AND es.estado = 'Activo' " +
                 "AND (LOWER(es.nombre) LIKE LOWER(?) OR LOWER(es.apellido) LIKE LOWER(?) OR LOWER(es.matricula) LIKE LOWER(?))";
 
         try(Connection conexion = Conexion.getConexion();
@@ -134,7 +136,7 @@ public class DaoListaEstudiantes {
     public List<BeanAsignacionEstadias> buscarTodosLosEstudiantesAdmin(int id_periodo, String condicion) {
         List<BeanAsignacionEstadias> listaEstudiantes = new ArrayList<>();
 
-        String sql = "SELECT aes.id_usuario_docente, aes.id_periodo, es.nombre, es.apellido, es.matricula, es.carrera, es.cuatrimestre, es.grupo, es.correo, es.estado FROM asignacion_estadias aes INNER JOIN estudiante es ON aes.matricula = es.matricula WHERE aes.id_periodo = ? AND es.estado = 'Activo' AND (LOWER(es.nombre) LIKE LOWER(?) OR LOWER(es.apellido) LIKE LOWER(?) OR LOWER(es.matricula) LIKE LOWER(?))";
+        String sql = "SELECT aes.id_usuario_docente, aes.id_periodo, es.nombre, es.apellido, es.matricula, es.carrera, es.cuatrimestre, es.grupo, es.correo, es.estado FROM asignacion_estadias aes INNER JOIN estudiante es ON aes.matricula = es.matricula WHERE aes.id_periodo = ? AND (LOWER(es.nombre) LIKE LOWER(?) OR LOWER(es.apellido) LIKE LOWER(?) OR LOWER(es.matricula) LIKE LOWER(?))";
 
         try (Connection conexion = Conexion.getConexion();
              PreparedStatement prs = conexion.prepareStatement(sql)) {
