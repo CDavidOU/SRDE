@@ -28,12 +28,6 @@
         <div class="w-100  position-relative d-flex align-items-center justify-content-center py-3 text-white" style="background-color: #002E60" >
             <h1 class="text-white m-0 py-3 fs-2 fw-semibold" style="background-color: #002E60;">Programar Calendario de Documentos</h1>
             <!-- Botón de calendarios -->
-            <a href="${pageContext.request.contextPath}/listaCalendariosServlet"
-               class="btn btn-success d-flex align-items-center justify-content-center shadow-sm"
-               style="height: 38px; z-index: 40;"
-               title="Calendario De Documentos Programados">
-                <span class="d-none d-md-inline small fw-bold">Calendarios Programados</span>
-            </a>
         </div>
 
         <div id="datos" class="p-4 flex-grow-1 d-flex justify-content-center">
@@ -50,7 +44,7 @@
                     </c:if>
                     <c:if test="${not empty mensajeError}">
                         <div class="alert alert-danger" role="alert">
-                        <p>${mensajeError}</p>
+                            <p>${mensajeError}</p>
                         </div>
                     </c:if>
                     <input type="hidden" name="idPeriodo" value="${periodoActivo.id_periodo}">

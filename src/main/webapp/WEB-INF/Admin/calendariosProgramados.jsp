@@ -10,6 +10,20 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <style>
+        .btn-editar {
+            background-color: #345177;
+            color: #ffffff;
+            border: 1px solid #345177;
+            transition: all 0.2s ease-in-out;
+        }
+        .btn-editar:hover {
+            background-color: #ffffff;
+            color: #345177;
+            border-color: #345177;
+        }
+    </style>
 </head>
 <body>
 
@@ -41,6 +55,7 @@
                                 ${periodoActivo != null ? periodoActivo.nombre_periodo : 'Sin Periodo Activo'}
                             </strong>
                         </h5>
+                        <a href="servlet-crear-calendario" class="btn btn-success position-absolute end-0 me-3 d-flex align-items-center justify-content-center shadow-sm" style="background-color: #429983;" >Registrar calendario</a>
                     </div>
                     <c:if test="${not empty mensajeCorrecto}">
                         <div class="alert alert-success" role="alert">
@@ -82,7 +97,7 @@
                                                 <form action="${pageContext.request.contextPath}/listaCalendariosServlet" method="POST" class="d-inline">
                                                     <input type="hidden" name="idCalendario" value="${cal.idCalendario}">
 
-                                                    <button type="submit" class="btn btn-outline-warning btn-sm d-flex align-items-center gap-1 mx-auto" title="Editar Calendario">
+                                                    <button type="submit" class="btn btn-editar btn-sm d-flex align-items-center gap-1 mx-auto" title="Editar Calendario">
                                                         <i class="bi bi-pencil-square"></i> Editar
                                                     </button>
                                                 </form>

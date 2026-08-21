@@ -6,86 +6,176 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Detalles de Estudiante - Administración</title>
-        <!-- Bootstrap CSS -->
+        <!-- Bootstrap CSS & Icons -->
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+        <style>
+                .input-gris {
+                        background-color: #EFEFEF !important;
+                        border: none !important;
+                        color: #333 !important;
+                }
+                .input-edicion {
+                        background-color: #FFFFFF !important;
+                        border: 1px solid #0557B3 !important;
+                        color: #000 !important;
+                }
+                .card-documento {
+                        background-color: #EBF0F2;
+                        border-radius: 8px;
+                }
+                .box-icono-doc {
+                        height: 100%;
+                        min-height: 150px;
+                        display: flex;
+                        flex-direction: column;
+                        justify-content: space-between;
+                }
+        </style>
 </head>
-<body>
+<body class="bg-white">
 <div id="contenido" class="d-flex min-vh-100">
 
         <!-- Menú Lateral Estático -->
-        <div id="menu" class="border-end" style="width: 180px; flex-shrink: 0; position: sticky; top: 0; height: 100vh; overflow-y: auto;">
+        <div id="menu" class="border-end bg-white" style="width: 180px; flex-shrink: 0; position: sticky; top: 0; height: 100vh; overflow-y: auto;">
                 <jsp:include page="../Plantillas/menu.jsp" />
         </div>
 
         <div id="cambiantes" class="flex-grow-1 d-flex flex-column">
-                <!-- Encabezado -->
+                <!-- Encabezado azul oscuro amplio -->
                 <div class="text-center w-100 mb-4 text-white m-0 py-3 px-4" style="background-color: #002E60;">
                         <div class="row align-items-center justify-content-between">
-                                <!-- Botón Regresar -->
                                 <div class="col-auto">
-                                        <a href="javascript:history.back()" class="btn btn-outline-light d-flex align-items-center gap-2">
+                                        <a href="${pageContext.request.contextPath}/servlet-admin-estudiantes" class="btn btn-outline-light d-flex align-items-center gap-2">
                                                 <i class="bi bi-arrow-left fs-5"></i>
                                         </a>
                                 </div>
-
-                                <!-- Título Centrado -->
                                 <div class="col text-center">
-                                        <h1 class="m-0 fs-2 fw-semibold">Perfil del Estudiante</h1>
+                                        <h1 class="m-0 fs-2 fw-bold">Perfil del estudiante</h1>
                                 </div>
+                                <div class="col-auto" style="width: 42px;"></div>
                         </div>
                 </div>
 
-                <!-- Contenedor de la información -->
-                <div class="mx-auto" style="max-width: 950px;">
+                <!-- Contenedor principal (850px) -->
+                <div class="mx-auto px-3" style="max-width: 850px; width: 100%;">
 
-                        <!-- Nombre, apellidos, matrícula -->
-                        <div id="personales" class="row g-3 mb-3">
-                                <div class="col-4">
-                                        <label class="fw-bold fs-5 mb-1">Nombre(s):</label>
-                                        <input class="form-control" type="text" disabled readonly value="${datosEstudiante.nombre}">
+                        <!-- FORMULARIO DE EDICIÓN DEL PERFIL -->
+                        <form action="${pageContext.request.contextPath}/servlet-modificar-estudiante" method="POST" id="formPerfilEstudiante" class="mb-5">
+
+                                <input type="hidden" name="matriculaOriginal" value="${datosEstudiante.matricula}">
+
+                                <!-- Fila 1: Nombre(s), Apellido(s), Matrícula -->
+                                <div class="row g-4 mb-3">
+                                        <div class="col-4">
+                                                <label class="fw-bold small mb-1 text-dark">Nombre(s):</label>
+                                                <input class="form-control form-control-sm input-gris campo-estudiante" name="nombre" type="text" disabled readonly value="${datosEstudiante.nombre}">
+                                        </div>
+                                        <div class="col-4">
+                                                <label class="fw-bold small mb-1 text-dark">Apellido(s):</label>
+                                                <input class="form-control form-control-sm input-gris campo-estudiante" name="apellido" type="text" disabled readonly value="${datosEstudiante.apellido}">
+                                        </div>
+                                        <div class="col-4">
+                                                <label class="fw-bold small mb-1 text-dark">Matrícula:</label>
+                                                <input class="form-control form-control-sm input-gris campo-estudiante" name="matricula" type="text" disabled readonly value="${datosEstudiante.matricula}">
+                                        </div>
                                 </div>
-                                <div class="col-4">
-                                        <label class="fw-bold fs-5 mb-1">Apellido(s):</label>
-                                        <input class="form-control" type="text" disabled readonly value="${datosEstudiante.apellido}">
+
+                                <!-- Fila 2: Carrera, Cuatrimestre, Grupo -->
+                                <div class="row g-4 mb-3">
+                                        <div class="col-4">
+                                                <label class="fw-bold small mb-1 text-dark">Carrera:</label>
+                                                <input class="form-control form-control-sm input-gris campo-estudiante" name="carrera" type="text" disabled readonly value="${datosEstudiante.carrera}">
+                                        </div>
+                                        <div class="col-4">
+                                                <label class="fw-bold small mb-1 text-dark">Cuatrimestre:</label>
+                                                <input class="form-control form-control-sm input-gris campo-estudiante" name="cuatrimestre" type="text" disabled readonly value="${datosEstudiante.cuatrimestre}">
+                                        </div>
+                                        <div class="col-4">
+                                                <label class="fw-bold small mb-1 text-dark">Grupo:</label>
+                                                <input class="form-control form-control-sm input-gris campo-estudiante" name="grupo" type="text" disabled readonly value="${datosEstudiante.grupo}">
+                                        </div>
                                 </div>
-                                <div class="col-4">
-                                        <label class="fw-bold fs-5 mb-1">Matricula:</label>
-                                        <input class="form-control" type="text" disabled readonly value="${datosEstudiante.matricula}">
+
+                                <!-- Fila 3: Correo electrónico y Estado -->
+                                <div class="row g-4 mb-3">
+                                        <div class="col-6">
+                                                <label class="fw-bold small mb-1 text-dark">Correo electrónico:</label>
+                                                <input class="form-control form-control-sm input-gris campo-estudiante" name="correo" type="text" disabled readonly value="${datosEstudiante.correo}">
+                                        </div>
+                                        <div class="col-6">
+                                                <label class="fw-bold small mb-1 text-dark">Estado:</label>
+                                                <select class="form-select form-select-sm input-gris campo-estudiante" name="estado" disabled required>
+                                                        <option value="Activo" ${datosEstudiante.estado == 'Activo' || datosEstudiante.estado == 'activo' ? 'selected' : ''}>Activo</option>
+                                                        <option value="Inactivo" ${datosEstudiante.estado == 'Inactivo' || datosEstudiante.estado == 'inactivo' ? 'selected' : ''}>Inactivo</option>
+                                                </select>
+                                        </div>
                                 </div>
+
+                                <!-- Fila 4: Docente Asesor -->
+                                <div class="row g-4 mb-3">
+                                        <div class="col-12">
+                                                <label class="fw-bold small mb-1 text-dark">Docente Asesor Actual:</label>
+
+                                                <!-- Vista Lectura -->
+                                                <input id="inputDocenteLectura" class="form-control form-control-sm input-gris" type="text" disabled readonly
+                                                       value="${not empty datosEstudiante.docenteAsignado ? datosEstudiante.docenteAsignado : 'Sin asignar'}">
+
+                                                <!-- Vista Edición -->
+                                                <select id="selectDocenteEdicion" name="idDocente" class="form-select form-select-sm border-primary text-dark d-none">
+                                                        <option value="0">-- Sin asignar --</option>
+                                                        <c:forEach var="docente" items="${listaDocentesActivos}">
+                                                                <option value="${docente.id}" ${not empty datosEstudiante.idDocente && docente.id == datosEstudiante.idDocente ? 'selected' : ''}>
+                                                                                ${docente.nombre} ${docente.apellido}
+                                                                </option>
+                                                        </c:forEach>
+                                                </select>
+                                        </div>
+                                </div>
+
+                                <!-- Botones de Acción del perfil -->
+                                <div class="row mt-3">
+                                        <div class="col-12 d-flex justify-content-end gap-2">
+                                                <button type="button" id="btnEditarPerfil" class="btn btn-sm text-white fw-bold px-3 shadow-sm" onclick="activarEdicionPerfil()" style="background-color: #002E60">
+                                                        <i class="bi bi-pencil-square me-1"></i> Editar datos
+                                                </button>
+
+                                                <button type="button" id="btnCancelarPerfil" class="btn btn-sm btn-secondary fw-bold shadow-sm d-none" onclick="cancelarEdicionPerfil()">
+                                                        Cancelar
+                                                </button>
+                                                <button type="submit" id="btnGuardarPerfil" class="btn btn-sm text-white fw-bold shadow-sm d-none" style="background-color: #429983;">
+                                                        <i class="bi bi-save me-1"></i> Guardar Cambios
+                                                </button>
+                                        </div>
+                                </div>
+                        </form>
+
+                        <!-- Título separador de Documentos -->
+                        <div class="w-100 mb-4 border-bottom pb-2 d-flex justify-content-between align-items-center">
+                                <h2 class="fw-bold m-0 fs-3" style="color: #002E60;">Documentos del Estudiante</h2>
+
+                                <c:if test="${not empty listaPeriodosEstudiante}">
+                                        <form action="${pageContext.request.contextPath}/servlet-datos-estudiante" method="GET" class="d-flex align-items-center gap-2">
+                                                <input type="hidden" name="matricula" value="${datosEstudiante.matricula}">
+                                                <label class="fw-bold text-secondary small mb-0 me-1">Período:</label>
+                                                <select name="idPeriodo" class="form-select form-select-sm border-primary fw-bold" onchange="this.form.submit()">
+                                                        <c:forEach var="p" items="${listaPeriodosEstudiante}">
+                                                                <option value="${p.id_periodo}" ${p.id_periodo == periodoSeleccionado ? 'selected' : ''}>
+                                                                                ${p.nombre_periodo}
+                                                                </option>
+                                                        </c:forEach>
+                                                </select>
+                                        </form>
+                                </c:if>
                         </div>
 
-                        <!-- Carrera, Cuatrimestre y Grupo -->
-                        <div class="row g-3 mb-3">
-                                <div class="col-4">
-                                        <label class="fw-bold fs-5 mb-1">Carrera:</label>
-                                        <input class="form-control" type="text" disabled readonly value="${datosEstudiante.carrera}">
+                        <!-- Lista vacía -->
+                        <c:if test="${empty listaDocumentos}">
+                                <div class="alert alert-warning text-center fw-bold shadow-sm py-2 my-3 small">
+                                        <i class="bi bi-exclamation-triangle-fill fs-6 me-2"></i>
+                                        No hay documentos cargados ni configurados para este estudiante en el período seleccionado.
                                 </div>
-                                <div class="col-4">
-                                        <label class="fw-bold fs-5 mb-1">Cuatrimestre:</label>
-                                        <input class="form-control" type="text" disabled readonly value="${datosEstudiante.cuatrimestre}">
-                                </div>
-                                <div class="col-4">
-                                        <label class="fw-bold fs-5 mb-1">Grupo:</label>
-                                        <input class="form-control" type="text" disabled readonly value="${datosEstudiante.grupo}">
-                                </div>
-                        </div>
-
-                        <!-- Correo y Estado -->
-                        <div class="row g-3 mb-3">
-                                <div class="col-6">
-                                        <label class="fw-bold fs-5 mb-1">Correo:</label>
-                                        <input class="form-control" type="text" disabled readonly value="${datosEstudiante.correo}">
-                                </div>
-                                <div class="col-6">
-                                        <label class="fw-bold fs-5 mb-1">Estado:</label>
-                                        <input class="form-control" type="text" disabled readonly value="${datosEstudiante.estado}">
-                                </div>
-                        </div>
-
-                        <!-- Título separador para la sección de documentos -->
-                        <div class="w-100 mt-5 mb-4 border-bottom pb-2">
-                                <h3 class="fw-bold" style="color: #002E60;">Documentos del Estudiante</h3>
-                        </div>
+                        </c:if>
 
                         <!-- Iterador de Documentos -->
                         <c:forEach var="doc" items="${listaDocumentos}">
@@ -137,7 +227,7 @@
                                                                                                         <span class="badge bg-success"><i class="bi bi-check-circle-fill me-1"></i> Revisado</span>
                                                                                                 </c:when>
                                                                                                 <c:otherwise>
-                                                                                                        <span class="badge bg-warning text-dark"><i class="bi bi-hourglass-split me-1"></i> Pendiente</span>
+                                                                                                        <span class="badge text-white" style="background-color: #D4AC0D;"><i class="bi bi-hourglass-split me-1"></i> Pendiente</span>
                                                                                                 </c:otherwise>
                                                                                         </c:choose>
                                                                                 </div>
@@ -174,21 +264,21 @@
                                                                                                 <c:when test="${not empty sessionScope.adminLogueado || not empty sessionScope.docenteLogueado || (doc.tieneCalendario && doc.puedeSubir)}">
                                                                                                         <c:choose>
                                                                                                                 <c:when test="${!doc.revisado}">
-                                                                                                                        <button type="submit" name="accion" value="marcar" class="btn btn-success fw-bold shadow-sm flex-grow-1">
-                                                                                                                                <i class="bi bi-check2-circle me-1"></i> Marcar Revisado
+                                                                                                                        <button type="submit" name="accion" value="marcar" class="btn fw-bold text-white shadow-sm flex-grow-1" style="background-color: #429983;">
+                                                                                                                                <i class="bi bi-check2-circle me-1"></i> Revisar
                                                                                                                         </button>
                                                                                                                 </c:when>
                                                                                                                 <c:otherwise>
                                                                                                                         <button type="submit" name="accion" value="desmarcar" class="btn fw-bold text-white shadow-sm flex-grow-1" style="background-color: #D4AC0D;">
-                                                                                                                                <i class="bi bi-arrow-counterclockwise me-1"></i> Quitar Revisado
+                                                                                                                                <i class="bi bi-arrow-counterclockwise me-1"></i> Pendiente
                                                                                                                         </button>
                                                                                                                 </c:otherwise>
                                                                                                         </c:choose>
 
-                                                                                                        <button type="button" class="btn fw-bold text-white shadow-sm flex-grow-1" style="background-color: #D4AC0D;" onclick="activarEdicion(${doc.id_tipo_doc})">
+                                                                                                        <button type="button" class="btn fw-bold text-white shadow-sm flex-grow-1" style="background-color: #345177;" onclick="activarEdicion(${doc.id_tipo_doc})">
                                                                                                                 <i class="bi bi-pencil-square me-1"></i> Editar
                                                                                                         </button>
-                                                                                                        <button type="submit" form="formEliminar_${doc.id_tipo_doc}" class="btn btn-danger fw-bold shadow-sm flex-grow-1">
+                                                                                                        <button type="submit" form="formEliminar_${doc.id_tipo_doc}" class="btn fw-bold shadow-sm flex-grow-1" style="background-color: #C85252; color: white" >
                                                                                                                 Eliminar
                                                                                                         </button>
                                                                                                 </c:when>
@@ -310,31 +400,54 @@
         </div>
 </div>
 
-<!-- Scripts al final del body -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-        function activarEdicion(id) {
-                // 1. Desbloquear la caja de texto
-                document.getElementById('obs_' + id).removeAttribute('readonly');
+        function activarEdicionPerfil() {
+                const campos = document.querySelectorAll('.campo-estudiante');
+                campos.forEach(campo => {
+                        campo.removeAttribute('disabled');
+                        campo.removeAttribute('readonly');
+                        campo.classList.remove('input-gris');
+                        campo.classList.add('input-edicion');
+                });
 
-                // 2. Intercambiar el logo verde por el input de subir archivo
+                document.getElementById('inputDocenteLectura').classList.add('d-none');
+                document.getElementById('selectDocenteEdicion').classList.remove('d-none');
+
+                document.getElementById('btnEditarPerfil').classList.add('d-none');
+                document.getElementById('btnCancelarPerfil').classList.remove('d-none');
+                document.getElementById('btnGuardarPerfil').classList.remove('d-none');
+        }
+
+        function cancelarEdicionPerfil() {
+                const campos = document.querySelectorAll('.campo-estudiante');
+                campos.forEach(campo => {
+                        campo.setAttribute('disabled', true);
+                        campo.setAttribute('readonly', true);
+                        campo.classList.add('input-gris');
+                        campo.classList.remove('input-edicion');
+                });
+
+                document.getElementById('inputDocenteLectura').classList.remove('d-none');
+                document.getElementById('selectDocenteEdicion').classList.add('d-none');
+
+                document.getElementById('btnEditarPerfil').classList.remove('d-none');
+                document.getElementById('btnCancelarPerfil').classList.add('d-none');
+                document.getElementById('btnGuardarPerfil').classList.add('d-none');
+        }
+
+        function activarEdicion(id) {
+                document.getElementById('obs_' + id).removeAttribute('readonly');
                 document.getElementById('vista_icono_' + id).classList.add('d-none');
                 document.getElementById('vista_subir_' + id).classList.remove('d-none');
-
-                // 3. Ocultar botones de vista y mostrar los de guardar/cancelar
                 document.getElementById('botones_vista_' + id).classList.add('d-none');
                 document.getElementById('botones_edicion_' + id).classList.remove('d-none');
         }
 
         function cancelarEdicion(id) {
-                // 1. Volver a bloquear la caja de texto
                 document.getElementById('obs_' + id).setAttribute('readonly', true);
-
-                // 2. Regresar el logo verde y ocultar el input
                 document.getElementById('vista_icono_' + id).classList.remove('d-none');
                 document.getElementById('vista_subir_' + id).classList.add('d-none');
-
-                // 3. Restaurar los botones originales
                 document.getElementById('botones_vista_' + id).classList.remove('d-none');
                 document.getElementById('botones_edicion_' + id).classList.add('d-none');
         }

@@ -5,6 +5,7 @@ import mx.edu.utez.pres.srde.model.BeanEstudiante;
 import mx.edu.utez.pres.srde.model.BeanPeriodo;
 import java.time.LocalDate;
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ServicioPeriodos {
@@ -86,5 +87,20 @@ public class ServicioPeriodos {
         // Si el insert falló (p.ej. dos peticiones concurrentes insertando el mismo periodo nuevo),
         // reintentamos la búsqueda: es probable que la otra petición ya lo haya creado.
         return nuevoPeriodo.buscarPeriodo(nombreCalculado);
+    }
+    public List<BeanPeriodo> obtenerPeriodosPorEstudiante(String matricula) {
+        if (matricula == null || matricula.trim().isEmpty()) {
+            System.err.println("ServicioPeriodos: Matrícula inválida proporcionada.");
+            return new ArrayList<>(); // O Collections.emptyList();
+        }
+        String matriculaLimpia = matricula.trim();
+
+        List<BeanPeriodo> resultado = nuevoPeriodo.obtenerPeriodosPorEstudiante(matriculaLimpia);
+
+        if (resultado == null) {
+            return new ArrayList<>();
+        }
+
+        return resultado;
     }
 }

@@ -1,6 +1,8 @@
 package mx.edu.utez.pres.srde.dao;
 
 import mx.edu.utez.pres.srde.model.BeanNotificacion;
+import mx.edu.utez.pres.srde.model.CalendarioBean;
+import mx.edu.utez.pres.srde.model.NotificacionBean;
 import mx.edu.utez.pres.srde.util.Conexion;
 
 import java.sql.Connection;
@@ -16,62 +18,86 @@ public class DaoNotificaciones {
     // MÉTODOS DE LA RAMA CARLOS (Calendario)
     // ==========================================
 
-    public BeanNotificacion notificacionCreada(BeanNotificacion beanNotificacion) {
-        String sql="insert into calendario_estadias (id_periodo, id_usuario, comentario,id_tipo_doc,fecha_lim,visible) values (?,?,?,?,?,1)";
+    public List<CalendarioBean> mostrarCalendariosDocente(int idDocente, int idPeriodo) {
+        List<CalendarioBean> listaCalendarios = new ArrayList<>();
 
-        try(Connection conexion = Conexion.getConexion();
-            PreparedStatement prs = conexion.prepareStatement(sql)){
+        String sql = "SELECT c.ID_CALENDARIO, c.ID_PERIODO, c.ID_TIPO_DOC, t.NOMBRE_DOC, c.FECHA_LIM, c.COMENTARIO, c.FECHA_INICIO, COALESCE(nd.VISTO, 1) AS ESTADO_VISTO FROM CALENDARIO_ESTADIAS c INNER JOIN TIPO_DOC t ON c.ID_TIPO_DOC = t.ID_TIPO_DOC LEFT JOIN NOTIFICACION_DOCENTE nd ON c.ID_CALENDARIO = nd.ID_CALENDARIO AND nd.ID_DOCENTE = ? WHERE c.ID_PERIODO = ?";
 
-            prs.setInt(1,beanNotificacion.getId_periodo());
-            prs.setInt(2,beanNotificacion.getId_usuario_docente());
-            prs.setString(3,beanNotificacion.getDescripcion());
-            prs.setInt(4,beanNotificacion.getTipo_doc());
-            prs.setDate(5,beanNotificacion.getFechaLimite());
-            int filasAfectadas = prs.executeUpdate();
-            if(filasAfectadas>0){
-                return beanNotificacion;
-            }
+        try (Connection conexion = Conexion.getConexion();
+             PreparedStatement prs = conexion.prepareStatement(sql)) {
 
-        }catch (SQLException e) {
-            e.printStackTrace();
-        }
+            prs.setInt(1, idDocente);
+            prs.setInt(2, idPeriodo);
 
-        return null;
-    }
+            try (ResultSet rs = prs.executeQuery()) {
+                while (rs.next()) {
+                    CalendarioBean cal = new CalendarioBean();
+                    cal.setIdCalendario(rs.getInt("ID_CALENDARIO"));
+                    cal.setId_periodo(rs.getInt("ID_PERIODO"));
+                    cal.setTipo_doc(rs.getInt("ID_TIPO_DOC"));
+                    cal.setNombreDoc(rs.getString("NOMBRE_DOC"));
+                    cal.setFechaLimite(rs.getDate("FECHA_LIM"));
+                    cal.setComentario(rs.getString("COMENTARIO"));
+                    cal.setFechaInicio(rs.getDate("FECHA_INICIO"));
 
-    public List<BeanNotificacion> mostrarNotificaciones (int idDocente){
-        List<BeanNotificacion> mostrarNotificaciones = new ArrayList<>();
-        String sql="select * from calendario_estadias where id_usuario=? AND visible = 1";
-        try(Connection conexion = Conexion.getConexion();
-            PreparedStatement prs=conexion.prepareStatement(sql)){
-            prs.setInt(1,idDocente);
-            try(ResultSet rs=prs.executeQuery()){
-                while(rs.next()){
-                    BeanNotificacion buscarNotificacion=new BeanNotificacion();
-                    buscarNotificacion.setIdCalendario(rs.getInt("id_calendario"));
-                    buscarNotificacion.setTipo_doc(rs.getInt("id_tipo_doc"));
-                    buscarNotificacion.setId_periodo(rs.getInt("id_periodo"));
-                    buscarNotificacion.setId_usuario_docente(rs.getInt("id_usuario"));
-                    buscarNotificacion.setFechaLimite(rs.getDate("fecha_lim"));
-                    buscarNotificacion.setDescripcion(rs.getString("comentario"));
+                    cal.setVisibilidad(rs.getInt("ESTADO_VISTO"));
 
-                    mostrarNotificaciones.add(buscarNotificacion);
+                    listaCalendarios.add(cal);
                 }
             }
         } catch (SQLException e) {
+            System.err.println("Error al obtener calendarios docente: " + e.getMessage());
             e.printStackTrace();
         }
-        return mostrarNotificaciones;
+        return listaCalendarios;
     }
 
-    public boolean ocultarNotificacion(int idNotificacion) {
-        String sqlOcultar = "UPDATE calendario_estadias SET visible = 0 WHERE id_calendario = ?";
-        try (Connection conexion = Conexion.getConexion();
-             PreparedStatement prs = conexion.prepareStatement(sqlOcultar)) {
-            prs.setInt(1, idNotificacion);
-            return prs.executeUpdate()> 0;
+    public boolean desocultarNotificacion(NotificacionBean noti) {
+        String sqlUpdate = "UPDATE NOTIFICACION_DOCENTE SET VISTO = 1, FECHA_LECTURA = SYSDATE WHERE ID_CALENDARIO = ? AND ID_DOCENTE = ?";
+        String sqlInsert = "INSERT INTO NOTIFICACION_DOCENTE (ID_CALENDARIO, ID_DOCENTE, VISTO, FECHA_LECTURA) VALUES (?, ?, 1, SYSDATE)";
+
+        try (Connection conexion = Conexion.getConexion()) {
+            try (PreparedStatement prsUpdate = conexion.prepareStatement(sqlUpdate)) {
+                prsUpdate.setInt(1, noti.getIdCalendario());
+                prsUpdate.setInt(2, noti.getId_docente());
+                int filasAfectadas = prsUpdate.executeUpdate();
+                if (filasAfectadas > 0) {
+                    return true;
+                }
+            }
+            try (PreparedStatement prsInsert = conexion.prepareStatement(sqlInsert)) {
+                prsInsert.setInt(1, noti.getIdCalendario());
+                prsInsert.setInt(2, noti.getId_docente());
+                return prsInsert.executeUpdate() > 0;
+            }
 
         } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean ocultarNotificacion(NotificacionBean notif) {
+        String sqlUpdate = "UPDATE NOTIFICACION_DOCENTE SET VISTO = 0, FECHA_LECTURA = CURRENT_TIMESTAMP WHERE ID_DOCENTE = ? AND ID_CALENDARIO = ?";
+        String sqlInsert = "INSERT INTO NOTIFICACION_DOCENTE (ID_DOCENTE, ID_CALENDARIO, VISTO, FECHA_LECTURA) VALUES (?, ?, 0, CURRENT_TIMESTAMP)";
+
+        try (Connection conexion = Conexion.getConexion()) {
+
+            try (PreparedStatement prsUpdate = conexion.prepareStatement(sqlUpdate)) {
+                prsUpdate.setInt(1, notif.getId_docente());
+                prsUpdate.setInt(2, notif.getIdCalendario());
+                if (prsUpdate.executeUpdate() > 0) {
+                    return true;
+                }
+            }
+            try (PreparedStatement prsInsert = conexion.prepareStatement(sqlInsert)) {
+                prsInsert.setInt(1, notif.getId_docente());
+                prsInsert.setInt(2, notif.getIdCalendario());
+                return prsInsert.executeUpdate() > 0;
+            }
+
+        } catch (SQLException e) {
+            System.err.println("Error al ocultar notificación: " + e.getMessage());
             e.printStackTrace();
             return false;
         }
@@ -81,7 +107,6 @@ public class DaoNotificaciones {
     // MÉTODOS DE LA RAMA UNION (Documentos Pendientes)
     // ==========================================
 
-    // Documentos pendientes de los estudiantes asignados a un docente, con detalle
     public List<BeanNotificacion> listarPendientesDocente(int idDocente) {
         List<BeanNotificacion> lista = new ArrayList<>();
         String sql = "SELECT e.matricula, e.nombre, e.apellido, td.nombre_doc, cd.id_asignacion, cd.id_tipo_doc " +
@@ -108,7 +133,6 @@ public class DaoNotificaciones {
         return lista;
     }
 
-    // Documentos pendientes de todo el sistema, con el docente responsable (vista Admin)
     public List<BeanNotificacion> listarPendientesGlobal() {
         List<BeanNotificacion> lista = new ArrayList<>();
         String sql = "SELECT e.matricula, e.nombre, e.apellido, td.nombre_doc, cd.id_asignacion, cd.id_tipo_doc, " +
@@ -151,7 +175,6 @@ public class DaoNotificaciones {
         return notificacion;
     }
 
-    // Documentos pendientes de los estudiantes asignados a un docente (cualquier periodo)
     public int contarDocumentosPendientesDocente(int idDocente) {
         String sql = "SELECT COUNT(*) FROM CONTROL_DOC cd " +
                 "INNER JOIN ASIGNACION_ESTADIAS ae ON cd.ID_ASIGNACION = ae.ID_ASIGNACION " +
@@ -173,7 +196,6 @@ public class DaoNotificaciones {
         return 0;
     }
 
-    // Documentos pendientes en todo el sistema (vista administrativa)
     public int contarDocumentosPendientesGlobal() {
         String sql = "SELECT COUNT(*) FROM CONTROL_DOC WHERE ESTADO = 'Pendiente'";
 

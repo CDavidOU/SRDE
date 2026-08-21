@@ -196,4 +196,30 @@ public class DaoPeriodo {
         }
         return lista;
     }
+    public List<BeanPeriodo> obtenerPeriodosPorEstudiante(String matricula) {
+        List<BeanPeriodo> lista = new ArrayList<>();
+        String sql = "SELECT DISTINCT p.id_periodo, p.nombre_periodo, p.fecha_inicio, p.fecha_fin FROM asignacion_estadias aes INNER JOIN periodo p ON aes.id_periodo = p.id_periodo WHERE aes.matricula = ? ORDER BY p.fecha_inicio DESC";
+
+        try (Connection conexion = Conexion.getConexion();
+             PreparedStatement prs = conexion.prepareStatement(sql)) {
+
+            prs.setString(1, matricula);
+
+            try (ResultSet rs = prs.executeQuery()) {
+                while (rs.next()) {
+                    BeanPeriodo p = new BeanPeriodo();
+                    p.setId_periodo(rs.getInt("id_periodo"));
+                    p.setNombre_periodo(rs.getString("nombre_periodo"));
+                    p.setFecha_inicio(rs.getDate("fecha_inicio"));
+                    p.setFecha_fin(rs.getDate("fecha_fin"));
+
+                    lista.add(p);
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("Error al obtener periodos del estudiante: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return lista;
+    }
 }

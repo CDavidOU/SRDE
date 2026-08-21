@@ -56,4 +56,23 @@ public class DaoAsignacionEstadias {
 
         return idGenerado; // Retorna el ID generado (o 0 si falló)
     }
+    public boolean existeAsignacionEnPeriodo(String matricula, int idPeriodo) {
+        String sql = "SELECT COUNT(*) FROM ASIGNACION_ESTADIAS WHERE MATRICULA = ? AND ID_PERIODO = ?";
+        try (Connection conexion = Conexion.getConexion();
+             PreparedStatement prs = conexion.prepareStatement(sql)) {
+
+            prs.setString(1, matricula);
+            prs.setInt(2, idPeriodo);
+
+            try (ResultSet rs = prs.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1) > 0;
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("Error al verificar asignación existente: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return false;
+    }
 }

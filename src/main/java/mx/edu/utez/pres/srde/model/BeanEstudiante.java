@@ -9,6 +9,15 @@ public class BeanEstudiante extends BeanPersona{
     private String grupo;
     private int idAsignacion;
     private String docenteAsignado;
+    private int idDocente;
+
+    public int getIdDocente() {
+        return idDocente;
+    }
+
+    public void setIdDocente(int idDocente) {
+        this.idDocente = idDocente;
+    }
 
     public String getDocenteAsignado() {
         return docenteAsignado;
