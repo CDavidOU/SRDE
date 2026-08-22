@@ -44,7 +44,11 @@
                     <form action="${pageContext.request.contextPath}/servlet-lista-estudiantes" method="post" class="mb-4">
                         <div id="busqueda" class="row g-2">
 
+<<<<<<< HEAD
                             <!-- Caja de texto -->
+=======
+                            <!-- Caja de texto (reducida a 8 columnas) -->
+>>>>>>> b978b3a83bc7bea0f2f69f7c745c7f803e0a542f
                             <div class="col-8">
                                 <div class="input-group h-100">
                                     <span class="input-group-text bg-white border-end-0">
@@ -59,10 +63,18 @@
                                 </div>
                             </div>
 
+<<<<<<< HEAD
                             <!-- Contenedor de botones -->
                             <div class="col-4 d-flex gap-2">
                                 <button class="btn btn-success flex-grow-1 fw-medium" type="submit">Buscar</button>
 
+=======
+                            <!-- Contenedor de botones (4 columnas) usando Flexbox -->
+                            <div class="col-4 d-flex gap-2">
+                                <button class="btn btn-success flex-grow-1 fw-medium" type="submit">Buscar</button>
+
+                                <!-- Este botón de Limpiar solo se mostrará si 'terminoBuscado' tiene texto -->
+>>>>>>> b978b3a83bc7bea0f2f69f7c745c7f803e0a542f
                                 <c:if test="${not empty terminoBuscado}">
                                     <a href="${pageContext.request.contextPath}/servlet-lista-estudiantes"
                                        class="btn btn-outline-secondary flex-grow-1 fw-medium d-flex align-items-center justify-content-center"
@@ -75,7 +87,11 @@
                         </div>
                     </form>
 
+<<<<<<< HEAD
                     <!-- Mensaje de confirmación -->
+=======
+                    <!-- Muestra si se agrego correctamente al estudiante -->
+>>>>>>> b978b3a83bc7bea0f2f69f7c745c7f803e0a542f
                     <c:if test="${not empty sessionScope.mensajeOk}">
                         <div class="alert alert-success alert-dismissible fade show text-center mb-4" role="alert">
                             <c:out value="${sessionScope.mensajeOk}" />
@@ -87,6 +103,7 @@
                     <!-- Tablas de Estudiantes -->
                     <div id="Estudiantes" class="row">
                         <div class="col-12">
+<<<<<<< HEAD
                             <c:choose>
                                 <c:when test="${not empty listaEstudiantesActivos}">
 
@@ -189,6 +206,40 @@
                                     </div>
                                 </c:otherwise>
                             </c:choose>
+=======
+                            <table class="table align-middle bg-white border-1">
+                                <thead>
+                                <tr class="border-bottom">
+                                    <th class="fs-6 text-secondary">Matrícula</th>
+                                    <th class="fs-6 text-secondary">Nombre</th>
+                                    <th class="fs-6 text-secondary">Apellido</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <c:forEach var="asignacionEstadias" items="${listaEstudiantesActivos}">
+                                    <tr class="border-bottom">
+                                        <td class="py-3 fs-5">
+                                            <c:out value="${asignacionEstadias.estudiante.matricula}" />
+                                        </td>
+                                        <td class="py-3 fs-5">
+                                            <c:out value="${asignacionEstadias.estudiante.nombre}" />
+                                        </td>
+                                        <td class="py-3 fs-5">
+                                            <c:out value="${asignacionEstadias.estudiante.apellido}" />
+                                        </td>
+                                        <td class="py-3 text-end text-nowrap">
+                                            <!-- Botón de Detalles -->
+                                            <a href="servlet-datos-estudiante?matricula=${asignacionEstadias.estudiante.matricula}"
+                                               class="btn px-3 py-1 me-2 text-white"
+                                               style="background-color: #002E60">
+                                                Detalles <i class="bi bi-journal-text ms-1"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                </c:forEach>
+                                </tbody>
+                            </table>
+>>>>>>> b978b3a83bc7bea0f2f69f7c745c7f803e0a542f
                         </div>
                     </div>
 

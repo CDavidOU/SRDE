@@ -3,7 +3,7 @@
 
 <!-- Carga de Bootstrap Icons para la campana -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <!-- Contenedor principal del sidebar fijado a la izquierda (sticky) -->
 <div class="d-flex flex-column justify-content-between p-0 text-white"
      style="background-color: #002E60; position: sticky; top: 0; height: 100vh; overflow-y: auto; z-index: 1000;">

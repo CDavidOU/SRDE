@@ -23,6 +23,7 @@
 
     <!-- Contenido Principal -->
     <div id="cambiantes" class="flex-grow-1 d-flex flex-column bg-light">
+<<<<<<< HEAD
         <!-- Contenido Principal -->
         <div id="cambiantes" class="flex-grow-1 d-flex flex-column bg-light">
 
@@ -67,6 +68,49 @@
                             <div class="col-4 d-flex gap-2">
                                 <button class="btn btn-success flex-grow-1 fw-medium" type="submit">Buscar</button>
 
+=======
+            <!-- Encabezado -->
+            <div class="w-100 position-relative d-flex align-items-center justify-content-center py-3 text-white" style="background-color: #002E60">
+                <h1 class="m-0 fs-2 fw-normal">Docentes</h1>
+
+                <!-- Botón de registrar (Ruta corregida) -->
+                <a href="${pageContext.request.contextPath}/servlet-registro-docente"
+                   class="btn position-absolute end-0 me-4 d-flex align-items-center justify-content-center p-0 rounded"
+                   style="width: 38px; height: 38px;"
+                   title="Registrar Nuevo Docente">
+                    <i class="bi bi-person-plus-fill fs-5"></i>
+                </a>
+            </div>
+
+            <div id="datos" class="p-4 flex-grow-1 d-flex justify-content-center">
+
+                <!-- Contenedor principal alineado con la maqueta -->
+                <div class="w-100" style="max-width: 850px;">
+
+                    <!-- Buscador con botón de Limpiar -->
+                    <form action="${pageContext.request.contextPath}/servlet-lista-docentes" method="post" class="mb-4">
+                        <div id="busqueda" class="row g-2">
+
+                            <!-- Caja de texto (reducida a 8 columnas para dar espacio a los botones) -->
+                            <div class="col-8">
+                                <div class="input-group h-100">
+                                <span class="input-group-text bg-white border-end-0">
+                                    <i class="bi bi-search text-muted"></i>
+                                </span>
+                                    <input id="buscador"
+                                           name="buscador"
+                                           type="text"
+                                           value="${terminoBuscado}"
+                                           placeholder="Buscar por nombre, apellido o estado"
+                                           class="form-control border-start-0 p-2">
+                                </div>
+                            </div>
+
+                            <!-- Contenedor de botones (4 columnas) usando Flexbox para que se acomoden solos -->
+                            <div class="col-4 d-flex gap-2">
+                                <button class="btn btn-success flex-grow-1 fw-medium" style="background-color: #429983;" type="submit">Buscar</button>
+
+>>>>>>> b978b3a83bc7bea0f2f69f7c745c7f803e0a542f
                                 <!-- Este botón de Limpiar solo se mostrará si 'terminoBuscado' tiene texto -->
                                 <c:if test="${not empty terminoBuscado}">
                                     <a href="${pageContext.request.contextPath}/servlet-lista-docentes"
@@ -116,7 +160,11 @@
 
                                                 <a href="${pageContext.request.contextPath}/servlet-datos-docente?id=${docente.id}"
                                                    class="btn px-3 py-1 me-2 text-white"
+<<<<<<< HEAD
                                                     style="background-color: #002E60">
+=======
+                                                   style="background-color: #002E60">
+>>>>>>> b978b3a83bc7bea0f2f69f7c745c7f803e0a542f
                                                     Detalles<i class="bi bi-journal-text ms-1"></i>
                                                 </a>
                                             </div>

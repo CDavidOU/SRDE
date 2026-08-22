@@ -13,7 +13,11 @@ public class DaoUsuario {
 
     public BeanUsuario verificarUsuario(String correo, String password) {
         BeanUsuario usuarioLogueado = null;
+<<<<<<< HEAD
         // upper para detectar minusculas o mayusculas, raw por el tipo de formato que se vuelve la contra con el standar/hash
+=======
+        //upper para detectar minusculas o mayusculas, raw por el tipo de formato que se vuelve la contra con el standar/hash
+>>>>>>> b978b3a83bc7bea0f2f69f7c745c7f803e0a542f
         String sql = "SELECT u.correo, u.contrasena, u.rol, u.id_usuario, d.estado FROM usuario u LEFT JOIN docente d ON u.id_usuario = d.id_usuario WHERE UPPER(TRIM(u.correo)) = UPPER(TRIM(?)) AND UPPER(u.contrasena) = RAWTOHEX(STANDARD_HASH(?, 'SHA256')) AND (u.rol = 'Administrador' OR (u.rol = 'Docente' AND UPPER(d.estado) = 'ACTIVO'))";
 
         try (Connection conexion = Conexion.getConexion();

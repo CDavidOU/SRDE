@@ -50,8 +50,13 @@
             <!-- Botón de calendarios -->
             <a href="${pageContext.request.contextPath}/listaCalendariosServlet"
                class="btn btn-success position-absolute end-0 me-3 d-flex align-items-center justify-content-center shadow-sm"
+<<<<<<< HEAD
                style="width: 38px; height: 38px; z-index: 40;"
                title="Calendario de Documentos">
+=======
+               style="background-color: #429983;"
+               title="Calendarios Programados">
+>>>>>>> b978b3a83bc7bea0f2f69f7c745c7f803e0a542f
                 <i class="bi bi-calendar-plus fs-5"></i>
             </a>
         </div>
@@ -76,7 +81,11 @@
                         </div>
                     </div>
                     <div class="col-3">
+<<<<<<< HEAD
                         <button class="btn w-100 py-2 text-white fw-medium rounded-3" style="background-color: #429983;" type="submit">
+=======
+                        <button class="btn w-100 py-2 text-white fw-medium rounded-3" style="background-color: #429983;"type="submit">
+>>>>>>> b978b3a83bc7bea0f2f69f7c745c7f803e0a542f
                             Buscar
                         </button>
                     </div>

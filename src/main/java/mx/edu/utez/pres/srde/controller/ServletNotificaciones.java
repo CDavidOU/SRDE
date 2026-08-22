@@ -1,11 +1,20 @@
 package mx.edu.utez.pres.srde.controller;
 
+import mx.edu.utez.pres.srde.model.BeanDocente;
+import mx.edu.utez.pres.srde.model.BeanNotificacion;
+import mx.edu.utez.pres.srde.model.BeanPeriodo;
+import mx.edu.utez.pres.srde.model.CalendarioBean;
+import mx.edu.utez.pres.srde.model.NotificacionBean;
+import mx.edu.utez.pres.srde.service.ServicioNotificaciones;
+import mx.edu.utez.pres.srde.service.ServicioPeriodos;
+
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+<<<<<<< HEAD
 
 import mx.edu.utez.pres.srde.model.*;
 import mx.edu.utez.pres.srde.service.ServicioDocente;
@@ -13,17 +22,22 @@ import mx.edu.utez.pres.srde.service.ServicioNotificaciones;
 import mx.edu.utez.pres.srde.service.ServicioPeriodos;
 import mx.edu.utez.pres.srde.service.ServicioTiposDocumento;
 
+=======
+>>>>>>> b978b3a83bc7bea0f2f69f7c745c7f803e0a542f
 import java.io.IOException;
-import java.sql.Date;
-import java.time.LocalDate;
 import java.util.List;
 
+<<<<<<< HEAD
 @WebServlet(name = "servletNotificaciones", urlPatterns = {"/servlet-crear-notificacion", "/servlet-notificaciones"})
+=======
+@WebServlet(name = "NotificacionesServlet", value = {"/servlet-notificaciones", "/servlet-notificaciones-admin"})
+>>>>>>> b978b3a83bc7bea0f2f69f7c745c7f803e0a542f
 public class ServletNotificaciones extends HttpServlet {
 
     private final ServicioNotificaciones servicioNotificaciones = new ServicioNotificaciones();
     private final ServicioPeriodos servicioPeriodos = new ServicioPeriodos();
 
+<<<<<<< HEAD
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
         HttpSession sesion = req.getSession(false);
@@ -76,12 +90,47 @@ public class ServletNotificaciones extends HttpServlet {
             }
 
             req.getRequestDispatcher("/WEB-INF/Plantillas/notificaciones.jsp").forward(req, res);
+=======
+    public ServletNotificaciones() {
+        super();
+    }
+
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
+        HttpSession sesion = req.getSession(false);
+
+        if (sesion == null || (sesion.getAttribute("docenteLogueado") == null && sesion.getAttribute("adminLogueado") == null)) {
+            res.sendRedirect(req.getContextPath() + "/index.jsp");
+            return;
         }
+
+        if (sesion.getAttribute("docenteLogueado") != null) {
+            BeanDocente docenteLogueado = (BeanDocente) sesion.getAttribute("docenteLogueado");
+            BeanPeriodo periodoActivo = servicioPeriodos.automatizacionPeriodos();
+
+            if (periodoActivo != null) {
+                List<CalendarioBean> listaAvisosCalendario = servicioNotificaciones.buscarListaNotificaciones(
+                        docenteLogueado.getId(),
+                        periodoActivo.getId_periodo()
+                );
+                req.setAttribute("listaAvisosCalendario", listaAvisosCalendario);
+            }
+            List<BeanNotificacion> listaPendientes = servicioNotificaciones.listarPendientesDocente(docenteLogueado.getId());
+            req.setAttribute("listaPendientes", listaPendientes);
+
+        } else {
+            List<BeanNotificacion> listaPendientesGlobal = servicioNotificaciones.listarPendientesGlobal();
+            req.setAttribute("listaPendientes", listaPendientesGlobal);
+>>>>>>> b978b3a83bc7bea0f2f69f7c745c7f803e0a542f
+        }
+
+        req.getRequestDispatcher("/WEB-INF/Plantillas/notificaciones.jsp").forward(req, res);
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
         HttpSession sesion = req.getSession(false);
+<<<<<<< HEAD
         if (sesion == null) {
             res.sendRedirect(req.getContextPath() + "/index.jsp");
             return;
@@ -167,5 +216,24 @@ public class ServletNotificaciones extends HttpServlet {
                 res.sendRedirect(req.getContextPath() + "/servlet-crear-notificacion");
             }
         }
+=======
+
+        if (sesion != null && sesion.getAttribute("docenteLogueado") != null) {
+            BeanDocente docenteLogueado = (BeanDocente) sesion.getAttribute("docenteLogueado");
+
+            String idCalParam = req.getParameter("idCalendario");
+            int idCalendario = (idCalParam != null && !idCalParam.isEmpty()) ? Integer.parseInt(idCalParam) : 0;
+
+            if (idCalendario > 0) {
+                NotificacionBean notifToHide = new NotificacionBean();
+                notifToHide.setId_docente(docenteLogueado.getId());
+                notifToHide.setIdCalendario(idCalendario);
+
+                servicioNotificaciones.ocultarNotificacion(notifToHide);
+            }
+        }
+
+        res.sendRedirect(req.getContextPath() + "/servlet-notificaciones");
+>>>>>>> b978b3a83bc7bea0f2f69f7c745c7f803e0a542f
     }
 }

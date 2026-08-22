@@ -21,7 +21,10 @@ public class DaoNotificaciones {
     public List<CalendarioBean> mostrarCalendariosDocente(int idDocente, int idPeriodo) {
         List<CalendarioBean> listaCalendarios = new ArrayList<>();
 
+<<<<<<< HEAD
         // Cambiamos el COALESCE a la lista de campos SELECT como 'ESTADO_VISTO' y quitamos el filtro WHERE
+=======
+>>>>>>> b978b3a83bc7bea0f2f69f7c745c7f803e0a542f
         String sql = "SELECT c.ID_CALENDARIO, c.ID_PERIODO, c.ID_TIPO_DOC, t.NOMBRE_DOC, c.FECHA_LIM, c.COMENTARIO, c.FECHA_INICIO, COALESCE(nd.VISTO, 1) AS ESTADO_VISTO FROM CALENDARIO_ESTADIAS c INNER JOIN TIPO_DOC t ON c.ID_TIPO_DOC = t.ID_TIPO_DOC LEFT JOIN NOTIFICACION_DOCENTE nd ON c.ID_CALENDARIO = nd.ID_CALENDARIO AND nd.ID_DOCENTE = ? WHERE c.ID_PERIODO = ?";
 
         try (Connection conexion = Conexion.getConexion();
@@ -41,7 +44,10 @@ public class DaoNotificaciones {
                     cal.setComentario(rs.getString("COMENTARIO"));
                     cal.setFechaInicio(rs.getDate("FECHA_INICIO"));
 
+<<<<<<< HEAD
                     // Guardamos el estado (1 = Visible, 0 = Oculta) en el bean
+=======
+>>>>>>> b978b3a83bc7bea0f2f69f7c745c7f803e0a542f
                     cal.setVisibilidad(rs.getInt("ESTADO_VISTO"));
 
                     listaCalendarios.add(cal);
@@ -85,7 +91,10 @@ public class DaoNotificaciones {
 
         try (Connection conexion = Conexion.getConexion()) {
 
+<<<<<<< HEAD
             // 1. Intentamos actualizar si ya existía la fila
+=======
+>>>>>>> b978b3a83bc7bea0f2f69f7c745c7f803e0a542f
             try (PreparedStatement prsUpdate = conexion.prepareStatement(sqlUpdate)) {
                 prsUpdate.setInt(1, notif.getId_docente());
                 prsUpdate.setInt(2, notif.getIdCalendario());
@@ -105,11 +114,14 @@ public class DaoNotificaciones {
             return false;
         }
     }
+<<<<<<< HEAD
+=======
+
+>>>>>>> b978b3a83bc7bea0f2f69f7c745c7f803e0a542f
     // ==========================================
     // MÉTODOS DE LA RAMA UNION (Documentos Pendientes)
     // ==========================================
 
-    // Documentos pendientes de los estudiantes asignados a un docente, con detalle
     public List<BeanNotificacion> listarPendientesDocente(int idDocente) {
         List<BeanNotificacion> lista = new ArrayList<>();
         String sql = "SELECT e.matricula, e.nombre, e.apellido, td.nombre_doc, cd.id_asignacion, cd.id_tipo_doc " +
@@ -136,7 +148,6 @@ public class DaoNotificaciones {
         return lista;
     }
 
-    // Documentos pendientes de todo el sistema, con el docente responsable (vista Admin)
     public List<BeanNotificacion> listarPendientesGlobal() {
         List<BeanNotificacion> lista = new ArrayList<>();
         String sql = "SELECT e.matricula, e.nombre, e.apellido, td.nombre_doc, cd.id_asignacion, cd.id_tipo_doc, " +
@@ -179,7 +190,6 @@ public class DaoNotificaciones {
         return notificacion;
     }
 
-    // Documentos pendientes de los estudiantes asignados a un docente (cualquier periodo)
     public int contarDocumentosPendientesDocente(int idDocente) {
         String sql = "SELECT COUNT(*) FROM CONTROL_DOC cd " +
                 "INNER JOIN ASIGNACION_ESTADIAS ae ON cd.ID_ASIGNACION = ae.ID_ASIGNACION " +
@@ -201,7 +211,6 @@ public class DaoNotificaciones {
         return 0;
     }
 
-    // Documentos pendientes en todo el sistema (vista administrativa)
     public int contarDocumentosPendientesGlobal() {
         String sql = "SELECT COUNT(*) FROM CONTROL_DOC WHERE ESTADO = 'Pendiente'";
 

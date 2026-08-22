@@ -1,7 +1,6 @@
 package mx.edu.utez.pres.srde.controller;
 
 import jakarta.servlet.ServletException;
-import jakarta.servlet.ServletOutputStream;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -9,15 +8,12 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import mx.edu.utez.pres.srde.model.BeanAdmin;
 import mx.edu.utez.pres.srde.model.BeanDocente;
-import mx.edu.utez.pres.srde.model.BeanPersona;
 import mx.edu.utez.pres.srde.model.BeanUsuario;
 import mx.edu.utez.pres.srde.service.ServiceUsuario;
 import mx.edu.utez.pres.srde.service.ServicioAdmin;
 import mx.edu.utez.pres.srde.service.ServicioDocente;
 
 import java.io.IOException;
-import java.util.List;
-
 @WebServlet(name = "servletinicio", value = "/servlet-inicio")
 public class ServletInicio extends HttpServlet {
 
@@ -70,7 +66,11 @@ public class ServletInicio extends HttpServlet {
             res.sendRedirect(req.getContextPath() + "/servlet-inicio");
 
         } else {
+<<<<<<< HEAD
             req.setAttribute("mensajeError", "Credenciales incorrectas o cuenta inactiva.");
+=======
+            req.setAttribute("mensajeError", "Usuario o contraseña incorrectos, o cuenta inactiva.");
+>>>>>>> b978b3a83bc7bea0f2f69f7c745c7f803e0a542f
             req.getRequestDispatcher("/index.jsp").forward(req, res);
         }
     }

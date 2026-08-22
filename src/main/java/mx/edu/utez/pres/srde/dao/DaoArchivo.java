@@ -109,23 +109,23 @@ public class DaoArchivo {
         }
         return false;
     }
-
-    public List<BeanArchivo> consultarDocumentosPorMatricula(String matricula) {
+    public List<BeanArchivo> consultarDocumentosPorMatricula(String matricula, int idPeriodo) {
         List<BeanArchivo> listaDocumentos = new ArrayList<>();
 
-        // Consulta combinada: Trae FECHA_SUBIDA de tu versión y REVISADO/FECHA_LIM de la otra rama
+        // Agregamos: AND ae.ID_PERIODO = ? al final de la consulta
         String sql = "SELECT td.ID_TIPO_DOC, td.NOMBRE_DOC, cd.ESTADO, cd.OBSERVACIONES, cd.REVISADO, ar.ID_ARCHIVO, ar.FECHA_SUBIDA, cal.FECHA_LIM " +
                 "FROM ASIGNACION_ESTADIAS ae " +
                 "INNER JOIN CONTROL_DOC cd ON ae.ID_ASIGNACION = cd.ID_ASIGNACION " +
                 "INNER JOIN TIPO_DOC td ON cd.ID_TIPO_DOC = td.ID_TIPO_DOC " +
                 "LEFT JOIN ARCHIVO ar ON cd.ID_ARCHIVO = ar.ID_ARCHIVO " +
                 "LEFT JOIN CALENDARIO_ESTADIAS cal ON cal.ID_TIPO_DOC = cd.ID_TIPO_DOC AND cal.ID_PERIODO = ae.ID_PERIODO " +
-                "WHERE ae.MATRICULA = ?";
+                "WHERE ae.MATRICULA = ? AND ae.ID_PERIODO = ?";
 
         try (Connection con = Conexion.getConexion();
              PreparedStatement ps = con.prepareStatement(sql)) {
 
             ps.setString(1, matricula);
+            ps.setInt(2, idPeriodo); // Se vincula el periodo activo
 
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
@@ -137,7 +137,6 @@ public class DaoArchivo {
 
                     java.sql.Timestamp fechaBD = rs.getTimestamp("FECHA_SUBIDA");
                     if (fechaBD != null) {
-                        // Si la base de datos nos devolvió una fecha, la convertimos y la guardamos en el objeto
                         doc.setFechaSubida(fechaBD.toLocalDateTime());
                     }
 

@@ -34,8 +34,8 @@ public class ServicioDocumento {
     }
 
     // Método para obtener los documentos de un estudiante usando su matrícula
-    public List<BeanArchivo> obtenerDocumentosPorMatricula(String matricula) {
-        return daoArchivo.consultarDocumentosPorMatricula(matricula);
+    public List<BeanArchivo> obtenerDocumentosPorMatricula(String matricula, int idPeriodo) {
+        return daoArchivo.consultarDocumentosPorMatricula(matricula, idPeriodo);
     }
 
     public void inicializarDocumento(int idAsignacion, int idDocente){

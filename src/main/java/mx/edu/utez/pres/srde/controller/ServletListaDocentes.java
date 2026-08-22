@@ -43,6 +43,10 @@ public class ServletListaDocentes extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
+<<<<<<< HEAD
+=======
+        req.setCharacterEncoding("UTF-8");
+>>>>>>> b978b3a83bc7bea0f2f69f7c745c7f803e0a542f
         HttpSession sesion = req.getSession(false);
 
         // 1. Validar que sea el Administrador
@@ -51,6 +55,7 @@ public class ServletListaDocentes extends HttpServlet {
             return;
         }
 
+<<<<<<< HEAD
         // 2. Obtener el periodo actual
         ServicioPeriodos servicioPeriodos = new ServicioPeriodos();
         BeanPeriodo periodoActual = servicioPeriodos.automatizacionPeriodos();
@@ -76,5 +81,41 @@ public class ServletListaDocentes extends HttpServlet {
 
         // 7. Redirigir a la vista
         req.getRequestDispatcher("WEB-INF/Admin/vista-docentes.jsp").forward(req, res);
+=======
+        // 2. Obtener el periodo actual con validación de nulos
+        ServicioPeriodos servicioPeriodos = new ServicioPeriodos();
+        BeanPeriodo periodoActual = servicioPeriodos.automatizacionPeriodos();
+        int idPeriodo = (periodoActual != null) ? periodoActual.getId_periodo() : 0;
+
+        // 3. Obtener y limpiar el texto del buscador
+        String buscador = req.getParameter("buscador");
+        ServicioDocente servicioDocente = new ServicioDocente();
+        List<BeanDocente> listaBuscada;
+
+        if (buscador != null && !buscador.trim().isEmpty()) {
+            // Limpiar espacios extras en los extremos
+            buscador = buscador.trim();
+
+            // 4. Buscar con el término limpio
+            listaBuscada = servicioDocente.buscarDocentes(idPeriodo, buscador);
+        } else {
+            // Si el usuario envió el buscador vacío, se recarga la lista completa por defecto
+            listaBuscada = servicioDocente.listaDocentes(idPeriodo);
+            buscador = "";
+        }
+
+        // 5. Enviar resultados o mensaje
+        if (listaBuscada != null && !listaBuscada.isEmpty()) {
+            req.setAttribute("listaDocentes", listaBuscada);
+        } else {
+            req.setAttribute("mensajeVacio", "No se encontró ningún docente con el criterio: '" + buscador + "'");
+        }
+
+        // 6. Retornar el término buscado para mantenerlo en el campo de texto del JSP
+        req.setAttribute("terminoBuscado", buscador);
+
+        // 7. Redirigir a la vista
+        req.getRequestDispatcher("/WEB-INF/Admin/vista-docentes.jsp").forward(req, res);
+>>>>>>> b978b3a83bc7bea0f2f69f7c745c7f803e0a542f
     }
 }

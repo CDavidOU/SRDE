@@ -13,12 +13,12 @@ import mx.edu.utez.pres.srde.service.ServicioPeriodos;
 
 import java.io.IOException;
 import java.util.List;
-
-@WebServlet(name = "servletadminestudiantes", value = "/servlet-admin-estudiantes")
+@WebServlet(name = "ServletAdminEstudiantes", value = "/servlet-admin-estudiantes")
 public class ServletAdminEstudiantes extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
+        req.setCharacterEncoding("UTF-8");
         HttpSession sesion = req.getSession(false);
 
         if (sesion == null || sesion.getAttribute("adminLogueado") == null) {
@@ -27,22 +27,18 @@ public class ServletAdminEstudiantes extends HttpServlet {
         }
 
         ServicioPeriodos servicioPeriodos = new ServicioPeriodos();
-        BeanPeriodo periodoActual = servicioPeriodos.automatizacionPeriodos();
+        BeanPeriodo periodo = servicioPeriodos.automatizacionPeriodos();
 
-        ServicioAdminEstudiantes servicioAdminEstudiantes = new ServicioAdminEstudiantes();
-        List<BeanEstudiante> listaEstudiantes = servicioAdminEstudiantes.listaEstudiantes(periodoActual.getId_periodo());
+        ServicioAdminEstudiantes servicioAdmin = new ServicioAdminEstudiantes();
+        List<BeanEstudiante> lista = servicioAdmin.listaEstudiantes(periodo.getId_periodo());
 
-        if (listaEstudiantes != null && !listaEstudiantes.isEmpty()) {
-            req.setAttribute("listaEstudiantes", listaEstudiantes);
-        } else {
-            req.setAttribute("mensajeVacio", "No hay estudiantes registrados.");
-        }
-
+        req.setAttribute("listaEstudiantes", lista);
         req.getRequestDispatcher("WEB-INF/Admin/vista-estudiantes-admin.jsp").forward(req, res);
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
+        req.setCharacterEncoding("UTF-8");
         HttpSession sesion = req.getSession(false);
 
         if (sesion == null || sesion.getAttribute("adminLogueado") == null) {
@@ -50,21 +46,27 @@ public class ServletAdminEstudiantes extends HttpServlet {
             return;
         }
 
-        ServicioPeriodos servicioPeriodos = new ServicioPeriodos();
-        BeanPeriodo periodoActual = servicioPeriodos.automatizacionPeriodos();
-
         String buscador = req.getParameter("buscador");
+        ServicioPeriodos servicioPeriodos = new ServicioPeriodos();
+        BeanPeriodo periodo = servicioPeriodos.automatizacionPeriodos();
 
-        ServicioAdminEstudiantes servicioAdminEstudiantes = new ServicioAdminEstudiantes();
-        List<BeanEstudiante> listaBuscada = servicioAdminEstudiantes.buscarEstudiantes(periodoActual.getId_periodo(), buscador);
+        ServicioAdminEstudiantes servicioAdmin = new ServicioAdminEstudiantes();
+        List<BeanEstudiante> lista;
 
-        if (listaBuscada != null && !listaBuscada.isEmpty()) {
-            req.setAttribute("listaEstudiantes", listaBuscada);
+        if (buscador != null && !buscador.trim().isEmpty()) {
+            lista = servicioAdmin.buscarEstudiantes(periodo.getId_periodo(), buscador);
         } else {
+<<<<<<< HEAD
             req.setAttribute("mensajeVacio", "No hay ninguna coincidencia.");
         }// Asegúrate de tener esta línea en el doPost de tu ServletAdminEstudiantes
         req.setAttribute("terminoBuscado", buscador);
+=======
+            lista = servicioAdmin.listaEstudiantes(periodo.getId_periodo());
+        }
+>>>>>>> b978b3a83bc7bea0f2f69f7c745c7f803e0a542f
 
+        req.setAttribute("listaEstudiantes", lista);
+        req.setAttribute("terminoBuscado", buscador);
         req.getRequestDispatcher("WEB-INF/Admin/vista-estudiantes-admin.jsp").forward(req, res);
     }
 }

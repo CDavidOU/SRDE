@@ -4,16 +4,15 @@ import mx.edu.utez.pres.srde.dao.DaoAdminEstudiantes;
 import mx.edu.utez.pres.srde.model.BeanEstudiante;
 
 import java.util.List;
-
 public class ServicioAdminEstudiantes {
 
+    private final DaoAdminEstudiantes dao = new DaoAdminEstudiantes();
+
     public List<BeanEstudiante> listaEstudiantes(int idPeriodo) {
-        DaoAdminEstudiantes daoAdminEstudiantes = new DaoAdminEstudiantes();
-        return daoAdminEstudiantes.listaEstudiantes(idPeriodo);
+        return dao.listaEstudiantes(idPeriodo);
     }
 
     public List<BeanEstudiante> buscarEstudiantes(int idPeriodo, String condicion) {
-        DaoAdminEstudiantes daoAdminEstudiantes = new DaoAdminEstudiantes();
-        return daoAdminEstudiantes.buscarEstudiantes(idPeriodo, condicion);
+        return dao.buscarEstudiantes(idPeriodo, condicion);
     }
 }

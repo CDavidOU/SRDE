@@ -1,5 +1,4 @@
 package mx.edu.utez.pres.srde.service;
-
 import mx.edu.utez.pres.srde.dao.DaoNotificaciones;
 import mx.edu.utez.pres.srde.model.BeanNotificacion;
 import mx.edu.utez.pres.srde.model.CalendarioBean;
@@ -12,8 +11,15 @@ public class ServicioNotificaciones {
     private final DaoNotificaciones daoNotificaciones = new DaoNotificaciones();
 
     public boolean desocultarNotificacion(NotificacionBean notificacion) {
+<<<<<<< HEAD
         DaoNotificaciones dao = new DaoNotificaciones();
         return dao.desocultarNotificacion(notificacion);
+=======
+        if (notificacion == null || notificacion.getIdCalendario() <= 0 || notificacion.getId_docente() <= 0) {
+            return false;
+        }
+        return daoNotificaciones.desocultarNotificacion(notificacion);
+>>>>>>> b978b3a83bc7bea0f2f69f7c745c7f803e0a542f
     }
 
     public List<CalendarioBean> buscarListaNotificaciones(int idDocente, int idPeriodo) {
@@ -31,6 +37,7 @@ public class ServicioNotificaciones {
     }
 
     // ==========================================
+<<<<<<< HEAD
     // CREACIÓN DE NOTIFICACIONES (AGREGADO PARA QUITAR EL ERROR DEL SERVLET)
     // ==========================================
     public BeanNotificacion crearNotificacion(BeanNotificacion notificacion) {
@@ -51,6 +58,9 @@ public class ServicioNotificaciones {
 
     // ==========================================
     // 2. DOCUMENTOS PENDIENTES (RAMA UNIÓN)
+=======
+    // DOCUMENTOS PENDIENTES (RAMA UNIÓN)
+>>>>>>> b978b3a83bc7bea0f2f69f7c745c7f803e0a542f
     // ==========================================
 
     public int contarDocumentosPendientesDocente(int idDocente) {

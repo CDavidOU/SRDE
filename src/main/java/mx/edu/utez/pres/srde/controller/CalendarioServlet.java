@@ -56,12 +56,13 @@ public class CalendarioServlet extends HttpServlet {
                 req.setAttribute("mensajeCorrecto", mensaje);
                 req.setAttribute("calendarioRegistrado", calendarioIngresado);
             } else {
-                mensaje = "Error al registrar el calendario, coloque datos correctos";
+                mensaje = "Error al registrar el calendario, calendario ya registrado o coloque correctamente los datos";
                 req.setAttribute("mensajeError", mensaje);
             }
         }
         cargarDatosFormulario(req);
-        req.getRequestDispatcher("/WEB-INF/Admin/programar-documentacion.jsp").forward(req, resp);
+        cargarListaProgramada(req);
+        req.getRequestDispatcher("/WEB-INF/Admin/calendariosProgramados.jsp").forward(req, resp);
 
     }
     private void cargarDatosFormulario(HttpServletRequest req) {
@@ -72,5 +73,19 @@ public class CalendarioServlet extends HttpServlet {
         ServicioPeriodos servicioPeriodos = new ServicioPeriodos();
         BeanPeriodo periodoActivo = servicioPeriodos.automatizacionPeriodos();
         req.setAttribute("periodoActivo", periodoActivo);
+    }
+    private void cargarListaProgramada(HttpServletRequest req) {
+        ServicioPeriodos servicioPeriodos = new ServicioPeriodos();
+        BeanPeriodo periodoActivo = servicioPeriodos.automatizacionPeriodos();
+
+        if (periodoActivo != null) {
+            int idPeriodo = periodoActivo.getId_periodo();
+
+            CalendarioServicio servicioCalendario = new CalendarioServicio();
+            List<CalendarioBean> listaProgramada = servicioCalendario.buscarListaProgramada(idPeriodo);
+
+            req.setAttribute("listaProgramada", listaProgramada);
+            req.setAttribute("periodoActivo", periodoActivo);
+        }
     }
 }

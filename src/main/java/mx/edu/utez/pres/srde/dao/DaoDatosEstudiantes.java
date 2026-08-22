@@ -10,40 +10,43 @@ import java.sql.SQLException;
 
 public class DaoDatosEstudiantes {
 
-    public BeanEstudiante datosEstudiante(String matricula){
+    public BeanEstudiante datosEstudiante(String matricula) {
         BeanEstudiante estudiante = null;
-        // Unimos la tabla ESTUDIANTE con ASIGNACION_ESTADIAS para obtener el ID_ASIGNACION
-        String sql = "SELECT e.*, a.ID_ASIGNACION FROM ESTUDIANTE e " +
-                "LEFT JOIN ASIGNACION_ESTADIAS a ON e.MATRICULA = a.MATRICULA " +
-                "WHERE e.MATRICULA = ?";
 
-        try(Connection conexion = Conexion.getConexion();
-            PreparedStatement prs = conexion.prepareStatement(sql)){
-            prs.setString(1, matricula);
-            try (ResultSet rs = prs.executeQuery()){
-                if (rs.next()){
+        String sql = "SELECT e.*, ae.id_asignacion, ae.id_usuario_docente AS idDocente, (SELECT d.nombre || ' ' || d.apellido FROM docente d WHERE d.id_usuario = ae.id_usuario_docente) AS docenteAsignado FROM estudiante e LEFT JOIN asignacion_estadias ae ON e.matricula = ae.matricula WHERE e.matricula = ?";
+
+        try (Connection con = Conexion.getConexion();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setString(1, matricula);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
                     estudiante = new BeanEstudiante();
                     estudiante.setMatricula(rs.getString("matricula"));
                     estudiante.setNombre(rs.getString("nombre"));
                     estudiante.setApellido(rs.getString("apellido"));
                     estudiante.setCarrera(rs.getString("carrera"));
                     estudiante.setCuatrimestre(rs.getInt("cuatrimestre"));
-                    estudiante.setCorreo(rs.getString("correo"));
                     estudiante.setGrupo(rs.getString("grupo"));
+                    estudiante.setCorreo(rs.getString("correo"));
                     estudiante.setEstado(rs.getString("estado"));
 
-                    // ¡Aquí mapeamos el ID de asignación que faltaba!
-                    estudiante.setIdAsignacion(rs.getInt("ID_ASIGNACION"));
-                }
-            }catch (SQLException e) {
-                e.printStackTrace();
-            }
+                    estudiante.setIdAsignacion(rs.getInt("id_asignacion"));
+                    estudiante.setDocenteAsignado(rs.getString("docenteAsignado"));
 
-        }catch (SQLException e) {
+                    // Mapear el ID del docente asignado al Bean
+                    estudiante.setIdDocente(rs.getInt("idDocente"));
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("Error al consultar datos del estudiante: " + e.getMessage());
             e.printStackTrace();
         }
+
         return estudiante;
     }
+<<<<<<< HEAD
 
     public boolean actualizarEstudiante(BeanEstudiante estudiante) {
         boolean actualizado = false;
@@ -68,5 +71,31 @@ public class DaoDatosEstudiantes {
             e.printStackTrace();
         }
         return actualizado;
+=======
+    public boolean actualizarEstudiante(String matriculaOriginal, BeanEstudiante estudiante, int idDocente) {
+        String sql = "UPDATE estudiante SET matricula = ?, nombre = ?, apellido = ?, carrera = ?, " +
+                "cuatrimestre = ?, grupo = ?, correo = ?, estado = ?, id_docente = ? " +
+                "WHERE matricula = ?";
+
+        try (Connection con = Conexion.getConexion();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setString(1, estudiante.getMatricula());
+            ps.setString(2, estudiante.getNombre());
+            ps.setString(3, estudiante.getApellido());
+            ps.setString(4, estudiante.getCarrera());
+            ps.setInt(5, estudiante.getCuatrimestre());
+            ps.setString(6, estudiante.getGrupo());
+            ps.setString(7, estudiante.getCorreo());
+            ps.setString(8, estudiante.getEstado());
+            ps.setInt(9, idDocente); // Aquí asignas la FK del docente
+            ps.setString(10, matriculaOriginal); // WHERE por la matrícula que tenía antes
+
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+>>>>>>> b978b3a83bc7bea0f2f69f7c745c7f803e0a542f
     }
 }

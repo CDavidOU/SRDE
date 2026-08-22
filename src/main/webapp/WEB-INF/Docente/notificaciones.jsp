@@ -37,7 +37,11 @@
                 </li>
                 <li class="nav-item" role="presentation">
                     <button class="nav-link text-secondary fw-bold" id="ocultas-tab" data-bs-toggle="tab" data-bs-target="#ocultas" type="button" role="tab">
+<<<<<<< HEAD
                         <i class="bi bi-eye-slash-fill me-1"></i> Archivadas / Ocultas
+=======
+                        <i class="bi bi-eye-slash-fill me-1"></i> Ocultas
+>>>>>>> b978b3a83bc7bea0f2f69f7c745c7f803e0a542f
                     </button>
                 </li>
             </ul>
@@ -75,7 +79,11 @@
                                                     class="btn text-white px-3 py-2 fw-semibold"
                                                     style="background-color: #C85252;"
                                                     onclick="return confirm('¿Deseas archivar esta notificación?');">
+<<<<<<< HEAD
                                                 <i class="bi bi-trash3-fill me-1"></i> Eliminar
+=======
+                                                <i class="bi bi-trash3-fill me-1"></i> Ocultar
+>>>>>>> b978b3a83bc7bea0f2f69f7c745c7f803e0a542f
                                             </button>
                                         </form>
                                     </div>
@@ -122,7 +130,11 @@
                                             <button type="submit"
                                                     class="btn btn-success text-white px-3 py-2 fw-semibold"
                                                     onclick="return confirm('¿Deseas restaurar esta notificación?');">
+<<<<<<< HEAD
                                                 <i class="bi bi-arrow-counterclockwise me-1"></i> Desocultar
+=======
+                                                <i class="bi bi-arrow-counterclockwise me-1" style="background-color: #429983;" ></i> Desocultar
+>>>>>>> b978b3a83bc7bea0f2f69f7c745c7f803e0a542f
                                             </button>
                                         </form>
                                     </div>

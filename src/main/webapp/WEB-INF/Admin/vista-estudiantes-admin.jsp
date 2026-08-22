@@ -28,7 +28,7 @@
             <h1 class="m-0 fs-2 fw-normal">Estudiantes</h1>
             <a href="${pageContext.request.contextPath}/servlet-registro-estudiante"
                class="btn btn-success position-absolute end-0 me-4 d-flex align-items-center justify-content-center p-0 rounded"
-               style="width: 38px; height: 38px;"
+               style="width: 38px; height: 38px;background-color: #429983;"
                title="Registrar Nuevo Estudiante">
                 <i class="bi bi-person-plus-fill fs-5"></i>
             </a>

@@ -1,5 +1,8 @@
 package mx.edu.utez.pres.srde.model;
+<<<<<<< HEAD
 
+=======
+>>>>>>> b978b3a83bc7bea0f2f69f7c745c7f803e0a542f
 import java.sql.Date;
 
 public class NotificacionBean {

@@ -50,11 +50,21 @@ public class DaoListaEstudiantes {
 
     public List<BeanAsignacionEstadias> listaEstudiantes(int id_docente, int id_periodo) {
         List<BeanAsignacionEstadias> listaEstudiantes = new ArrayList<>();
+<<<<<<< HEAD
         // Se agrega es.estado y se quita el filtro restrictivo de es.estado = 'Activo'
         String sql = "SELECT aes.id_usuario_docente, aes.id_periodo, es.nombre, es.matricula, es.apellido, es.estado " +
                 "FROM asignacion_estadias aes " +
                 "INNER JOIN estudiante es ON aes.matricula = es.matricula " +
                 "WHERE aes.id_usuario_docente = ? AND aes.id_periodo = ?";
+=======
+
+        // Convertimos 'estado' a Mayúsculas para evitar fallos si en la BD dice 'activo' o 'Activo'
+        String sql = "SELECT aes.id_usuario_docente, aes.id_periodo, es.nombre, es.matricula, es.apellido " +
+                "FROM asignacion_estadias aes " +
+                "INNER JOIN estudiante es ON aes.matricula = es.matricula " +
+                "WHERE aes.id_usuario_docente = ? AND aes.id_periodo = ? AND UPPER(es.estado) = 'ACTIVO' " +
+                "ORDER BY es.apellido ASC, es.nombre ASC";
+>>>>>>> b978b3a83bc7bea0f2f69f7c745c7f803e0a542f
 
         try (Connection conexion = Conexion.getConexion();
              PreparedStatement prs = conexion.prepareStatement(sql)) {
@@ -81,7 +91,7 @@ public class DaoListaEstudiantes {
                 }
             }
         } catch (SQLException e) {
-            System.err.println("Error al listar estudiantes: " + e.getMessage());
+            System.err.println("Error al listar estudiantes para el docente: " + e.getMessage());
             e.printStackTrace();
         }
         return listaEstudiantes;

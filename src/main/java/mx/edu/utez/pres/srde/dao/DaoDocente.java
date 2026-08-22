@@ -46,7 +46,7 @@ public class DaoDocente {
         try (Connection conexion = Conexion.getConexion();
              PreparedStatement prs = conexion.prepareStatement(sqlDocentes);
              ResultSet rs = prs.executeQuery();) {
-             
+
             while (rs.next()) {
                 BeanDocente docente=new BeanDocente();
                 docente.setId(rs.getInt("id_usuario"));
@@ -72,7 +72,7 @@ public class DaoDocente {
         try(Connection conexion = Conexion.getConexion();
             PreparedStatement prs =conexion.prepareStatement(sqlEditar);
             PreparedStatement prs2=conexion.prepareStatement(sqlUsuario)){
-            
+
             prs.setString(1, docente.getNombre());
             prs.setString(2, docente.getApellido());
             prs.setString(3, docente.getCarrera());
@@ -80,13 +80,13 @@ public class DaoDocente {
             prs.setString(5, docente.getTelefono());
             prs.setString(6, docente.getEstado());
             prs.setInt(7, docente.getId());
-            
+
             prs2.setString(1, docente.getCorreo());
             prs2.setInt(2, docente.getId());
-            
+
             int filasActualizadas = prs.executeUpdate();
             int filasActualizadasUsuario = prs2.executeUpdate();
-            
+
             return filasActualizadas > 0 && filasActualizadasUsuario > 0;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -223,11 +223,15 @@ public class DaoDocente {
         // Mantenemos tu consulta original (con el INNER JOIN y el conteo de alumnos)
         // pero agregamos el WHERE con LIKE para buscar coincidencias.
         // Usamos LOWER para que la búsqueda ignore mayúsculas y minúsculas.
+<<<<<<< HEAD
         String sql = "SELECT u.id_usuario, d.nombre, d.apellido, d.carrera, d.telefono, d.academia, u.correo, d.estado, " +
                 "(SELECT COUNT(*) FROM asignacion_estadias ae WHERE ae.id_usuario_docente = u.id_usuario AND ae.id_periodo = ?) AS num_alumnos " +
                 "FROM docente d INNER JOIN usuario u ON d.id_usuario = u.id_usuario " +
                 "WHERE LOWER(d.nombre) LIKE LOWER(?) OR LOWER(d.apellido) LIKE LOWER(?) OR LOWER(d.estado) LIKE LOWER(?) " +
                 "ORDER BY d.nombre, d.apellido";
+=======
+        String sql = "SELECT u.id_usuario, d.nombre, d.apellido, d.carrera, d.telefono, d.academia, u.correo, d.estado, (SELECT COUNT(*) FROM asignacion_estadias ae WHERE ae.id_usuario_docente = u.id_usuario AND ae.id_periodo = ?) AS num_alumnos FROM docente d INNER JOIN usuario u ON d.id_usuario = u.id_usuario WHERE LOWER(TRANSLATE(d.nombre, 'ÁÉÍÓÚáéíóú', 'AEIOUaeiou')) LIKE LOWER(TRANSLATE(?, 'ÁÉÍÓÚáéíóú', 'AEIOUaeiou')) OR LOWER(TRANSLATE(d.apellido, 'ÁÉÍÓÚáéíóú', 'AEIOUaeiou')) LIKE LOWER(TRANSLATE(?, 'ÁÉÍÓÚáéíóú', 'AEIOUaeiou')) OR LOWER(TRANSLATE(d.estado, 'ÁÉÍÓÚáéíóú', 'AEIOUaeiou')) LIKE LOWER(TRANSLATE(?, 'ÁÉÍÓÚáéíóú', 'AEIOUaeiou')) ORDER BY d.nombre, d.apellido";
+>>>>>>> b978b3a83bc7bea0f2f69f7c745c7f803e0a542f
 
         try (Connection con = Conexion.getConexion();
              PreparedStatement ps = con.prepareStatement(sql)) {
